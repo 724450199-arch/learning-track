@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400">
+  <style>
+    @keyframes fly { 0%{transform:translateY(0)} 50%{transform:translateY(-15px)} 100%{transform:translateY(0)} }
+    @keyframes flicker { 0%{opacity:1} 50%{opacity:0.4} 100%{opacity:1} }
+    @keyframes blink { 0%{ry:12} 45%{ry:12} 50%{ry:1} 55%{ry:12} 100%{ry:12} }
+    .rocket { animation: fly 2s ease-in-out infinite }
+    .flame { animation: flicker 0.3s ease-in-out infinite }
+    .window { animation: blink 3s ease-in-out infinite }
+  </style>
+  <rect width="300" height="400" fill="#1a1a2e"/>
+  <circle cx="50" cy="50" r="2" fill="white"><animate attributeName="opacity" values="1;0;1" dur="1s" repeatCount="indefinite"/></circle>
+  <circle cx="200" cy="80" r="1.5" fill="white"/>
+  <circle cx="80" cy="100" r="1" fill="white"><animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"/></circle>
+  <g class="rocket">
+    <polygon points="150,60 120,180 180,180" fill="#e63946"/>
+    <rect x="120" y="180" width="60" height="120" rx="5" fill="#f1faee"/>
+    <rect x="120" y="200" width="60" height="15" fill="#e63946"/>
+    <ellipse cx="150" cy="240" rx="18" ry="12" class="window" fill="#457b9d" stroke="#1d3557" stroke-width="2"/>
+    <ellipse cx="148" cy="237" rx="5" ry="4" fill="white" opacity="0.4"/>
+    <polygon points="110,260 120,300 100,300" fill="#e63946"/>
+    <polygon points="190,260 180,300 200,300" fill="#e63946"/>
+    <rect x="135" y="295" width="30" height="15" rx="3" fill="#444"/>
+    <polygon points="135,310 165,310 150,360" class="flame" fill="#f4a261"/>
+    <polygon points="140,310 160,310 150,340" class="flame" fill="#e9c46a"/>
+  </g>
+  <text x="150" y="390" fill="white" font-family="Arial" font-size="12" text-anchor="middle">SVG 动画火箭</text>
+</svg>
