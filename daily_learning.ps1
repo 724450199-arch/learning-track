@@ -39,6 +39,9 @@ if (-not (Test-Path $ProgressFile)) {
   if (-not $Progress.duo_duo_chinese) {
     $Progress | Add-Member -NotePropertyName "duo_duo_chinese" -NotePropertyValue ([PSCustomObject]@{ current_week = 1; total_weeks = 13; name = "多多语文" })
   }
+  if (-not $Progress.issues) {
+    $Progress | Add-Member -NotePropertyName "issues" -NotePropertyValue ([PSCustomObject]@{})
+  }
 }
 
 # ====== 计算当前周 ======
@@ -416,5 +419,49 @@ try {
 } catch {
   Write-Log "微信推送失败：$($_.Exception.Message)"
 }
+
+# ====== Gitee Issue 自动创建（仅周一） ======
+try {
+  $WeekNum = [Math]::Floor($DaysSinceStart / 7) + 1
+  $IssueKey = "week_$WeekNum"
+  if ($RunDate.DayOfWeek -eq 'Monday' -and -not $Progress.issues.$IssueKey) {
+    $GiteeToken = [Environment]::GetEnvironmentVariable("GITEE_TOKEN")
+    if ($GiteeToken) {
+      $IssueTitle = "第${WeekNum}周学习计划（$($RunDate.ToString('yyyy-MM-dd'))起）"
+      $IssueBody = @"
+## 多多 · 牛津自然拼读 第3册 第${DuoDuoWeek}周
+- [ ] 字母/音：$($D.letter)
+- [ ] 单词：$($D.words)
+- [ ] 活动：$($D.act)
+
+## 小铭 · 牛津自然拼读 第1册 第${XiaoMingWeek}周
+- [ ] 字母/音：$($X.letter)
+- [ ] 单词：$($X.words)
+- [ ] 活动：$($X.act)
+
+## 多多 · 新加坡数学 G1 第${MathWeek}周
+- [ ] 章节：$($M.ch)
+- [ ] 内容：$($M.topic)
+- [ ] 活动：$($M.act)
+
+## 多多 · 语文冲刺 第${ChineseWeek}周
+- [ ] 拼音：$($C.pinyin)
+- [ ] 汉字：$($C.chars)
+- [ ] 本周安排：$($C.plan)
+"@
+      $bodyUtf8 = [System.Text.Encoding]::UTF8.GetBytes((@{ title = $IssueTitle; body = $IssueBody; labels = "学习计划" } | ConvertTo-Json))
+      $resp = Invoke-RestMethod -Uri "https://gitee.com/api/v5/repos/yql8981229/learning-track/issues" -Method Post -Body $bodyUtf8 -ContentType "application/json; charset=utf-8" -Headers @{ Authorization = "Bearer $GiteeToken" }
+      if ($resp.html_url) {
+        $Progress.issues | Add-Member -NotePropertyName $IssueKey -NotePropertyValue $resp.html_url
+        Write-Log "Gitee Issue 已创建：$($resp.html_url)"
+      }
+    }
+  }
+} catch {
+  Write-Log "Gitee Issue 创建失败：$($_.Exception.Message)"
+}
+
+# ====== 保存进度 ======
+$Progress | ConvertTo-Json -Depth 5 | Out-File -FilePath $ProgressFile -Encoding utf8
 
 Write-Log "===== 执行完成 ====="
