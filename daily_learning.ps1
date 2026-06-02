@@ -469,4 +469,17 @@ try {
 # ====== 保存进度 ======
 $Progress | ConvertTo-Json -Depth 5 | Out-File -FilePath $ProgressFile -Encoding utf8
 
+# ====== Gitee 自动同步 ======
+try {
+  $RepoDir = $PSScriptRoot
+  Set-Location $RepoDir
+  git add -A
+  $CommitMsg = "daily sync - $(Get-Date -Format 'yyyy-MM-dd HH:mm')"
+  git commit -m $CommitMsg
+  git push
+  Write-Log "Gitee 同步完成"
+} catch {
+  Write-Log "Gitee 同步失败：$($_.Exception.Message)"
+}
+
 Write-Log "===== 执行完成 ====="
