@@ -60,7 +60,7 @@ $ddLines = @(
     "\pard\fs24 数一数，在横线上写出数字:\par"
     "\pard\fs28 ☆☆☆☆☆ = {\ul __}\tab ☆☆☆ = {\ul __}\par"
     "\pard\fs28 ●●●●●●● = {\ul __}\tab ■■■■■■■■■ = {\ul __}\par"
-    "\pard\fs28 圈出较大的数: 8 < {\ul __}\tab 或  3 < {\ul __}\par"
+    "\pard\fs28 圈出较大的数:  8    3     \tab 圈出较大的数:  5    7\par"
     "\pard\fs20 生成日期: ${DateStr}\par"
 )
 Write-RtfFile -Path (Join-Path $printableDir "duoduo_week${DuoDuoWeek}.doc") -ColorTable $ddColor -Body ($ddLines -join "")

@@ -60,7 +60,8 @@ $ddSvg = New-Svg @(
   '  <text x="320" y="605" font-size="18" fill="#333" font-family="monospace">&#x2605; &#x2605; &#x2605; = </text><text x="458" y="605" font-size="18" fill="#E53935" font-family="monospace" font-weight="bold">__</text>',
   '  <text x="70" y="640" font-size="18" fill="#333" font-family="monospace">&#x25CF; &#x25CF; &#x25CF; &#x25CF; &#x25CF; &#x25CF; &#x25CF; = </text><text x="310" y="640" font-size="18" fill="#E53935" font-family="monospace" font-weight="bold">__</text>',
   '  <text x="70" y="675" font-size="18" fill="#333" font-family="monospace">&#x25A3; &#x25A3; &#x25A3; &#x25A3; &#x25A3; &#x25A3; &#x25A3; &#x25A3; &#x25A3; = </text><text x="330" y="675" font-size="18" fill="#E53935" font-family="monospace" font-weight="bold">__</text>',
-  '  <text x="70" y="710" font-size="18" fill="#333" font-family="monospace">圈出较大的数：8 &lt; </text><text x="280" y="710" font-size="18" fill="#E53935" font-family="monospace" font-weight="bold">__</text><text x="295" y="710" font-size="18" fill="#333" font-family="monospace">  或  3 &lt; </text><text x="410" y="710" font-size="18" fill="#E53935" font-family="monospace" font-weight="bold">__</text>',
+  '  <text x="70" y="710" font-size="18" fill="#333" font-family="monospace">圈出较大的数：  8    3</text>',
+  '  <text x="70" y="730" font-size="18" fill="#333" font-family="monospace">圈出较大的数：  5    7</text>',
   '</svg>'
 )
 
