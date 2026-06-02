@@ -11,9 +11,12 @@
     [string]$ChinesePinyin = "",
     [string]$ChineseChars = "",
     [string]$ChineseAct = "",
-    [string]$ChinesePoemTitle = "",
-    [string]$ChinesePoemAuthor = "",
-    [string]$ChinesePoemText = "",
+    [string]$ChinesePoem1Title = "",
+    [string]$ChinesePoem1Author = "",
+    [string]$ChinesePoem1Text = "",
+    [string]$ChinesePoem2Title = "",
+    [string]$ChinesePoem2Author = "",
+    [string]$ChinesePoem2Text = "",
     [string]$WorksheetDir
 )
 

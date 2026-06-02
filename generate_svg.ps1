@@ -1,20 +1,23 @@
 ﻿param(
-    [int]$DuoDuoWeek,
-    [int]$XiaoMingWeek,
-    [string]$DDLetter,
-    [string]$DDWords,
-    [string]$DDAct,
-    [string]$XMLetter,
-    [string]$XMWords,
-    [string]$XMAct,
-    [string]$ChineseWeek = "",
-    [string]$ChinesePinyin = "",
-    [string]$ChineseChars = "",
-    [string]$ChineseAct = "",
-    [string]$ChinesePoemTitle = "",
-    [string]$ChinesePoemAuthor = "",
-    [string]$ChinesePoemText = "",
-    [string]$WorksheetDir
+  [string]$DuoDuoWeek = "1",
+  [string]$XiaoMingWeek = "1",
+  [string]$DDLetter = "",
+  [string]$DDWords = "",
+  [string]$DDAct = "",
+  [string]$XMLetter = "",
+  [string]$XMWords = "",
+  [string]$XMAct = "",
+  [string]$ChineseWeek = "",
+  [string]$ChinesePinyin = "",
+  [string]$ChineseChars = "",
+  [string]$ChineseAct = "",
+  [string]$ChinesePoem1Title = "",
+  [string]$ChinesePoem1Author = "",
+  [string]$ChinesePoem1Text = "",
+  [string]$ChinesePoem2Title = "",
+  [string]$ChinesePoem2Author = "",
+  [string]$ChinesePoem2Text = "",
+  [string]$WorksheetDir = ""
 )
 
 function New-Svg([string[]]$lines) { $lines -join "`n" }
@@ -150,22 +153,42 @@ foreach ($c in $cnCharList) {
 }
 
 # ====== Poem Section ======
-$cnSvgLines += '  <rect x="30" y="' + ($yPos + 5) + '" width="535" height="150" rx="10" fill="url(#cs3)" stroke="#9FA8DA" stroke-width="1.5"/>'
-$cnSvgLines += '  <text x="297" y="' + ($yPos + 33) + '" font-size="16" font-weight="bold" fill="#283593" text-anchor="middle">&#x1F4DA; 今日古诗 · ' + $ChinesePoemTitle + '（' + $ChinesePoemAuthor + '）</text>'
-$poemY = $yPos + 65
-$poemParts = $ChinesePoemText -replace '[，。！？]', "|" -split '\|' | Where-Object { $_ -and $_.Trim() }
-$poemLines = @()
-for ($i = 0; $i -lt $poemParts.Count; $i += 2) {
-  $line = $poemParts[$i].Trim()
-  if ($i + 1 -lt $poemParts.Count) { $line += "，" + $poemParts[$i+1].Trim() + "。" }
-  else { $line += "。" }
-  $poemLines += $line
+function Format-PoemLines {
+  param([string]$Text)
+  $parts = $Text -replace '[，。！？]', "|" -split '\|' | Where-Object { $_ -and $_.Trim() }
+  $lines = @()
+  for ($i = 0; $i -lt $parts.Count; $i += 2) {
+    $line = $parts[$i].Trim()
+    if ($i + 1 -lt $parts.Count) { $line += "，" + $parts[$i+1].Trim() + "。" }
+    else { $line += "。" }
+    $lines += $line
+  }
+  return $lines
 }
-for ($j = 0; $j -lt $poemLines.Count; $j++) {
-  $cnSvgLines += '  <text x="80" y="' + ($poemY + $j * 27) + '" font-size="18" fill="#333" font-family="STKaiti,serif">' + $poemLines[$j] + '</text>'
+$pBoxH = 230
+$cnSvgLines += '  <rect x="30" y="' + ($yPos + 5) + '" width="535" height="' + $pBoxH + '" rx="10" fill="url(#cs3)" stroke="#9FA8DA" stroke-width="1.5"/>'
+$pY = $yPos + 30
+if ($ChinesePoem1Title) {
+  $cnSvgLines += '  <text x="297" y="' + $pY + '" font-size="15" font-weight="bold" fill="#283593" text-anchor="middle">&#x1F4DA; ' + $ChinesePoem1Title + ' — ' + $ChinesePoem1Author + '</text>'
+  $pY += 24
+  $p1Lines = Format-PoemLines $ChinesePoem1Text
+  foreach ($l in $p1Lines) {
+    $cnSvgLines += '  <text x="80" y="' + $pY + '" font-size="16" fill="#333" font-family="STKaiti,serif">' + $l + '</text>'
+    $pY += 22
+  }
+  $pY += 10
+}
+if ($ChinesePoem2Title) {
+  $cnSvgLines += '  <text x="297" y="' + $pY + '" font-size="15" font-weight="bold" fill="#283593" text-anchor="middle">&#x1F4DA; ' + $ChinesePoem2Title + ' — ' + $ChinesePoem2Author + '</text>'
+  $pY += 24
+  $p2Lines = Format-PoemLines $ChinesePoem2Text
+  foreach ($l in $p2Lines) {
+    $cnSvgLines += '  <text x="80" y="' + $pY + '" font-size="16" fill="#333" font-family="STKaiti,serif">' + $l + '</text>'
+    $pY += 22
+  }
 }
 
-$taskY = $yPos + 170
+$taskY = $yPos + $pBoxH + 20
 $cnSvgLines += '  <rect x="30" y="' + $taskY + '" width="535" height="55" rx="10" fill="#FFCC02" opacity="0.2"/>'
 $cnSvgLines += '  <text x="297" y="' + ($taskY + 33) + '" font-size="15" fill="#E65100" text-anchor="middle">&#x1F3C6; 今日任务：跟读3遍 | 认读 | 描红 | 读古诗 | 在家找字</text>'
 $cnSvgLines += '  <text x="297" y="' + ($taskY + 65) + '" font-size="12" fill="#B0BEC5" text-anchor="middle">活动：' + $ChineseAct + '</text>'
