@@ -19,141 +19,118 @@ if (-not (Test-Path $printableDir)) {
     New-Item -ItemType Directory -Path $printableDir -Force | Out-Null
 }
 
-$CR = [char]13
-
-function Build-DuoDuo {
-    param($week, $letter, $words, $act)
-    @(
-        "多多 - 牛津自然拼读 第3册 第${week}周"
-        "字母: ${letter}    单词: ${words}"
-        "活动: ${act}"
-        "------------------------------------------------------------"
-        "按发音排序 (a_e)"
-        "(在横线上填入正确的单词)"
-        "1. c_t (猫)"
-        "2. c_k (蛋糕)"
-        "3. l_k (湖)"
-        "4. m_k (制作)"
-        "5. n_m (名字)"
-        "------------------------------------------------------------"
-        "读句子填空"
-        "I have a red c___. (帽子/cap)"
-        "She likes to r___ fast. (跑/run)"
-        "The sun is h___. (热/hot)"
-        "------------------------------------------------------------"
-        "数学 - 数数"
-        "Count the objects and write the number:"
-        "☆☆☆☆☆ ☆☆☆☆☆ ☆☆☆"
-        "数一数: ___ 个星星"
-        "生成日期: $(Get-Date -Format 'yyyy-MM-dd')"
-    ) -join $CR
+function Write-RtfFile {
+    param($Path, $Body)
+    $rtf = @(
+        "{\rtf1\ansi\deff0{\fonttbl{\f0\fnil\fcharset134 Yu Gothic;}}"
+        "\paperw11900\paperh16840\margl1134\margr1134\margt1134\margb1134"
+        "\pard\f0\fs28"
+        $Body
+        "}"
+    ) -join "\line "
+    $utf8Bom = [System.Text.Encoding]::UTF8.GetPreamble()
+    $bytes = $utf8Bom + [System.Text.Encoding]::UTF8.GetBytes($rtf)
+    [System.IO.File]::WriteAllBytes($Path, $bytes)
 }
 
-function Build-XiaoMing {
-    param($week, $letter, $words, $act)
-    @(
-        "小铭 - 牛津自然拼读 第1册 第${week}周"
-        "字母: ${letter}    单词: ${words}"
-        "活动: ${act}"
-        "------------------------------------------------------------"
-        "字母描写 - Trace the letters"
-        "${letter}  ${letter.ToLower()}${letter.ToLower()}"
-        "(沿着灰色字母描一描)"
-        "------------------------------------------------------------"
-        "找字母 - Find the letter"
-        "把字母 ${letter} 圈出来："
-        "a, a, a  a, a, a  abc def"
-        "------------------------------------------------------------"
-        "单词认读 - Read the words"
-        "大声读出下面的单词："
-        $words
-        "------------------------------------------------------------"
-        "发音练习 - Beginning sounds"
-        "大声说出每个单词的首字母发音："
-        "apple → /aa/"
-        "生成日期: $(Get-Date -Format 'yyyy-MM-dd')"
-    ) -join $CR
+function Escape-Rtf {
+    param($s)
+    $s -replace '\\', '\\' -replace '{', '\{' -replace '}', '\}' -replace "\n", "\line "
 }
 
-try {
-    $word = New-Object -ComObject Word.Application
-    $word.Visible = $false
-    $word.DisplayAlerts = 0
+$DateStr = Get-Date -Format "yyyy-MM-dd"
 
-    $doc = $word.Documents.Add()
-    $doc.PageSetup.PageWidth = $word.CentimetersToPoints(21.0)
-    $doc.PageSetup.PageHeight = $word.CentimetersToPoints(29.7)
-    $doc.PageSetup.TopMargin = $word.CentimetersToPoints(1.0)
-    $doc.PageSetup.BottomMargin = $word.CentimetersToPoints(1.0)
-    $doc.PageSetup.LeftMargin = $word.CentimetersToPoints(1.5)
-    $doc.PageSetup.RightMargin = $word.CentimetersToPoints(1.5)
-    $doc.Content.Font.Name = "Yu Gothic"
-    $doc.Content.Font.Size = 14
-    $doc.Content.Text = Build-DuoDuo $DuoDuoWeek $DDLetter $DDWords $DDAct
-    $docxPath = Join-Path $printableDir "duoduo_week${DuoDuoWeek}.docx"
-    $doc.SaveAs([ref][object]$docxPath, [ref][object]16)
-    $doc.Close()
-    Write-Output "DOCX generated: $docxPath"
+# === 多多 DOCX (RTF) ===
+$ddLines = @(
+    "\pard\b\fs44 ${DuoDuoWeek}周 - 多多 牛津自然拼读 第3册\b0\par"
+    "\pard\fs28 字母: ${DDLetter}   单词: ${DDWords}\par"
+    "\pard\fs24 活动: ${DDAct}\par"
+    "\pard \brdrb\brdrs\par"
+    "\pard\b\fs36 按发音排序 (a_e)\b0\par"
+    "\pard\fs24 (在横线上填入正确的单词)\par"
+    "\pard\fs28 1. c_t (猫)\par"
+    "\pard\fs28 2. c_k (蛋糕)\par"
+    "\pard\fs28 3. l_k (湖)\par"
+    "\pard\fs28 4. m_k (制作)\par"
+    "\pard\fs28 5. n_m (名字)\par"
+    "\pard \brdrb\brdrs\par"
+    "\pard\b\fs36 读句子填空\b0\par"
+    "\pard\fs28 I have a red c___. (帽子/cap)\par"
+    "\pard\fs28 She likes to r___ fast. (跑/run)\par"
+    "\pard\fs28 The sun is h___. (热/hot)\par"
+    "\pard \brdrb\brdrs\par"
+    "\pard\b\fs36 数学 - 数数\b0\par"
+    "\pard\fs24 Count the objects and write the number:\par"
+    "\pard\fs48 ☆☆☆☆☆ ☆☆☆☆☆ ☆☆☆\par"
+    "\pard\fs28 数一数: ___ 个星星\par"
+    "\pard \brdrb\brdrs\par"
+    "\pard\fs20 生成日期: ${DateStr}\par"
+)
+Write-RtfFile -Path (Join-Path $printableDir "duoduo_week${DuoDuoWeek}.doc") -Body ($ddLines -join "")
+Write-Output ("DOC generated: duoduo_week${DuoDuoWeek}.doc")
 
-    $doc = $word.Documents.Add()
-    $doc.PageSetup.PageWidth = $word.CentimetersToPoints(21.0)
-    $doc.PageSetup.PageHeight = $word.CentimetersToPoints(29.7)
-    $doc.PageSetup.TopMargin = $word.CentimetersToPoints(1.0)
-    $doc.PageSetup.BottomMargin = $word.CentimetersToPoints(1.0)
-    $doc.PageSetup.LeftMargin = $word.CentimetersToPoints(1.5)
-    $doc.PageSetup.RightMargin = $word.CentimetersToPoints(1.5)
-    $doc.Content.Font.Name = "Yu Gothic"
-    $doc.Content.Font.Size = 14
-    $doc.Content.Text = Build-XiaoMing $XiaoMingWeek $XMLetter $XMWords $XMAct
-    $docxPath = Join-Path $printableDir "xiaoming_week${XiaoMingWeek}.docx"
-    $doc.SaveAs([ref][object]$docxPath, [ref][object]16)
-    $doc.Close()
-    Write-Output "DOCX generated: $docxPath"
+# === 小铭 DOCX (RTF) ===
+$xmLines = @(
+    "\pard\b\fs44 ${XiaoMingWeek}周 - 小铭 牛津自然拼读 第1册\b0\par"
+    "\pard\fs28 字母: ${XMLetter}   单词: ${XMWords}\par"
+    "\pard\fs24 活动: ${XMAct}\par"
+    "\pard \brdrb\brdrs\par"
+    "\pard\b\fs36 字母描写\b0\par"
+    "\pard\fs24 Trace the letters:\par"
+    "\pard\fs72\cf2 ${XMLetter} ${XMLetter} ${XMLetter} ${XMLetter} ${XMLetter}\par"
+    "\pard\fs72\cf2 $($XMLetter.ToLower()) $($XMLetter.ToLower()) $($XMLetter.ToLower()) $($XMLetter.ToLower()) $($XMLetter.ToLower())\par"
+    "\pard\fs24 (沿着灰色字母描一描)\par"
+    "\pard \brdrb\brdrs\par"
+    "\pard\b\fs36 找字母\b0\par"
+    "\pard\fs28 把字母 ${XMLetter} 圈出来:\par"
+    "\pard\fs40 a a a a a b c d e f g h\par"
+    "\pard \brdrb\brdrs\par"
+    "\pard\b\fs36 单词认读\b0\par"
+    "\pard\fs28 大声读出下面的单词:\par"
+    "\pard\fs36\b ${XMWords}\b0\par"
+    "\pard \brdrb\brdrs\par"
+    "\pard\b\fs36 发音练习\b0\par"
+    "\pard\fs28 大声说出每个单词的首字母发音:\par"
+    "\pard\fs32 apple → /a/\par"
+    "\pard \brdrb\brdrs\par"
+    "\pard\fs20 生成日期: ${DateStr}\par"
+)
+Write-RtfFile -Path (Join-Path $printableDir "xiaoming_week${XiaoMingWeek}.doc") -Body ($xmLines -join "")
+Write-Output ("DOC generated: xiaoming_week${XiaoMingWeek}.doc")
 
-    if ($ChineseWeek) {
-        $doc = $word.Documents.Add()
-        $doc.PageSetup.PageWidth = $word.CentimetersToPoints(21.0)
-        $doc.PageSetup.PageHeight = $word.CentimetersToPoints(29.7)
-        $doc.PageSetup.TopMargin = $word.CentimetersToPoints(1.0)
-        $doc.PageSetup.BottomMargin = $word.CentimetersToPoints(1.0)
-        $doc.PageSetup.LeftMargin = $word.CentimetersToPoints(1.5)
-        $doc.PageSetup.RightMargin = $word.CentimetersToPoints(1.5)
-        $doc.Content.Font.Name = "Yu Gothic"
-        $doc.Content.Font.Size = 14
-        $cnContent = @(
-            "多多 - 语文冲刺 第${ChineseWeek}周"
-            "拼音: ${ChinesePinyin}    汉字: ${ChineseChars}"
-            "活动: ${ChineseAct}"
-            "------------------------------------------------------------"
-            "拼音跟读 - 大声读3遍"
-            $ChinesePinyin
-            "------------------------------------------------------------"
-            "汉字描红 - 每个字描2遍"
-        )
-        $cnCharList = @($ChineseChars -split '\s+') | Where-Object { $_ -and $_ -notmatch '复习|字母|声母|韵母|组合|全部|新字' }
-        foreach ($c in $cnCharList) {
-            $cnContent += "${c}  ${c}  ${c}  ${c}  ${c}"
-        }
-        $cnContent += "------------------------------------------------------------"
-        $cnContent += "今日任务"
-        $cnContent += "拼音跟读3遍 | 汉字认读 | 描红练习 | 在家找字"
-        $cnContent += "生成日期: $(Get-Date -Format 'yyyy-MM-dd')"
+# === 语文 DOCX (RTF) ===
+if ($ChineseWeek) {
+    $cnPinyin = Escape-Rtf $ChinesePinyin
+    $cnChars = Escape-Rtf $ChineseChars
+    $cnAct = Escape-Rtf $ChineseAct
+    $cnCharList = @($ChineseChars -split '\s+') | Where-Object { $_ -and $_ -notmatch '复习|字母|声母|韵母|组合|全部|新字' }
 
-        $doc.Content.Text = ($cnContent -join $CR)
-        $docxPath = Join-Path $printableDir "duoduo_chinese_week${ChineseWeek}.docx"
-        $doc.SaveAs([ref][object]$docxPath, [ref][object]16)
-        $doc.Close()
-        Write-Output "DOCX generated: $docxPath"
+    $cnLines = @(
+        "\pard\b\fs44 ${ChineseWeek}周 - 多多 语文冲刺\b0\par"
+        "\pard\fs28 拼音: ${cnPinyin}    汉字: ${cnChars}\par"
+        "\pard\fs24 活动: ${cnAct}\par"
+        "\pard \brdrb\brdrs\par"
+        "\pard\b\fs36 拼音跟读\b0\par"
+        "\pard\fs24 (大声读3遍)\par"
+        "\pard\fs48\b ${cnPinyin}\b0\par"
+        "\pard \brdrb\brdrs\par"
+        "\pard\b\fs36 汉字描红\b0\par"
+        "\pard\fs24 (每个字描2遍)\par"
+    )
+
+    foreach ($c in $cnCharList) {
+        $esc = Escape-Rtf $c
+        $cnLines += "\pard\fs56\cf2 ${esc}  ${esc}  ${esc}  ${esc}  ${esc}\par"
     }
 
-    Write-Output "Done."
+    $cnLines += "\pard \brdrb\brdrs\par"
+    $cnLines += "\pard\b\fs36 今日任务\b0\par"
+    $cnLines += "\pard\fs28 拼音跟读3遍 | 汉字认读 | 描红练习 | 在家找字\par"
+    $cnLines += "\pard \brdrb\brdrs\par"
+    $cnLines += "\pard\fs20 生成日期: ${DateStr}\par"
+
+    Write-RtfFile -Path (Join-Path $printableDir "duoduo_chinese_week${ChineseWeek}.doc") -Body ($cnLines -join "")
+    Write-Output ("DOC generated: duoduo_chinese_week${ChineseWeek}.doc")
 }
-catch {
-    Write-Error "Error: $($_.Exception.Message)"
-}
-finally {
-    if ($word) {
-        try { $word.Quit() } catch {}
-        [System.Runtime.InteropServices.Marshal]::ReleaseComObject($word) | Out-Null
-    }
-}
+
+Write-Output "Done."
