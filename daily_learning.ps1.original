@@ -1,4 +1,4 @@
-﻿param(
+﻿﻿param(
   [DateTime]$RunDate = (Get-Date)
 )
 
@@ -204,11 +204,14 @@ $M = $MathContent[[int]$MathWeek]
 
 # ====== 记录每日学习内容 ======
 $DateStr = Get-Date -Format "yyyy-MM-dd"
-$DayLog = "  ===== $DateStr 第$([Math]::Floor($DaysSinceStart / 7) + 1)周 ====="
-$DayLog += "`n  多多（第${DuoDuoWeek}周）：$($D.letter) 单词：$($D.words) 活动：$($D.act)"
-$DayLog += "`n  小铭（第${XiaoMingWeek}周）：$($X.letter) 单词：$($X.words) 活动：$($X.act)"
-$DayLog += "`n  多多数学（第${MathWeek}周）：$($M.ch) 内容：$($M.topic) 活动：$($M.act)"
-$DayLog += "`n  多多语文（第${ChineseWeek}周）：$($C.pinyin) $($C.chars) 每日：$DailyAct"
+$DayLog = @"
+ 
+ ===== $DateStr 第$([Math]::Floor($DaysSinceStart / 7) + 1)周 =====
+ 多多（第${DuoDuoWeek}周）：$($D.letter) 单词：$($D.words) 活动：$($D.act)
+ 小铭（第${XiaoMingWeek}周）：$($X.letter) 单词：$($X.words) 活动：$($X.act)
+ 多多数学（第${MathWeek}周）：$($M.ch) 内容：$($M.topic) 活动：$($M.act)
+ 多多语文（第${ChineseWeek}周）：$($C.pinyin) $($C.chars) 每日：$DailyAct
+ "@
 Out-File -FilePath $LogFile -Encoding utf8 -Append -InputObject $DayLog
 
 # ====== 生成每日练习卡片（Markdown） ======
@@ -333,30 +336,6 @@ $ChineseSheet | Out-File -FilePath "$WorksheetDir\多多语文_第${ChineseWeek}
 
 Write-Log "练习卡片已生成"
 
-# ====== SVG 打印练习纸 ======
-$svgScript = Join-Path $PSScriptRoot "generate_svg.ps1"
-if (Test-Path $svgScript) {
-  try {
-    & $svgScript -DuoDuoWeek $DuoDuoWeek -XiaoMingWeek $XiaoMingWeek -DDLetter $D.letter -DDWords $D.words -DDAct $D.act -XMLetter $X.letter -XMWords $X.words -XMAct $X.act -WorksheetDir $WorksheetDir
-  } catch {
-    Write-Log ("SVG生成失败: " + $_.Exception.Message)
-  }
-  } else {
-    Write-Log "SVG生成脚本不存在: $svgScript"
-  }
-
-  # ====== DOCX 打印文档 ======
-  $docxScript = Join-Path $PSScriptRoot "generate_docx.ps1"
-  if (Test-Path $docxScript) {
-    try {
-      & $docxScript -DuoDuoWeek $DuoDuoWeek -XiaoMingWeek $XiaoMingWeek -DDLetter $D.letter -DDWords $D.words -DDAct $D.act -XMLetter $X.letter -XMWords $X.words -XMAct $X.act -WorksheetDir $WorksheetDir
-    } catch {
-      Write-Log ("DOCX生成失败: " + $_.Exception.Message)
-    }
-  } else {
-    Write-Log "DOCX生成脚本不存在: $docxScript"
-  }
-
 # ====== 更新进度文件 ======
 $Progress.duo_duo.current_week = $DuoDuoWeek
 $Progress.xiao_ming.current_week = $XiaoMingWeek
@@ -364,36 +343,6 @@ $Progress.duo_duo_math.current_week = $MathWeek
 $Progress.duo_duo_chinese.current_week = $ChineseWeek
 $Progress | ConvertTo-Json -Depth 3 | Set-Content -Path $ProgressFile -Encoding utf8
 Write-Log "进度文件已更新"
-
-# ====== 生成FlowUs同步数据 ======
-$SyncData = @{
-  generated_at = (Get-Date -Format "yyyy-MM-dd HH:mm:ss")
-  duo_duo = @{
-    page_id = "b80cd768-6ef5-4da6-a257-e2afe8d388ac"
-    week = $DuoDuoWeek
-    items = @(
-      "按发音排序填空 (c_t, c_k, l_k, m_k, n_m)",
-      "读句子填空 (c___, r___, h___)",
-      "数学：数星星写数字"
-    )
-  }
-  xiao_ming = @{
-    page_id = "8169ce9a-efd8-47bd-b671-2d0b8fa4c6e6"
-    week = $XiaoMingWeek
-    letter = $($X.letter)
-    words = $($X.words)
-    items = @(
-      "字母描写: $($X.letter)",
-      "找字母: 圈出 $($X.letter.Substring(0,1))",
-      "单词认读: $($X.words)",
-      "发音练习: apple → /a/"
-    )
-  }
-  synced = $false
-}
-$SyncPath = Join-Path -Path $PSScriptRoot -ChildPath "worksheets\flowus_sync.json"
-$SyncData | ConvertTo-Json -Depth 5 | Set-Content -Path $SyncPath -Encoding utf8
-Write-Log "FlowUs同步数据已保存到: $SyncPath"
 
 # ====== Windows 通知 ======
 try {
@@ -404,12 +353,26 @@ try {
   $Notify.BalloonTipIcon = "Info"
   $Notify.BalloonTipTitle = "学习时间到！"
 
-  $b1 = " 多多 第${DuoDuoWeek}周：$($D.letter)`n   单词：$($D.words)`n   活动：$($D.act)"
-  $b2 = " 小铭 第${XiaoMingWeek}周：$($X.letter)`n   单词：$($X.words)`n   活动：$($X.act)"
-  $b3 = " 多多数学 第${MathWeek}周：$($M.ch)`n   内容：$($M.topic)`n   活动：$($M.act)"
-  $b4 = " 多多语文 第${ChineseWeek}周：$($C.pinyin) + $($C.chars)`n   今日：$DailyAct"
-  $b5 = " 练习卡片已保存至：$WorksheetDir`n 点击查看息流学习页面"
-  $Body = "$b1`n`n$b2`n`n$b3`n`n$b4`n`n$b5"
+  $Body = @"
+ 
+ 多多 第${DuoDuoWeek}周：$($D.letter)
+   单词：$($D.words)
+   活动：$($D.act)
+ 
+ 小铭 第${XiaoMingWeek}周：$($X.letter)
+   单词：$($X.words)
+   活动：$($X.act)
+ 
+ 多多数学 第${MathWeek}周：$($M.ch)
+   内容：$($M.topic)
+   活动：$($M.act)
+ 
+ 多多语文 第${ChineseWeek}周：$($C.pinyin) + $($C.chars)
+   今日：$DailyAct
+ 
+ 练习卡片已保存至：$WorksheetDir
+ 点击查看息流学习页面
+ "@
 
   $Notify.BalloonTipText = $Body.Trim()
   $Notify.Visible = $true
@@ -429,13 +392,29 @@ try {
 }
 
 # ====== 微信推送（Server酱） ======
-$WeChatTitle = "学习提醒 - 第$([Math]::Floor($DaysSinceStart / 7) + 1)周"
-$WeChatBody = "**多多 第${DuoDuoWeek}周：$($D.letter)**`n单词：$($D.words)`n活动：$($D.act)`n`n**小铭 第${XiaoMingWeek}周：$($X.letter)**`n单词：$($X.words)`n活动：$($X.act)`n`n**多多数学 第${MathWeek}周：$($M.ch)**`n内容：$($M.topic)`n活动：$($M.act)`n`n**多多语文 第${ChineseWeek}周：$($C.pinyin) + $($C.chars)**`n今日：$DailyAct`n`n查看息流详情：$ChineseUrl"
 try {
+  $WeChatTitle = "学习提醒 - 第$([Math]::Floor($DaysSinceStart / 7) + 1)周"
+  $WeChatBody = @"
+**多多 第${DuoDuoWeek}周：$($D.letter)**
+单词：$($D.words)
+活动：$($D.act)
+
+**小铭 第${XiaoMingWeek}周：$($X.letter)**
+单词：$($X.words)
+活动：$($X.act)
+
+**多多数学 第${MathWeek}周：$($M.ch)**
+内容：$($M.topic)
+活动：$($M.act)
+
+**多多语文 第${ChineseWeek}周：$($C.pinyin) + $($C.chars)**
+今日：$DailyAct
+
+查看息流详情：$ChineseUrl
+"@
   $jsonBody = @{ title = $WeChatTitle; desp = $WeChatBody } | ConvertTo-Json
   $utf8Body = [System.Text.Encoding]::UTF8.GetBytes($jsonBody)
-  $scUrl = "https://sctapi.ftqq.com/${ServerChanKey}.send"
-  $resp = Invoke-RestMethod -Uri $scUrl -Method Post -Body $utf8Body -ContentType "application/json; charset=utf-8"
+  $resp = Invoke-RestMethod -Uri "https://sctapi.ftqq.com/$ServerChanKey.send" -Method Post -Body $utf8Body -ContentType "application/json; charset=utf-8"
   if ($resp.code -eq 0) { Write-Log "微信推送成功" } else { Write-Log "微信推送返回：$($resp.message)" }
 } catch {
   Write-Log "微信推送失败：$($_.Exception.Message)"
@@ -449,11 +428,27 @@ try {
     $GiteeToken = [Environment]::GetEnvironmentVariable("GITEE_TOKEN")
     if ($GiteeToken) {
       $IssueTitle = "第${WeekNum}周学习计划（$($RunDate.ToString('yyyy-MM-dd'))起）"
-      $p1 = "## 多多 · 牛津自然拼读 第3册 第${DuoDuoWeek}周`n- [ ] 字母/音：$($D.letter)`n- [ ] 单词：$($D.words)`n- [ ] 活动：$($D.act)"
-      $p2 = "## 小铭 · 牛津自然拼读 第1册 第${XiaoMingWeek}周`n- [ ] 字母/音：$($X.letter)`n- [ ] 单词：$($X.words)`n- [ ] 活动：$($X.act)"
-      $p3 = "## 多多 · 新加坡数学 G1 第${MathWeek}周`n- [ ] 章节：$($M.ch)`n- [ ] 内容：$($M.topic)`n- [ ] 活动：$($M.act)"
-      $p4 = "## 多多 · 语文冲刺 第${ChineseWeek}周`n- [ ] 拼音：$($C.pinyin)`n- [ ] 汉字：$($C.chars)`n- [ ] 本周安排：$($C.plan)"
-      $IssueBody = "$p1`n`n$p2`n`n$p3`n`n$p4"
+      $IssueBody = @"
+## 多多 · 牛津自然拼读 第3册 第${DuoDuoWeek}周
+- [ ] 字母/音：$($D.letter)
+- [ ] 单词：$($D.words)
+- [ ] 活动：$($D.act)
+
+## 小铭 · 牛津自然拼读 第1册 第${XiaoMingWeek}周
+- [ ] 字母/音：$($X.letter)
+- [ ] 单词：$($X.words)
+- [ ] 活动：$($X.act)
+
+## 多多 · 新加坡数学 G1 第${MathWeek}周
+- [ ] 章节：$($M.ch)
+- [ ] 内容：$($M.topic)
+- [ ] 活动：$($M.act)
+
+## 多多 · 语文冲刺 第${ChineseWeek}周
+- [ ] 拼音：$($C.pinyin)
+- [ ] 汉字：$($C.chars)
+- [ ] 本周安排：$($C.plan)
+"@
       $bodyUtf8 = [System.Text.Encoding]::UTF8.GetBytes((@{ title = $IssueTitle; body = $IssueBody; labels = "学习计划" } | ConvertTo-Json))
       $resp = Invoke-RestMethod -Uri "https://gitee.com/api/v5/repos/yql8981229/learning-track/issues" -Method Post -Body $bodyUtf8 -ContentType "application/json; charset=utf-8" -Headers @{ Authorization = "Bearer $GiteeToken" }
       if ($resp.html_url) {
