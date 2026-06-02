@@ -72,6 +72,9 @@ foreach ($w in $xmWordsList) { $xmLetters += $w.Substring(0, 1) }
 $xmLettersStr = $xmLetters -join ', '
 $xmLetterDisplay = $XMLetter.Substring(0,1) + " " + $XMLetter.Substring(1)
 
+$xmLetterUp = $XMLetter.Substring(0,1).ToUpper()
+$xmLetterLow = if ($xmLetterUp -eq 'A') { "&#x0251;" } else { $XMLetter.Substring(0,1).ToLower() }
+
 $xmSvg = New-Svg @(
   '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 595 842" width="595" height="842">',
   '  <defs>',
@@ -90,10 +93,10 @@ $xmSvg = New-Svg @(
   '  <rect x="30" y="160" width="535" height="120" rx="10" fill="url(#xs1)" stroke="#A5D6A7" stroke-width="1.5"/>',
   '  <text x="297" y="188" font-size="17" font-weight="bold" fill="#2E7D32" text-anchor="middle">&#x270F;&#xFE0F; 字母描写</text>',
   '  <text x="297" y="205" font-size="12" fill="#78909C" text-anchor="middle">先看示例（黑色），再描灰色字母</text>',
-  '  <text x="200" y="248" font-size="50" fill="#333" text-anchor="middle" font-family="monospace" font-weight="bold">' + $XMLetter.Substring(0,1).ToUpper() + '</text>',
-  '  <text x="270" y="248" font-size="50" fill="#CFD8DC" text-anchor="middle" font-family="monospace" font-weight="bold">' + $XMLetter.Substring(0,1).ToUpper() + ' ' + $XMLetter.Substring(0,1).ToUpper() + ' ' + $XMLetter.Substring(0,1).ToUpper() + ' ' + $XMLetter.Substring(0,1).ToUpper() + '</text>',
-  '  <text x="200" y="272" font-size="50" fill="#333" text-anchor="middle" font-family="monospace" font-weight="bold">' + $XMLetter.Substring(0,1).ToLower() + '</text>',
-  '  <text x="270" y="272" font-size="50" fill="#CFD8DC" text-anchor="middle" font-family="monospace" font-weight="bold">' + $XMLetter.Substring(0,1).ToLower() + ' ' + $XMLetter.Substring(0,1).ToLower() + ' ' + $XMLetter.Substring(0,1).ToLower() + ' ' + $XMLetter.Substring(0,1).ToLower() + '</text>',
+  '  <text x="200" y="248" font-size="50" fill="#333" text-anchor="middle" font-family="monospace" font-weight="bold">' + $xmLetterUp + '</text>',
+  '  <text x="270" y="248" font-size="50" fill="#CFD8DC" text-anchor="middle" font-family="monospace" font-weight="bold">' + $xmLetterUp + ' ' + $xmLetterUp + ' ' + $xmLetterUp + ' ' + $xmLetterUp + '</text>',
+  '  <text x="200" y="272" font-size="50" fill="#333" text-anchor="middle" font-family="monospace" font-weight="bold">' + $xmLetterLow + '</text>',
+  '  <text x="270" y="272" font-size="50" fill="#CFD8DC" text-anchor="middle" font-family="monospace" font-weight="bold">' + $xmLetterLow + ' ' + $xmLetterLow + ' ' + $xmLetterLow + ' ' + $xmLetterLow + '</text>',
   '  <rect x="30" y="275" width="535" height="90" rx="10" fill="url(#xs2)" stroke="#F48FB1" stroke-width="1.5"/>',
   '  <text x="297" y="303" font-size="17" font-weight="bold" fill="#C62828" text-anchor="middle">&#x1F50D; 找字母</text>',
   '  <text x="297" y="320" font-size="13" fill="#78909C" text-anchor="middle">把字母 ' + $XMLetter.Substring(0,1) + ' 圈出来：</text>',

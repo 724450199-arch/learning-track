@@ -69,6 +69,7 @@ Write-Output ("DOC: duoduo_week${DuoDuoWeek}.doc")
 # === 小铭 DOC ===
 $xmColor = "red0\green0\blue0;\red67\green160\blue71;\red232\green245\blue233;\red252\green228\blue236;\red232\green234\blue246;\red40\green53\blue147;\red67\green160\blue71;\red255\green255\blue255;\red207\green216\blue220"
 $xmLetterUpper = $XMLetter.Substring(0,1)
+$xmLetterLow = if ($xmLetterUpper -eq 'A') { "\u593\?'" } else { $XMLetter.Substring(0,1).ToLower() }
 if ($XMWords) { $xmWordsList = $XMWords -split ',\s*' } else { $xmWordsList = @("A") }
 $xmLines = @(
     "\pard\cb6\cf2\b\fs44 ${XiaoMingWeek}周 - 小铭 牛津自然拼读 第1册\cf1\cb8\b0\par"
@@ -76,7 +77,7 @@ $xmLines = @(
     "\pard\cb2\cf2\b\fs36 字母描写\cf1\b0\par"
     "\pard\fs24 (先看黑色示例，再描灰色字母)\par"
     "\pard\fs60\cf1 ${xmLetterUpper}\cf9 ${xmLetterUpper} ${xmLetterUpper} ${xmLetterUpper} ${xmLetterUpper}\cf1\par"
-    "\pard\fs60\cf1 $($xmLetterUpper.ToLower())\cf9 $($xmLetterUpper.ToLower()) $($xmLetterUpper.ToLower()) $($xmLetterUpper.ToLower()) $($xmLetterUpper.ToLower())\cf1\par"
+    "\pard\fs60\cf1 ${xmLetterLow}\cf9 ${xmLetterLow} ${xmLetterLow} ${xmLetterLow} ${xmLetterLow}\cf1\par"
     "\pard\cb3\cf5\b\fs36 找字母\cf1\b0\par"
     "\pard\fs28 把字母 ${xmLetterUpper} 圈出来:\par"
     "\pard\fs40 a a a a a b c d e f g h\par"
