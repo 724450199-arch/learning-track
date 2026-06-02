@@ -56,12 +56,11 @@ $ddLines = @(
     "\pard\fs28 I like to r{\ul __}e. (赛跑/race)\par"
     "\pard\fs28 She has a red c{\ul __}e. (披肩/cape)\par"
     "\pard\fs28 We m{\ul __}e a cake. (制作/make)\par"
-    "\pard\cb6\cf5\b\fs36 数学练习\cf1\b0\par"
-    "\pard\fs24 在横线上写出答案:\par"
-    "\pard\fs28 3 + 2 = {\ul ___}\tab 5 + 1 = {\ul ___}\par"
-    "\pard\fs28 7 - 3 = {\ul ___}\tab 4 + 4 = {\ul ___}\par"
-    "\pard\fs28 9 - 2 = {\ul ___}\tab 6 + 3 = {\ul ___}\par"
-    "\pard\fs28 8 - 5 = {\ul ___}\tab 2 + 7 = {\ul ___}\par"
+    "\pard\cb6\cf5\b\fs36 数学 - Numbers to 10\cf1\b0\par"
+    "\pard\fs24 数一数，在横线上写出数字:\par"
+    "\pard\fs28 ☆☆☆☆☆ = {\ul __}\tab ☆☆☆ = {\ul __}\par"
+    "\pard\fs28 ●●●●●●● = {\ul __}\tab ■■■■■■■■■ = {\ul __}\par"
+    "\pard\fs28 圈出较大的数: 8 < {\ul __}\tab 或  3 < {\ul __}\par"
     "\pard\fs20 生成日期: ${DateStr}\par"
 )
 Write-RtfFile -Path (Join-Path $printableDir "duoduo_week${DuoDuoWeek}.doc") -ColorTable $ddColor -Body ($ddLines -join "")

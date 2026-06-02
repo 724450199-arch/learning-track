@@ -374,7 +374,7 @@ $SyncData = @{
     items = @(
       "按发音排序填空 (c_e, l_e, m_e, n_e, g_e)",
       "读句子填空 (race, cape, make a cake)",
-      "数学：8道10以内加减法"
+      "数学：数数写数字 + 比较大小"
     )
   }
   xiao_ming = @{

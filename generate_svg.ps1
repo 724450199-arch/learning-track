@@ -54,16 +54,13 @@ $ddSvg = New-Svg @(
   '  <text x="60" y="478" font-size="15" fill="#333" font-family="monospace">She has a red c<tspan fill="#E53935" font-weight="bold">__</tspan>e. (披肩/cape)</text>',
   '  <text x="60" y="508" font-size="15" fill="#333" font-family="monospace">We m<tspan fill="#E53935" font-weight="bold">__</tspan>e a cake. (制作/make)</text>',
   '  <rect x="30" y="520" width="535" height="210" rx="10" fill="url(#ds3)" stroke="#A5D6A7" stroke-width="1.5"/>',
-  '  <text x="297" y="548" font-size="17" font-weight="bold" fill="#2E7D32" text-anchor="middle">&#x1F522; 数学练习</text>',
-  '  <text x="297" y="568" font-size="12" fill="#558B2F" text-anchor="middle">在横线上写出答案</text>',
-  '  <text x="70" y="605" font-size="18" fill="#333" font-family="monospace">3 + 2 = </text><text x="158" y="605" font-size="18" fill="#E53935" font-family="monospace" font-weight="bold">___</text>',
-  '  <text x="320" y="605" font-size="18" fill="#333" font-family="monospace">5 + 1 = </text><text x="408" y="605" font-size="18" fill="#E53935" font-family="monospace" font-weight="bold">___</text>',
-  '  <text x="70" y="640" font-size="18" fill="#333" font-family="monospace">7 - 3 = </text><text x="158" y="640" font-size="18" fill="#E53935" font-family="monospace" font-weight="bold">___</text>',
-  '  <text x="320" y="640" font-size="18" fill="#333" font-family="monospace">4 + 4 = </text><text x="408" y="640" font-size="18" fill="#E53935" font-family="monospace" font-weight="bold">___</text>',
-  '  <text x="70" y="675" font-size="18" fill="#333" font-family="monospace">9 - 2 = </text><text x="158" y="675" font-size="18" fill="#E53935" font-family="monospace" font-weight="bold">___</text>',
-  '  <text x="320" y="675" font-size="18" fill="#333" font-family="monospace">6 + 3 = </text><text x="408" y="675" font-size="18" fill="#E53935" font-family="monospace" font-weight="bold">___</text>',
-  '  <text x="70" y="710" font-size="18" fill="#333" font-family="monospace">8 - 5 = </text><text x="158" y="710" font-size="18" fill="#E53935" font-family="monospace" font-weight="bold">___</text>',
-  '  <text x="320" y="710" font-size="18" fill="#333" font-family="monospace">2 + 7 = </text><text x="408" y="710" font-size="18" fill="#E53935" font-family="monospace" font-weight="bold">___</text>',
+  '  <text x="297" y="548" font-size="17" font-weight="bold" fill="#2E7D32" text-anchor="middle">&#x1F522; 数学 · Numbers to 10</text>',
+  '  <text x="297" y="568" font-size="12" fill="#558B2F" text-anchor="middle">数一数，在横线上写出数字</text>',
+  '  <text x="70" y="605" font-size="18" fill="#333" font-family="monospace">&#x2605; &#x2605; &#x2605; &#x2605; &#x2605; = </text><text x="250" y="605" font-size="18" fill="#E53935" font-family="monospace" font-weight="bold">__</text>',
+  '  <text x="320" y="605" font-size="18" fill="#333" font-family="monospace">&#x2605; &#x2605; &#x2605; = </text><text x="458" y="605" font-size="18" fill="#E53935" font-family="monospace" font-weight="bold">__</text>',
+  '  <text x="70" y="640" font-size="18" fill="#333" font-family="monospace">&#x25CF; &#x25CF; &#x25CF; &#x25CF; &#x25CF; &#x25CF; &#x25CF; = </text><text x="310" y="640" font-size="18" fill="#E53935" font-family="monospace" font-weight="bold">__</text>',
+  '  <text x="70" y="675" font-size="18" fill="#333" font-family="monospace">&#x25A3; &#x25A3; &#x25A3; &#x25A3; &#x25A3; &#x25A3; &#x25A3; &#x25A3; &#x25A3; = </text><text x="330" y="675" font-size="18" fill="#E53935" font-family="monospace" font-weight="bold">__</text>',
+  '  <text x="70" y="710" font-size="18" fill="#333" font-family="monospace">圈出较大的数：8 &lt; </text><text x="280" y="710" font-size="18" fill="#E53935" font-family="monospace" font-weight="bold">__</text><text x="295" y="710" font-size="18" fill="#333" font-family="monospace">  或  3 &lt; </text><text x="410" y="710" font-size="18" fill="#E53935" font-family="monospace" font-weight="bold">__</text>',
   '</svg>'
 )
 
