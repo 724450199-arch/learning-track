@@ -7,6 +7,10 @@
     [string]$XMLetter,
     [string]$XMWords,
     [string]$XMAct,
+    [string]$ChineseWeek = "",
+    [string]$ChinesePinyin = "",
+    [string]$ChineseChars = "",
+    [string]$ChineseAct = "",
     [string]$WorksheetDir
 )
 
@@ -88,6 +92,43 @@ $xmLines = @(
 
 $xmSvg = New-Svg $xmLines
 
+# === 语文 SVG ===
+$cnDate = Get-Date -Format "yyyy-MM-dd"
+$cnPinyinList = $ChinesePinyin -split '\s+'
+$cnCharList = @($ChineseChars -split '\s+') | Where-Object { $_ -and $_ -notmatch '复习|字母|声母|韵母|组合|全部|新字' }
+$cnPinyinStr = $ChinesePinyin
+$cnCharsStr = $ChineseChars
+
+$cnLines = @(
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 595 842" width="595" height="842">',
+  '  <rect width="595" height="842" fill="#fff"/>',
+  "  <text x='50' y='60' font-size='24' font-weight='bold' fill='#333'>多多 - 语文冲刺 第${ChineseWeek}周</text>",
+  "  <text x='50' y='100' font-size='18' fill='#555'>拼音：$cnPinyinStr</text>",
+  "  <text x='50' y='130' font-size='16' fill='#777'>汉字：$cnCharsStr</text>",
+  '  <line x1="50" y1="145" x2="545" y2="145" stroke="#ddd"/>',
+  '  <text x="50" y="180" font-size="18" font-weight="bold" fill="#333">拼音跟读</text>',
+  '  <text x="50" y="210" font-size="14" fill="#999">(大声读3遍)</text>',
+  "  <text x='50' y='250' font-size='24' fill='#333'>$cnPinyinStr</text>",
+  '  <line x1="50" y1="280" x2="545" y2="280" stroke="#ddd"/>',
+  '  <text x="50" y="310" font-size="18" font-weight="bold" fill="#333">汉字描红</text>',
+  '  <text x="50" y="340" font-size="14" fill="#999">(每个字描2遍)</text>'
+)
+
+$yPos = 390
+foreach ($c in $cnCharList) {
+  $cnLines += "  <text x='50' y='${yPos}' font-size='28' fill='#ccc' font-family='serif'>$c $c $c $c $c</text>"
+  $yPos += 50
+}
+
+$cnLines += '  <line x1="50" y1="' + $yPos + '" x2="545" y2="' + $yPos + '" stroke="#ddd"/>'
+$cnLines += '  <text x="50" y="' + ($yPos + 40) + '" font-size="18" font-weight="bold" fill="#333">今日任务</text>'
+$cnLines += '  <text x="50" y="' + ($yPos + 70) + '" font-size="14" fill="#333">拼音跟读3遍 | 汉字认读 | 描红练习 | 在家找字</text>'
+$cnLines += '  <text x="50" y="' + ($yPos + 100) + '" font-size="14" fill="#999">活动：' + $ChineseAct + '</text>'
+$cnLines += "  <text x='50' y='" + ($yPos + 140) + "' font-size='14' fill='#999'>生成日期：$cnDate</text>"
+$cnLines += '</svg>'
+
+$cnSvg = New-Svg $cnLines
+
 # Save files
 $printableDir = Join-Path $WorksheetDir "printable"
 if (-not (Test-Path $printableDir)) {
@@ -96,9 +137,12 @@ if (-not (Test-Path $printableDir)) {
 
 $ddPath = Join-Path $printableDir "duoduo_week${DuoDuoWeek}.svg"
 $xmPath = Join-Path $printableDir "xiaoming_week${XiaoMingWeek}.svg"
+$cnPath = Join-Path $printableDir "duoduo_chinese_week${ChineseWeek}.svg"
 
 [System.IO.File]::WriteAllText($ddPath, $ddSvg, [System.Text.Encoding]::UTF8)
 [System.IO.File]::WriteAllText($xmPath, $xmSvg, [System.Text.Encoding]::UTF8)
+[System.IO.File]::WriteAllText($cnPath, $cnSvg, [System.Text.Encoding]::UTF8)
 
 Write-Output ("SVG generated: " + $ddPath)
 Write-Output ("SVG generated: " + $xmPath)
+Write-Output ("SVG generated: " + $cnPath)

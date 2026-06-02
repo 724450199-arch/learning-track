@@ -7,6 +7,10 @@
     [string]$XMLetter,
     [string]$XMWords,
     [string]$XMAct,
+    [string]$ChineseWeek = "",
+    [string]$ChinesePinyin = "",
+    [string]$ChineseChars = "",
+    [string]$ChineseAct = "",
     [string]$WorksheetDir
 )
 
@@ -105,6 +109,42 @@ try {
     $doc.SaveAs([ref][object]$docxPath, [ref][object]16)
     $doc.Close()
     Write-Output "DOCX generated: $docxPath"
+
+    if ($ChineseWeek) {
+        $doc = $word.Documents.Add()
+        $doc.PageSetup.PageWidth = $word.CentimetersToPoints(21.0)
+        $doc.PageSetup.PageHeight = $word.CentimetersToPoints(29.7)
+        $doc.PageSetup.TopMargin = $word.CentimetersToPoints(1.0)
+        $doc.PageSetup.BottomMargin = $word.CentimetersToPoints(1.0)
+        $doc.PageSetup.LeftMargin = $word.CentimetersToPoints(1.5)
+        $doc.PageSetup.RightMargin = $word.CentimetersToPoints(1.5)
+        $doc.Content.Font.Name = "Yu Gothic"
+        $doc.Content.Font.Size = 14
+        $cnContent = @(
+            "多多 - 语文冲刺 第${ChineseWeek}周"
+            "拼音: ${ChinesePinyin}    汉字: ${ChineseChars}"
+            "活动: ${ChineseAct}"
+            "------------------------------------------------------------"
+            "拼音跟读 - 大声读3遍"
+            $ChinesePinyin
+            "------------------------------------------------------------"
+            "汉字描红 - 每个字描2遍"
+        )
+        $cnCharList = @($ChineseChars -split '\s+') | Where-Object { $_ -and $_ -notmatch '复习|字母|声母|韵母|组合|全部|新字' }
+        foreach ($c in $cnCharList) {
+            $cnContent += "${c}  ${c}  ${c}  ${c}  ${c}"
+        }
+        $cnContent += "------------------------------------------------------------"
+        $cnContent += "今日任务"
+        $cnContent += "拼音跟读3遍 | 汉字认读 | 描红练习 | 在家找字"
+        $cnContent += "生成日期: $(Get-Date -Format 'yyyy-MM-dd')"
+
+        $doc.Content.Text = ($cnContent -join $CR)
+        $docxPath = Join-Path $printableDir "duoduo_chinese_week${ChineseWeek}.docx"
+        $doc.SaveAs([ref][object]$docxPath, [ref][object]16)
+        $doc.Close()
+        Write-Output "DOCX generated: $docxPath"
+    }
 
     Write-Output "Done."
 }

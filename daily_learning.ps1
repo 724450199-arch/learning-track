@@ -337,7 +337,7 @@ Write-Log "练习卡片已生成"
 $svgScript = Join-Path $PSScriptRoot "generate_svg.ps1"
 if (Test-Path $svgScript) {
   try {
-    & $svgScript -DuoDuoWeek $DuoDuoWeek -XiaoMingWeek $XiaoMingWeek -DDLetter $D.letter -DDWords $D.words -DDAct $D.act -XMLetter $X.letter -XMWords $X.words -XMAct $X.act -WorksheetDir $WorksheetDir
+    & $svgScript -DuoDuoWeek $DuoDuoWeek -XiaoMingWeek $XiaoMingWeek -DDLetter $D.letter -DDWords $D.words -DDAct $D.act -XMLetter $X.letter -XMWords $X.words -XMAct $X.act -ChineseWeek $ChineseWeek -ChinesePinyin $C.pinyin -ChineseChars $C.chars -ChineseAct $C.act -WorksheetDir $WorksheetDir
   } catch {
     Write-Log ("SVG生成失败: " + $_.Exception.Message)
   }
@@ -349,7 +349,7 @@ if (Test-Path $svgScript) {
   $docxScript = Join-Path $PSScriptRoot "generate_docx.ps1"
   if (Test-Path $docxScript) {
     try {
-      & $docxScript -DuoDuoWeek $DuoDuoWeek -XiaoMingWeek $XiaoMingWeek -DDLetter $D.letter -DDWords $D.words -DDAct $D.act -XMLetter $X.letter -XMWords $X.words -XMAct $X.act -WorksheetDir $WorksheetDir
+      & $docxScript -DuoDuoWeek $DuoDuoWeek -XiaoMingWeek $XiaoMingWeek -DDLetter $D.letter -DDWords $D.words -DDAct $D.act -XMLetter $X.letter -XMWords $X.words -XMAct $X.act -ChineseWeek $ChineseWeek -ChinesePinyin $C.pinyin -ChineseChars $C.chars -ChineseAct $C.act -WorksheetDir $WorksheetDir
     } catch {
       Write-Log ("DOCX生成失败: " + $_.Exception.Message)
     }
