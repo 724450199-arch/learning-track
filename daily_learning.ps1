@@ -372,7 +372,7 @@ $SyncData = @{
     page_id = "b80cd768-6ef5-4da6-a257-e2afe8d388ac"
     week = $DuoDuoWeek
     items = @(
-      "按发音排序填空 (c_t, c_k, l_k, m_k, n_m)",
+      "按发音排序填空 (c_k, l_k, m_k, n_m, g_m)",
       "读句子填空 (c___, r___, h___)",
       "数学：数星星写数字"
     )
