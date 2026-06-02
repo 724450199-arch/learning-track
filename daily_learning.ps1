@@ -481,6 +481,17 @@ $Progress.duo_duo_chinese.current_week = $ChineseWeek
 $Progress | ConvertTo-Json -Depth 3 | Set-Content -Path $ProgressFile -Encoding utf8
 Write-Log "进度文件已更新"
 
+# ====== 构建完整古诗课程计划（13周） ======
+$FullPoemPlan = @()
+for ($w = 1; $w -le 13; $w++) {
+  $cw = $ChineseContent[$w]
+  if (-not $cw) { continue }
+  $titles = @()
+  foreach ($p in $cw.poems) { $titles += $p.title }
+  $gradeLabel = if ($w -le 3) { "G1" } elseif ($w -le 6) { "G2" } elseif ($w -le 8) { "G3-4" } elseif ($w -le 11) { "G5" } else { "G6" }
+  $FullPoemPlan += "第${w}周（${gradeLabel}）：$($titles -join '、')"
+}
+
 # ====== 生成FlowUs同步数据 ======
 $SyncData = @{
   generated_at = (Get-Date -Format "yyyy-MM-dd HH:mm:ss")
@@ -516,6 +527,7 @@ $SyncData = @{
     poem2_title = $ChinesePoem2Title
     poem2_author = $ChinesePoem2Author
     poem2_text = $ChinesePoem2Text
+    poem_plan = $FullPoemPlan
     synced = $false
   }
   synced = $false
