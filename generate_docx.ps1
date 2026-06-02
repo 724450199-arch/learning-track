@@ -11,6 +11,9 @@
     [string]$ChinesePinyin = "",
     [string]$ChineseChars = "",
     [string]$ChineseAct = "",
+    [string]$ChinesePoemTitle = "",
+    [string]$ChinesePoemAuthor = "",
+    [string]$ChinesePoemText = "",
     [string]$WorksheetDir
 )
 
@@ -99,6 +102,9 @@ if ($ChineseWeek) {
     $cnPinyin = Escape-Rtf $ChinesePinyin
     $cnChars = Escape-Rtf $ChineseChars
     $cnAct = Escape-Rtf $ChineseAct
+    $cnPoemTitle = Escape-Rtf $ChinesePoemTitle
+    $cnPoemAuthor = Escape-Rtf $ChinesePoemAuthor
+    $cnPoemText = Escape-Rtf $ChinesePoemText
     $cnCharList = @($ChineseChars -split '\s+') | Where-Object { $_ -and $_ -notmatch '复习|字母|声母|韵母|组合|全部|新字' }
     $cnColor = "red0\green0\blue0;\red229\green57\blue53;\red255\green243\blue224;\red251\green233\blue231;\red230\green81\blue0;\red191\green54\blue12;\red255\green255\blue255"
 
@@ -108,7 +114,7 @@ if ($ChineseWeek) {
         "\pard\fs24 活动: ${cnAct}\par"
         "\pard\cb3\cf4\b\fs36 拼音跟读 - 大声读3遍\cf1\b0\par"
         "\pard\fs48\b ${cnPinyin}\b0\par"
-        "\pard\cb4\cf5\b\fs36 汉字描红 - 每个字描2遍\cf1\b0\par"
+        "\pard\cb4\cf5\b\fs36 汉字描红 - 每个字描3遍\cf1\b0\par"
     )
 
     foreach ($c in $cnCharList) {
@@ -116,8 +122,13 @@ if ($ChineseWeek) {
         $cnLines += "\pard\fs56\cf2 ${esc}  ${esc}  ${esc}  ${esc}  ${esc}\cf1\par"
     }
 
+    if ($cnPoemTitle) {
+        $cnLines += "\pard\cb3\cf4\b\fs36 今日古诗 - ${cnPoemTitle}（${cnPoemAuthor}）\cf1\b0\par"
+        $cnLines += "\pard\fs28 ${cnPoemText}\par"
+    }
+
     $cnLines += "\pard\b\fs36 今日任务\b0\par"
-    $cnLines += "\pard\fs28 拼音跟读3遍 | 汉字认读 | 描红练习 | 在家找字\par"
+    $cnLines += "\pard\fs28 拼音跟读3遍 | 汉字认读 | 描红练习 | 读古诗 | 在家找字\par"
     $cnLines += "\pard\fs20 生成日期: ${DateStr}\par"
 
     Write-RtfFile -Path (Join-Path $printableDir "duoduo_chinese_week${ChineseWeek}.doc") -ColorTable $cnColor -Body ($cnLines -join "")

@@ -11,6 +11,9 @@
     [string]$ChinesePinyin = "",
     [string]$ChineseChars = "",
     [string]$ChineseAct = "",
+    [string]$ChinesePoemTitle = "",
+    [string]$ChinesePoemAuthor = "",
+    [string]$ChinesePoemText = "",
     [string]$WorksheetDir
 )
 
@@ -119,13 +122,14 @@ $xmSvg = New-Svg @(
 $cnCharList = @($ChineseChars -split '\s+') | Where-Object { $_ -and $_ -notmatch '复习|字母|声母|韵母|组合|全部|新字' }
 
 $cnSvgLines = @(
-  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 595 842" width="595" height="842">',
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 595 1000" width="595" height="1000">',
   '  <defs>',
   '    <linearGradient id="ch" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#E53935"/><stop offset="100%" stop-color="#FF7043"/></linearGradient>',
   '    <linearGradient id="cs1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FFF3E0"/><stop offset="100%" stop-color="#FFF8E1"/></linearGradient>',
   '    <linearGradient id="cs2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FBE9E7"/><stop offset="100%" stop-color="#FFF0E8"/></linearGradient>',
+  '    <linearGradient id="cs3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#E8EAF6"/><stop offset="100%" stop-color="#F3F4FD"/></linearGradient>',
   '  </defs>',
-  '  <rect width="595" height="842" fill="#FFFBF5"/>',
+  '  <rect width="595" height="1000" fill="#FFFBF5"/>',
   '  <rect x="0" y="0" width="595" height="85" fill="url(#ch)" rx="0"/>',
   '  <text x="297" y="38" font-size="22" font-weight="bold" fill="#fff" text-anchor="middle">&#x2605; 多多 · 语文冲刺</text>',
   '  <text x="297" y="65" font-size="16" fill="#FFEBEE" text-anchor="middle">第' + $ChineseWeek + '周 · 9月入学准备</text>',
@@ -135,20 +139,37 @@ $cnSvgLines = @(
   '  <rect x="30" y="160" width="535" height="105" rx="10" fill="url(#cs1)" stroke="#FFCC80" stroke-width="1.5"/>',
   '  <text x="297" y="188" font-size="17" font-weight="bold" fill="#E65100" text-anchor="middle">&#x1F3A4; 拼音跟读 · 大声读3遍</text>',
   '  <text x="297" y="250" font-size="28" fill="#333" text-anchor="middle" font-weight="bold">' + $ChinesePinyin + '</text>',
-  '  <rect x="30" y="280" width="535" height="340" rx="10" fill="url(#cs2)" stroke="#FFAB91" stroke-width="1.5"/>',
-  '  <text x="297" y="308" font-size="17" font-weight="bold" fill="#BF360C" text-anchor="middle">&#x270F;&#xFE0F; 汉字描红 · 每个字描2遍</text>'
+  '  <rect x="30" y="280" width="535" height="270" rx="10" fill="url(#cs2)" stroke="#FFAB91" stroke-width="1.5"/>',
+  '  <text x="297" y="308" font-size="17" font-weight="bold" fill="#BF360C" text-anchor="middle">&#x270F;&#xFE0F; 汉字描红 · 每个字描3遍</text>'
 )
 
-$yPos = 345
+$yPos = 350
 foreach ($c in $cnCharList) {
   $cnSvgLines += "  <text x='297' y='${yPos}' font-size='30' fill='#CFD8DC' text-anchor='middle' font-family='STKaiti,serif' font-weight='bold'>$c  $c  $c  $c  $c</text>"
-  $yPos += 48
+  $yPos += 42
 }
 
-$cnSvgLines += '  <rect x="30" y="' + ($yPos + 5) + '" width="535" height="55" rx="10" fill="#FFCC02" opacity="0.2"/>'
-$cnSvgLines += '  <text x="297" y="' + ($yPos + 38) + '" font-size="15" fill="#E65100" text-anchor="middle">&#x1F3C6; 今日任务：跟读3遍 | 认读 | 描红 | 在家找字</text>'
-$cnSvgLines += '  <text x="297" y="' + ($yPos + 70) + '" font-size="12" fill="#B0BEC5" text-anchor="middle">活动：' + $ChineseAct + '</text>'
-$cnSvgLines += '  <text x="297" y="' + ($yPos + 100) + '" font-size="12" fill="#B0BEC5" text-anchor="middle">生成日期：' + $DateStr + '</text>'
+# ====== Poem Section ======
+$cnSvgLines += '  <rect x="30" y="' + ($yPos + 5) + '" width="535" height="150" rx="10" fill="url(#cs3)" stroke="#9FA8DA" stroke-width="1.5"/>'
+$cnSvgLines += '  <text x="297" y="' + ($yPos + 33) + '" font-size="16" font-weight="bold" fill="#283593" text-anchor="middle">&#x1F4DA; 今日古诗 · ' + $ChinesePoemTitle + '（' + $ChinesePoemAuthor + '）</text>'
+$poemY = $yPos + 65
+$poemParts = $ChinesePoemText -replace '[，。！？]', "|" -split '\|' | Where-Object { $_ -and $_.Trim() }
+$poemLines = @()
+for ($i = 0; $i -lt $poemParts.Count; $i += 2) {
+  $line = $poemParts[$i].Trim()
+  if ($i + 1 -lt $poemParts.Count) { $line += "，" + $poemParts[$i+1].Trim() + "。" }
+  else { $line += "。" }
+  $poemLines += $line
+}
+for ($j = 0; $j -lt $poemLines.Count; $j++) {
+  $cnSvgLines += '  <text x="80" y="' + ($poemY + $j * 27) + '" font-size="18" fill="#333" font-family="STKaiti,serif">' + $poemLines[$j] + '</text>'
+}
+
+$taskY = $yPos + 170
+$cnSvgLines += '  <rect x="30" y="' + $taskY + '" width="535" height="55" rx="10" fill="#FFCC02" opacity="0.2"/>'
+$cnSvgLines += '  <text x="297" y="' + ($taskY + 33) + '" font-size="15" fill="#E65100" text-anchor="middle">&#x1F3C6; 今日任务：跟读3遍 | 认读 | 描红 | 读古诗 | 在家找字</text>'
+$cnSvgLines += '  <text x="297" y="' + ($taskY + 65) + '" font-size="12" fill="#B0BEC5" text-anchor="middle">活动：' + $ChineseAct + '</text>'
+$cnSvgLines += '  <text x="297" y="' + ($taskY + 95) + '" font-size="12" fill="#B0BEC5" text-anchor="middle">生成日期：' + $DateStr + '</text>'
 $cnSvgLines += '</svg>'
 
 $cnSvg = New-Svg $cnSvgLines
