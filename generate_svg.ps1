@@ -14,127 +14,135 @@
     [string]$WorksheetDir
 )
 
-function New-Svg([string[]]$lines) {
-    $lines -join "`n"
-}
+function New-Svg([string[]]$lines) { $lines -join "`n" }
 
-$ddWordsList = $DDWords -split ',\s*'
-$ddDate = Get-Date -Format "yyyy-MM-dd"
-
-$ddLines = @()
-$ddLines = @(
-  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 595 842" width="595" height="842">',
-  '  <rect width="595" height="842" fill="#fff"/>',
-  "  <text x='50' y='60' font-size='24' font-weight='bold' fill='#333'>多多 - 牛津自然拼读 第3册 第${DuoDuoWeek}周</text>",
-  "  <text x='50' y='100' font-size='18' fill='#555'>当前学习：$DDLetter</text>",
-  "  <text x='50' y='130' font-size='16' fill='#777'>单词跟读：$DDWords</text>",
-  '  <line x1="50" y1="145" x2="545" y2="145" stroke="#ddd"/>',
-  '  <text x="50" y="180" font-size="18" font-weight="bold" fill="#333">按发音排序 (a_e)</text>',
-  '  <text x="50" y="210" font-size="14" fill="#999">(在空白处填入正确的单词)</text>',
-  '  <text x="50" y="250" font-size="16" fill="#333">1. c_t (猫)</text>',
-  '  <text x="50" y="280" font-size="16" fill="#333">2. c_k (蛋糕)</text>',
-  '  <text x="50" y="310" font-size="16" fill="#333">3. l_k (湖)</text>',
-  '  <text x="50" y="340" font-size="16" fill="#333">4. m_k (制作)</text>',
-  '  <text x="50" y="370" font-size="16" fill="#333">5. n_m (名字)</text>',
-  '  <line x1="50" y1="390" x2="545" y2="390" stroke="#ddd"/>',
-  '  <text x="50" y="420" font-size="18" font-weight="bold" fill="#333">读句子填空</text>',
-  '  <text x="50" y="450" font-size="14" fill="#333">I have a red c___. (帽子/cap)</text>',
-  '  <text x="50" y="475" font-size="14" fill="#333">She likes to r___ fast. (跑/run)</text>',
-  '  <text x="50" y="500" font-size="14" fill="#333">The sun is h___. (热/hot)</text>',
-  '  <line x1="50" y1="520" x2="545" y2="520" stroke="#ddd"/>',
-  '  <text x="50" y="550" font-size="18" font-weight="bold" fill="#333">数学 - 数数</text>',
-  '  <text x="50" y="580" font-size="14" fill="#333">Count the objects and write the number:</text>',
-  '  <text x="50" y="610" font-size="48" fill="#333">☆☆☆☆☆ ☆☆☆☆☆ ☆☆☆</text>',
-  '  <text x="50" y="650" font-size="16" fill="#333">数一数：___ 个星星</text>',
-  '  <line x1="50" y1="670" x2="545" y2="670" stroke="#ddd"/>',
-  "  <text x='50' y='700' font-size='14' fill='#999'>生成日期：$ddDate</text>",
-  '</svg>'
-)
-
-$ddSvg = New-Svg $ddLines
-
-# === 小铭 SVG ===
-$xmWordsList = $XMWords -split ',\s*'
-$xmLetters = @()
-foreach ($w in $xmWordsList) {
-    $xmLetters += $w.Substring(0, 1)
-}
-$xmLettersStr = $xmLetters -join ', '
-
-$xmDate = Get-Date -Format "yyyy-MM-dd"
-
-$xmLines = @(
-  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 595 842" width="595" height="842">',
-  '  <rect width="595" height="842" fill="#fff"/>',
-  "  <text x='50' y='60' font-size='24' font-weight='bold' fill='#333'>小铭 - 牛津自然拼读 第1册 第${XiaoMingWeek}周</text>",
-  "  <text x='50' y='100' font-size='18' fill='#555'>当前学习：$XMLetter</text>",
-  "  <text x='50' y='130' font-size='16' fill='#777'>单词：$XMWords</text>",
-  '  <line x1="50" y1="145" x2="545" y2="145" stroke="#ddd"/>',
-  '  <text x="50" y="180" font-size="18" font-weight="bold" fill="#333">字母描写</text>',
-  "  <text x='50' y='220' font-size='80' fill='#ccc' font-family='monospace'>$XMLetter $($XMLetter.ToLower())</text>",
-  '  <text x="50" y="260" font-size="16" fill="#333">(沿着灰色字母描一描)</text>',
-  '  <line x1="50" y1="280" x2="545" y2="280" stroke="#ddd"/>',
-  '  <text x="50" y="310" font-size="18" font-weight="bold" fill="#333">找字母</text>',
-  "  <text x='50' y='340' font-size='14' fill='#333'>把字母 $XMLetter 圈出来：</text>",
-  "  <text x='50' y='380' font-size='30' fill='#333' font-family='monospace'>$xmLettersStr $($xmLettersStr.ToLower()) abc def</text>",
-  '  <line x1="50" y1="400" x2="545" y2="400" stroke="#ddd"/>',
-  '  <text x="50" y="430" font-size="18" font-weight="bold" fill="#333">单词认读</text>',
-  '  <text x="50" y="460" font-size="14" fill="#333">大声读出下面的单词：</text>',
-  "  <text x='50' y='500' font-size='24' fill='#333'>$XMWords</text>",
-  '  <line x1="50" y1="520" x2="545" y2="520" stroke="#ddd"/>',
-  '  <text x="50" y="550" font-size="18" font-weight="bold" fill="#333">发音练习</text>',
-  '  <text x="50" y="580" font-size="14" fill="#333">大声说出每个单词的首字母发音：</text>',
-  "  <text x='50' y='620' font-size='20' fill='#333'>$($xmWordsList[0]) → /$($XMLetter.ToLower())/</text>",
-  '  <line x1="50" y1="640" x2="545" y2="640" stroke="#ddd"/>',
-  "  <text x='50' y='700' font-size='14' fill='#999'>生成日期：$xmDate</text>",
-  '</svg>'
-)
-
-$xmSvg = New-Svg $xmLines
-
-# === 语文 SVG ===
-$cnDate = Get-Date -Format "yyyy-MM-dd"
-$cnPinyinList = $ChinesePinyin -split '\s+'
-$cnCharList = @($ChineseChars -split '\s+') | Where-Object { $_ -and $_ -notmatch '复习|字母|声母|韵母|组合|全部|新字' }
-$cnPinyinStr = $ChinesePinyin
-$cnCharsStr = $ChineseChars
-
-$cnLines = @(
-  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 595 842" width="595" height="842">',
-  '  <rect width="595" height="842" fill="#fff"/>',
-  "  <text x='50' y='60' font-size='24' font-weight='bold' fill='#333'>多多 - 语文冲刺 第${ChineseWeek}周</text>",
-  "  <text x='50' y='100' font-size='18' fill='#555'>拼音：$cnPinyinStr</text>",
-  "  <text x='50' y='130' font-size='16' fill='#777'>汉字：$cnCharsStr</text>",
-  '  <line x1="50" y1="145" x2="545" y2="145" stroke="#ddd"/>',
-  '  <text x="50" y="180" font-size="18" font-weight="bold" fill="#333">拼音跟读</text>',
-  '  <text x="50" y="210" font-size="14" fill="#999">(大声读3遍)</text>',
-  "  <text x='50' y='250' font-size='24' fill='#333'>$cnPinyinStr</text>",
-  '  <line x1="50" y1="280" x2="545" y2="280" stroke="#ddd"/>',
-  '  <text x="50" y="310" font-size="18" font-weight="bold" fill="#333">汉字描红</text>',
-  '  <text x="50" y="340" font-size="14" fill="#999">(每个字描2遍)</text>'
-)
-
-$yPos = 390
-foreach ($c in $cnCharList) {
-  $cnLines += "  <text x='50' y='${yPos}' font-size='28' fill='#ccc' font-family='serif'>$c $c $c $c $c</text>"
-  $yPos += 50
-}
-
-$cnLines += '  <line x1="50" y1="' + $yPos + '" x2="545" y2="' + $yPos + '" stroke="#ddd"/>'
-$cnLines += '  <text x="50" y="' + ($yPos + 40) + '" font-size="18" font-weight="bold" fill="#333">今日任务</text>'
-$cnLines += '  <text x="50" y="' + ($yPos + 70) + '" font-size="14" fill="#333">拼音跟读3遍 | 汉字认读 | 描红练习 | 在家找字</text>'
-$cnLines += '  <text x="50" y="' + ($yPos + 100) + '" font-size="14" fill="#999">活动：' + $ChineseAct + '</text>'
-$cnLines += "  <text x='50' y='" + ($yPos + 140) + "' font-size='14' fill='#999'>生成日期：$cnDate</text>"
-$cnLines += '</svg>'
-
-$cnSvg = New-Svg $cnLines
-
-# Save files
 $printableDir = Join-Path $WorksheetDir "printable"
 if (-not (Test-Path $printableDir)) {
     New-Item -ItemType Directory -Path $printableDir -Force | Out-Null
 }
 
+$DateStr = Get-Date -Format "yyyy-MM-dd"
+
+# ========== 多多英语 ==========
+$ddWordsList = $DDWords -split ',\s*'
+$ddSvg = New-Svg @(
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 595 842" width="595" height="842">',
+  '  <defs>',
+  '    <linearGradient id="dh" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#4A90D9"/><stop offset="100%" stop-color="#67B8F7"/></linearGradient>',
+  '    <linearGradient id="ds1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#E8F4FD"/><stop offset="100%" stop-color="#F0F8FF"/></linearGradient>',
+  '    <linearGradient id="ds2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FFF8E1"/><stop offset="100%" stop-color="#FFFDE7"/></linearGradient>',
+  '    <linearGradient id="ds3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#E8F5E9"/><stop offset="100%" stop-color="#F1F8E9"/></linearGradient>',
+  '  </defs>',
+  '  <rect width="595" height="842" fill="#F8FBFF"/>',
+  '  <rect x="0" y="0" width="595" height="85" fill="url(#dh)" rx="0"/>',
+  '  <text x="297" y="38" font-size="22" font-weight="bold" fill="#fff" text-anchor="middle">&#x2605; 多多 · 牛津自然拼读 第3册</text>',
+  '  <text x="297" y="65" font-size="16" fill="#E3F2FD" text-anchor="middle">第' + $DuoDuoWeek + '周 &lt;' + $DDLetter + '&gt;  ' + $DDAct + '</text>',
+  '  <rect x="30" y="100" width="535" height="45" rx="8" fill="#E3F2FD" opacity="0.6"/>',
+  '  <text x="45" y="128" font-size="17" fill="#1565C0" font-weight="bold">&#x1F4D6; 单词跟读：</text>',
+  '  <text x="185" y="128" font-size="17" fill="#333">' + $DDWords + '</text>',
+  '  <rect x="30" y="160" width="535" height="210" rx="10" fill="url(#ds1)" stroke="#BBDEFB" stroke-width="1.5"/>',
+  '  <text x="297" y="188" font-size="17" font-weight="bold" fill="#1565C0" text-anchor="middle">&#x1F3B6; 按发音排序 — a_e</text>',
+  '  <text x="297" y="208" font-size="12" fill="#78909C" text-anchor="middle">(在横线上填入正确的单词)</text>',
+  '  <text x="60" y="245" font-size="16" fill="#333">1. c<span fill="#E53935">__</span> (猫)</text>',
+  '  <text x="60" y="272" font-size="16" fill="#333">2. c<span fill="#E53935">__</span> (蛋糕)</text>',
+  '  <text x="60" y="299" font-size="16" fill="#333">3. l<span fill="#E53935">__</span> (湖)</text>',
+  '  <text x="60" y="326" font-size="16" fill="#333">4. m<span fill="#E53935">__</span> (制作)</text>',
+  '  <text x="60" y="353" font-size="16" fill="#333">5. n<span fill="#E53935">__</span> (名字)</text>',
+  '  <rect x="30" y="385" width="535" height="130" rx="10" fill="url(#ds2)" stroke="#FFE082" stroke-width="1.5"/>',
+  '  <text x="297" y="413" font-size="17" font-weight="bold" fill="#F57F17" text-anchor="middle">&#x1F4DD; 读句子填空</text>',
+  '  <text x="60" y="448" font-size="15" fill="#333">I have a red c<span fill="#E53935">__</span>. (帽子/cap)</text>',
+  '  <text x="60" y="478" font-size="15" fill="#333">She likes to r<span fill="#E53935">__</span> fast. (跑/run)</text>',
+  '  <text x="60" y="508" font-size="15" fill="#333">The sun is h<span fill="#E53935">__</span>. (热/hot)</text>',
+  '  <rect x="30" y="530" width="535" height="130" rx="10" fill="url(#ds3)" stroke="#A5D6A7" stroke-width="1.5"/>',
+  '  <text x="297" y="558" font-size="17" font-weight="bold" fill="#2E7D32" text-anchor="middle">&#x1F522; 数学 · 数一数</text>',
+  '  <text x="297" y="578" font-size="13" fill="#558B2F" text-anchor="middle">Count the objects and write the number:</text>',
+  '  <text x="297" y="620" font-size="42" fill="#FF8F00" text-anchor="middle">&#x2605;&#x2605;&#x2605;&#x2605;&#x2605; &#x2605;&#x2605;&#x2605;&#x2605;&#x2605; &#x2605;&#x2605;&#x2605;</text>',
+  '  <text x="297" y="650" font-size="16" fill="#333" text-anchor="middle">数一数：<tspan fill="#E53935" font-weight="bold">___</tspan> 个星星</text>',
+  '  <text x="297" y="700" font-size="12" fill="#B0BEC5" text-anchor="middle">生成日期：' + $DateStr + '</text>',
+  '</svg>'
+)
+
+# ========== 小铭英语 ==========
+$xmWordsList = $XMWords -split ',\s*'
+$xmLetters = @()
+foreach ($w in $xmWordsList) { $xmLetters += $w.Substring(0, 1) }
+$xmLettersStr = $xmLetters -join ', '
+$xmLetterDisplay = $XMLetter.Substring(0,1) + " " + $XMLetter.Substring(1)
+
+$xmSvg = New-Svg @(
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 595 842" width="595" height="842">',
+  '  <defs>',
+  '    <linearGradient id="xh" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#43A047"/><stop offset="100%" stop-color="#66BB6A"/></linearGradient>',
+  '    <linearGradient id="xs1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#E8F5E9"/><stop offset="100%" stop-color="#F1F8E9"/></linearGradient>',
+  '    <linearGradient id="xs2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FCE4EC"/><stop offset="100%" stop-color="#FFF0F3"/></linearGradient>',
+  '    <linearGradient id="xs3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#E8EAF6"/><stop offset="100%" stop-color="#F3F4FD"/></linearGradient>',
+  '  </defs>',
+  '  <rect width="595" height="842" fill="#F9FFF9"/>',
+  '  <rect x="0" y="0" width="595" height="85" fill="url(#xh)" rx="0"/>',
+  '  <text x="297" y="38" font-size="22" font-weight="bold" fill="#fff" text-anchor="middle">&#x2605; 小铭 · 牛津自然拼读 第1册</text>',
+  '  <text x="297" y="65" font-size="16" fill="#E8F5E9" text-anchor="middle">第' + $XiaoMingWeek + '周 ' + $XMLetter + '  ' + $XMAct + '</text>',
+  '  <rect x="30" y="100" width="535" height="45" rx="8" fill="#E8F5E9" opacity="0.6"/>',
+  '  <text x="45" y="128" font-size="17" fill="#2E7D32" font-weight="bold">&#x1F4D6; 单词：</text>',
+  '  <text x="145" y="128" font-size="17" fill="#333">' + $XMWords + '</text>',
+  '  <rect x="30" y="160" width="535" height="110" rx="10" fill="url(#xs1)" stroke="#A5D6A7" stroke-width="1.5"/>',
+  '  <text x="297" y="188" font-size="17" font-weight="bold" fill="#2E7D32" text-anchor="middle">&#x270F;&#xFE0F; 字母描写</text>',
+  '  <text x="297" y="208" font-size="12" fill="#78909C" text-anchor="middle">(沿着灰色字母描一描)</text>',
+  '  <text x="297" y="255" font-size="60" fill="#CFD8DC" text-anchor="middle" font-family="monospace" font-weight="bold">A A A A A</text>',
+  '  <rect x="30" y="285" width="535" height="100" rx="10" fill="url(#xs2)" stroke="#F48FB1" stroke-width="1.5"/>',
+  '  <text x="297" y="313" font-size="17" font-weight="bold" fill="#C62828" text-anchor="middle">&#x1F50D; 找字母</text>',
+  '  <text x="297" y="333" font-size="13" fill="#78909C" text-anchor="middle">把字母 ' + $XMLetter.Substring(0,1) + ' 圈出来：</text>',
+  '  <text x="297" y="372" font-size="28" fill="#333" text-anchor="middle" font-family="monospace">a a a  a a a  b c d e f g h</text>',
+  '  <rect x="30" y="400" width="535" height="110" rx="10" fill="url(#xs3)" stroke="#9FA8DA" stroke-width="1.5"/>',
+  '  <text x="297" y="428" font-size="17" font-weight="bold" fill="#283593" text-anchor="middle">&#x1F4E3; 单词认读</text>',
+  '  <text x="297" y="448" font-size="13" fill="#78909C" text-anchor="middle">大声读出下面的单词：</text>',
+  '  <text x="297" y="495" font-size="22" fill="#333" text-anchor="middle" font-weight="bold">' + $XMWords + '</text>',
+  '  <rect x="30" y="525" width="535" height="90" rx="10" fill="url(#xs2)" stroke="#F48FB1" stroke-width="1.5"/>',
+  '  <text x="297" y="553" font-size="17" font-weight="bold" fill="#C62828" text-anchor="middle">&#x1F399;&#xFE0F; 发音练习</text>',
+  '  <text x="297" y="573" font-size="13" fill="#78909C" text-anchor="middle">大声说出每个单词的首字母发音：</text>',
+  '  <text x="297" y="603" font-size="20" fill="#333" text-anchor="middle">' + $xmWordsList[0] + ' → /' + $XMLetter.Substring(0,1).ToLower() + '/</text>',
+  '  <text x="297" y="700" font-size="12" fill="#B0BEC5" text-anchor="middle">生成日期：' + $DateStr + '</text>',
+  '</svg>'
+)
+
+# ========== 语文 SVG ==========
+$cnCharList = @($ChineseChars -split '\s+') | Where-Object { $_ -and $_ -notmatch '复习|字母|声母|韵母|组合|全部|新字' }
+
+$cnSvgLines = @(
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 595 842" width="595" height="842">',
+  '  <defs>',
+  '    <linearGradient id="ch" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#E53935"/><stop offset="100%" stop-color="#FF7043"/></linearGradient>',
+  '    <linearGradient id="cs1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FFF3E0"/><stop offset="100%" stop-color="#FFF8E1"/></linearGradient>',
+  '    <linearGradient id="cs2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FBE9E7"/><stop offset="100%" stop-color="#FFF0E8"/></linearGradient>',
+  '  </defs>',
+  '  <rect width="595" height="842" fill="#FFFBF5"/>',
+  '  <rect x="0" y="0" width="595" height="85" fill="url(#ch)" rx="0"/>',
+  '  <text x="297" y="38" font-size="22" font-weight="bold" fill="#fff" text-anchor="middle">&#x2605; 多多 · 语文冲刺</text>',
+  '  <text x="297" y="65" font-size="16" fill="#FFEBEE" text-anchor="middle">第' + $ChineseWeek + '周 · 9月入学准备</text>',
+  '  <rect x="30" y="100" width="535" height="45" rx="8" fill="#FFEBEE" opacity="0.6"/>',
+  '  <text x="45" y="128" font-size="17" fill="#C62828" font-weight="bold">&#x1F4D6; 拼音：</text>',
+  '  <text x="145" y="128" font-size="17" fill="#333">' + $ChinesePinyin + '</text>',
+  '  <rect x="30" y="160" width="535" height="105" rx="10" fill="url(#cs1)" stroke="#FFCC80" stroke-width="1.5"/>',
+  '  <text x="297" y="188" font-size="17" font-weight="bold" fill="#E65100" text-anchor="middle">&#x1F3A4; 拼音跟读 · 大声读3遍</text>',
+  '  <text x="297" y="250" font-size="28" fill="#333" text-anchor="middle" font-weight="bold">' + $ChinesePinyin + '</text>',
+  '  <rect x="30" y="280" width="535" height="340" rx="10" fill="url(#cs2)" stroke="#FFAB91" stroke-width="1.5"/>',
+  '  <text x="297" y="308" font-size="17" font-weight="bold" fill="#BF360C" text-anchor="middle">&#x270F;&#xFE0F; 汉字描红 · 每个字描2遍</text>'
+)
+
+$yPos = 345
+foreach ($c in $cnCharList) {
+  $cnSvgLines += "  <text x='297' y='${yPos}' font-size='30' fill='#CFD8DC' text-anchor='middle' font-family='STKaiti,serif' font-weight='bold'>$c  $c  $c  $c  $c</text>"
+  $yPos += 48
+}
+
+$cnSvgLines += '  <rect x="30" y="' + ($yPos + 5) + '" width="535" height="55" rx="10" fill="#FFCC02" opacity="0.2"/>'
+$cnSvgLines += '  <text x="297" y="' + ($yPos + 38) + '" font-size="15" fill="#E65100" text-anchor="middle">&#x1F3C6; 今日任务：跟读3遍 | 认读 | 描红 | 在家找字</text>'
+$cnSvgLines += '  <text x="297" y="' + ($yPos + 70) + '" font-size="12" fill="#B0BEC5" text-anchor="middle">活动：' + $ChineseAct + '</text>'
+$cnSvgLines += '  <text x="297" y="' + ($yPos + 100) + '" font-size="12" fill="#B0BEC5" text-anchor="middle">生成日期：' + $DateStr + '</text>'
+$cnSvgLines += '</svg>'
+
+$cnSvg = New-Svg $cnSvgLines
+
+# ====== Save ======
 $ddPath = Join-Path $printableDir "duoduo_week${DuoDuoWeek}.svg"
 $xmPath = Join-Path $printableDir "xiaoming_week${XiaoMingWeek}.svg"
 $cnPath = Join-Path $printableDir "duoduo_chinese_week${ChineseWeek}.svg"
@@ -143,6 +151,6 @@ $cnPath = Join-Path $printableDir "duoduo_chinese_week${ChineseWeek}.svg"
 [System.IO.File]::WriteAllText($xmPath, $xmSvg, [System.Text.Encoding]::UTF8)
 [System.IO.File]::WriteAllText($cnPath, $cnSvg, [System.Text.Encoding]::UTF8)
 
-Write-Output ("SVG generated: " + $ddPath)
-Write-Output ("SVG generated: " + $xmPath)
-Write-Output ("SVG generated: " + $cnPath)
+Write-Output ("SVG: " + $ddPath)
+Write-Output ("SVG: " + $xmPath)
+Write-Output ("SVG: " + $cnPath)
