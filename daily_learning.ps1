@@ -510,9 +510,12 @@ $SyncData = @{
     week = $ChineseWeek
     pinyin = $($C.pinyin)
     chars = $($C.chars)
-    poem_title = $ChinesePoemTitle
-    poem_author = $ChinesePoemAuthor
-    poem_text = $ChinesePoemText
+    poem1_title = $ChinesePoem1Title
+    poem1_author = $ChinesePoem1Author
+    poem1_text = $ChinesePoem1Text
+    poem2_title = $ChinesePoem2Title
+    poem2_author = $ChinesePoem2Author
+    poem2_text = $ChinesePoem2Text
     synced = $false
   }
   synced = $false
