@@ -1,0 +1,23 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 595 1000" width="595" height="1000">
+  <defs>
+    <linearGradient id="ch" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#E53935"/><stop offset="100%" stop-color="#FF7043"/></linearGradient>
+    <linearGradient id="cs1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FFF3E0"/><stop offset="100%" stop-color="#FFF8E1"/></linearGradient>
+    <linearGradient id="cs2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FBE9E7"/><stop offset="100%" stop-color="#FFF0E8"/></linearGradient>
+    <linearGradient id="cs3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#E8EAF6"/><stop offset="100%" stop-color="#F3F4FD"/></linearGradient>
+  </defs>
+  <rect width="595" height="1000" fill="#FFFBF5"/>
+  <rect x="0" y="0" width="595" height="85" fill="url(#ch)" rx="0"/>
+  <text x="297" y="38" font-size="22" font-weight="bold" fill="#fff" text-anchor="middle">&#x2605; 多多 · 语文冲刺</text>
+  <text x="297" y="65" font-size="16" fill="#FFEBEE" text-anchor="middle">第1周 · 9月入学准备</text>
+  <rect x="30" y="100" width="535" height="45" rx="8" fill="#FFEBEE" opacity="0.6"/>
+  <text x="45" y="128" font-size="17" fill="#C62828" font-weight="bold">&#x1F4D6; 拼音：</text>
+  <text x="145" y="128" font-size="17" fill="#333">b p m f</text>
+  <rect x="30" y="160" width="535" height="200" rx="10" fill="url(#cs1)" stroke="#FFCC80" stroke-width="1.5"/>
+  <text x="297" y="188" font-size="17" font-weight="bold" fill="#E65100" text-anchor="middle">&#x1F3A4; 拼音跟读 + 写一写</text>
+  <text x="297" y="240" font-size="26" fill="#333" text-anchor="middle" font-weight="bold">b p m f</text>
+  <text x='297' y='270' font-size='20' fill='#CFD8DC' text-anchor='middle' font-family='monospace' font-weight='bold'>b  b  b  b  b</text>  <text x='297' y='294' font-size='20' fill='#CFD8DC' text-anchor='middle' font-family='monospace' font-weight='bold'>p  p  p  p  p</text>  <text x='297' y='318' font-size='20' fill='#CFD8DC' text-anchor='middle' font-family='monospace' font-weight='bold'>m  m  m  m  m</text>  <text x='297' y='342' font-size='20' fill='#CFD8DC' text-anchor='middle' font-family='monospace' font-weight='bold'>f  f  f  f  f</text>  <rect x="30" y="380" width="535" height="220" rx="10" fill="url(#cs2)" stroke="#FFAB91" stroke-width="1.5"/>
+  <text x="297" y="408" font-size="17" font-weight="bold" fill="#BF360C" text-anchor="middle">&#x270F;&#xFE0F; 汉字描红 · 每个字描3遍</text>  <text x='297' y='445' font-size='30' fill='#CFD8DC' text-anchor='middle' font-family='STKaiti,serif' font-weight='bold'>人  人  人  人  人</text>  <text x='297' y='487' font-size='30' fill='#CFD8DC' text-anchor='middle' font-family='STKaiti,serif' font-weight='bold'>口  口  口  口  口</text>  <text x='297' y='529' font-size='30' fill='#CFD8DC' text-anchor='middle' font-family='STKaiti,serif' font-weight='bold'>手  手  手  手  手</text>  <text x='297' y='571' font-size='30' fill='#CFD8DC' text-anchor='middle' font-family='STKaiti,serif' font-weight='bold'>大  大  大  大  大</text>  <text x='297' y='613' font-size='30' fill='#CFD8DC' text-anchor='middle' font-family='STKaiti,serif' font-weight='bold'>小  小  小  小  小</text>  <rect x="30" y="660" width="535" height="230" rx="10" fill="url(#cs3)" stroke="#9FA8DA" stroke-width="1.5"/>  <text x="297" y="685" font-size="15" font-weight="bold" fill="#283593" text-anchor="middle">&#x1F4DA; 悯农（其二） — 李绅</text>  <text x="80" y="709" font-size="16" fill="#333" font-family="STKaiti,serif">春种一粒粟，秋收万颗子。</text>  <text x="80" y="731" font-size="16" fill="#333" font-family="STKaiti,serif">四海无闲田，农夫犹饿死。</text>  <text x="297" y="763" font-size="15" font-weight="bold" fill="#283593" text-anchor="middle">&#x1F4DA; 咏鹅 — 骆宾王</text>  <text x="80" y="787" font-size="16" fill="#333" font-family="STKaiti,serif">鹅鹅鹅，曲项向天歌。</text>  <text x="80" y="809" font-size="16" fill="#333" font-family="STKaiti,serif">白毛浮绿水，红掌拨清波。</text>  <rect x="30" y="905" width="535" height="55" rx="10" fill="#FFCC02" opacity="0.2"/>
+  <text x="297" y="938" font-size="15" fill="#E65100" text-anchor="middle">&#x1F3C6; 今日任务：跟读3遍 | 认读 | 描红 | 读古诗 | 在家找字</text>
+  <text x="297" y="970" font-size="12" fill="#B0BEC5" text-anchor="middle">活动：看拼音视频b p m f，识字卡:人口手大小</text>
+  <text x="297" y="1000" font-size="12" fill="#B0BEC5" text-anchor="middle">生成日期：2026-06-03</text>
+</svg>

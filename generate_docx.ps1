@@ -36,7 +36,17 @@ function Write-RtfFile {
     ) -join "\line "
     $utf8Bom = [System.Text.Encoding]::UTF8.GetPreamble()
     $bytes = $utf8Bom + [System.Text.Encoding]::UTF8.GetBytes($rtf)
-    [System.IO.File]::WriteAllBytes($Path, $bytes)
+    $maxRetries = 5
+    $retryDelay = 500
+    for ($attempt = 1; $attempt -le $maxRetries; $attempt++) {
+        try {
+            [System.IO.File]::WriteAllBytes($Path, $bytes)
+            return
+        } catch {
+            if ($attempt -eq $maxRetries) { throw }
+            Start-Sleep -Milliseconds $retryDelay
+        }
+    }
 }
 
 function Escape-Rtf {
@@ -105,9 +115,9 @@ if ($ChineseWeek) {
     $cnPinyin = Escape-Rtf $ChinesePinyin
     $cnChars = Escape-Rtf $ChineseChars
     $cnAct = Escape-Rtf $ChineseAct
-    $cnPoemTitle = Escape-Rtf $ChinesePoemTitle
-    $cnPoemAuthor = Escape-Rtf $ChinesePoemAuthor
-    $cnPoemText = Escape-Rtf $ChinesePoemText
+    $cnPoemTitle = Escape-Rtf $ChinesePoem1Title
+    $cnPoemAuthor = Escape-Rtf $ChinesePoem1Author
+    $cnPoemText = Escape-Rtf $ChinesePoem1Text
     $cnCharList = @($ChineseChars -split '\s+') | Where-Object { $_ -and $_ -notmatch '复习|字母|声母|韵母|组合|全部|新字' }
     $cnColor = "red0\green0\blue0;\red229\green57\blue53;\red255\green243\blue224;\red251\green233\blue231;\red230\green81\blue0;\red191\green54\blue12;\red255\green255\blue255"
 

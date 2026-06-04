@@ -1,0 +1,23 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 595 1000" width="595" height="1000">
+  <defs>
+    <linearGradient id="ch" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#E53935"/><stop offset="100%" stop-color="#FF7043"/></linearGradient>
+    <linearGradient id="cs1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FFF3E0"/><stop offset="100%" stop-color="#FFF8E1"/></linearGradient>
+    <linearGradient id="cs2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FBE9E7"/><stop offset="100%" stop-color="#FFF0E8"/></linearGradient>
+    <linearGradient id="cs3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#E8EAF6"/><stop offset="100%" stop-color="#F3F4FD"/></linearGradient>
+  </defs>
+  <rect width="595" height="1050" fill="#FFFBF5"/>
+  <rect x="0" y="0" width="595" height="85" fill="url(#ch)" rx="0"/>
+  <text x="297" y="40" font-size="26" font-weight="bold" fill="#fff" text-anchor="middle">&#x2605; 多多 · 语文冲刺</text>
+  <text x="297" y="68" font-size="18" fill="#FFEBEE" text-anchor="middle">第2周 · 9月入学准备</text>
+  <rect x="30" y="100" width="535" height="50" rx="8" fill="#FFEBEE" opacity="0.6"/>
+  <text x="45" y="132" font-size="20" fill="#C62828" font-weight="bold">&#x1F4D6; 拼音：</text>
+  <text x="150" y="132" font-size="20" fill="#333">d t n l</text>
+  <rect x="30" y="165" width="535" height="220" rx="10" fill="url(#cs1)" stroke="#FFCC80" stroke-width="1.5"/>
+  <text x="297" y="196" font-size="20" font-weight="bold" fill="#E65100" text-anchor="middle">&#x1F3A4; 拼音跟读 + 写一写</text>
+  <text x="297" y="255" font-size="30" fill="#333" text-anchor="middle" font-weight="bold">d t n l</text>
+  <text x='297' y='285' font-size='24' fill='#CFD8DC' text-anchor='middle' font-family='monospace' font-weight='bold'>d  d  d  d  d</text>  <text x='297' y='313' font-size='24' fill='#CFD8DC' text-anchor='middle' font-family='monospace' font-weight='bold'>t  t  t  t  t</text>  <text x='297' y='341' font-size='24' fill='#CFD8DC' text-anchor='middle' font-family='monospace' font-weight='bold'>n  n  n  n  n</text>  <text x='297' y='369' font-size='24' fill='#CFD8DC' text-anchor='middle' font-family='monospace' font-weight='bold'>l  l  l  l  l</text>  <rect x="30" y="400" width="535" height="240" rx="10" fill="url(#cs2)" stroke="#FFAB91" stroke-width="1.5"/>
+  <text x="297" y="430" font-size="20" font-weight="bold" fill="#BF360C" text-anchor="middle">&#x270F;&#xFE0F; 汉字描红 · 每个字描3遍</text>  <text x='297' y='470' font-size='36' fill='#CFD8DC' text-anchor='middle' font-family='STKaiti,serif' font-weight='bold'>上  上  上  上  上</text>  <text x='297' y='520' font-size='36' fill='#CFD8DC' text-anchor='middle' font-family='STKaiti,serif' font-weight='bold'>下  下  下  下  下</text>  <text x='297' y='570' font-size='36' fill='#CFD8DC' text-anchor='middle' font-family='STKaiti,serif' font-weight='bold'>天  天  天  天  天</text>  <text x='297' y='620' font-size='36' fill='#CFD8DC' text-anchor='middle' font-family='STKaiti,serif' font-weight='bold'>地  地  地  地  地</text>  <rect x="30" y="675" width="535" height="250" rx="10" fill="url(#cs3)" stroke="#9FA8DA" stroke-width="1.5"/>  <text x="297" y="700" font-size="17" font-weight="bold" fill="#283593" text-anchor="middle">&#x1F4DA; 古朗月行（节选） — 李白</text>  <text x="80" y="726" font-size="19" fill="#333" font-family="STKaiti,serif">小时不识月，呼作白玉盘。</text>  <text x="80" y="752" font-size="19" fill="#333" font-family="STKaiti,serif">又疑瑶台镜，飞在青云端。</text>  <text x="297" y="788" font-size="17" font-weight="bold" fill="#283593" text-anchor="middle">&#x1F4DA; 池上 — 白居易</text>  <text x="80" y="814" font-size="19" fill="#333" font-family="STKaiti,serif">小娃撑小艇，偷采白莲回。</text>  <text x="80" y="840" font-size="19" fill="#333" font-family="STKaiti,serif">不解藏踪迹，浮萍一道开。</text>  <rect x="30" y="940" width="535" height="65" rx="10" fill="#FFCC02" opacity="0.2"/>
+  <text x="297" y="970" font-size="17" fill="#E65100" text-anchor="middle">&#x1F3C6; 今日任务：跟读3遍 | 认读 | 描红 | 读古诗 | 在家找字</text>
+  <text x="297" y="998" font-size="14" fill="#B0BEC5" text-anchor="middle">活动：拼音跳房子，在家找认识的字</text>
+  <text x="297" y="1028" font-size="14" fill="#B0BEC5" text-anchor="middle">生成日期：2026-06-04</text>
+</svg>

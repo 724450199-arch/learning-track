@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 595 842" width="595" height="842">
+  <defs>
+    <linearGradient id="header" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#4A90D9"/>
+      <stop offset="100%" stop-color="#67B8F7"/>
+    </linearGradient>
+    <linearGradient id="section1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFF3E0"/>
+      <stop offset="100%" stop-color="#FFE0B2"/>
+    </linearGradient>
+    <linearGradient id="section2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#E8F5E9"/>
+      <stop offset="100%" stop-color="#C8E6C9"/>
+    </linearGradient>
+    <linearGradient id="section3" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#E3F2FD"/>
+      <stop offset="100%" stop-color="#BBDEFB"/>
+    </linearGradient>
+    <linearGradient id="section4" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#F3E5F5"/>
+      <stop offset="100%" stop-color="#E1BEE7"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="595" height="842" fill="#FAFAFA" rx="8"/>
+
+  <!-- Header -->
+  <rect x="0" y="0" width="595" height="85" fill="url(#header)" rx="8"/>
+  <rect x="0" y="40" width="595" height="45" fill="url(#header)"/>
+  <text x="298" y="40" font-size="26" font-weight="bold" fill="#fff" text-anchor="middle">新概念英语 Lesson 94</text>
+  <text x="298" y="68" font-size="16" fill="#E3F2FD" text-anchor="middle">Our New Neighbour — 一般将来时 will / shall</text>
+
+  <!-- Section 1: Vocabulary -->
+  <rect x="25" y="100" width="545" height="145" fill="url(#section1)" rx="10"/>
+  <text x="40" y="128" font-size="18" font-weight="bold" fill="#E65100">词汇加油站</text>
+  <text x="40" y="155" font-size="14" fill="#555">pilot /ˈpaɪlət/ 飞行员</text>
+  <text x="40" y="175" font-size="14" fill="#555">return /rɪˈtɜːn/ 返回，归还</text>
+  <text x="40" y="195" font-size="14" fill="#555">fly - flew - flown /flaɪ/ 飞行</text>
+  <text x="40" y="215" font-size="14" fill="#555">New York / Tokyo / Madrid / Athens / Berlin / Sydney</text>
+
+  <!-- Section 2: Grammar -->
+  <rect x="25" y="260" width="545" height="170" fill="url(#section2)" rx="10"/>
+  <text x="40" y="288" font-size="18" font-weight="bold" fill="#2E7D32">语法重点：将来时</text>
+  <text x="40" y="318" font-size="15" fill="#333">I / We <tspan font-weight="bold" fill="#C62828">shall</tspan> + 动词原形</text>
+  <text x="40" y="342" font-size="15" fill="#333">He / She / It / You / They <tspan font-weight="bold" fill="#C62828">will</tspan> + 动词原形</text>
+  <text x="40" y="372" font-size="14" fill="#555">否定：shall not = shan't &nbsp;&nbsp; will not = won't</text>
+  <text x="40" y="400" font-size="14" fill="#555">例句：I shall go to Beijing next week.</text>
+  <text x="40" y="420" font-size="14" fill="#555">　　　She will not return to Sydney tomorrow.</text>
+
+  <!-- Section 3: Exercise A -->
+  <rect x="25" y="445" width="545" height="180" fill="url(#section3)" rx="10"/>
+  <text x="40" y="473" font-size="18" font-weight="bold" fill="#1565C0">练习A：改写将来时</text>
+  <text x="40" y="500" font-size="14" fill="#555">把下列句子从过去时改为将来时</text>
+
+  <text x="40" y="530" font-size="14" fill="#333">1. He went to New York last week.</text>
+  <line x1="40" y1="548" x2="530" y2="548" stroke="#90CAF9" stroke-dasharray="4,3"/>
+  <text x="40" y="572" font-size="14" fill="#333">2. She flew to Tokyo last month.</text>
+  <line x1="40" y1="590" x2="530" y2="590" stroke="#90CAF9" stroke-dasharray="4,3"/>
+  <text x="40" y="614" font-size="14" fill="#333">3. They returned to Berlin the year before last.</text>
+  <line x1="40" y1="632" x2="530" y2="632" stroke="#90CAF9" stroke-dasharray="4,3"/>
+
+  <!-- Section 4: Exercise B -->
+  <rect x="25" y="640" width="545" height="155" fill="url(#section4)" rx="10"/>
+  <text x="40" y="668" font-size="18" font-weight="bold" fill="#6A1B9A">练习B：否定回答并纠正</text>
+  <text x="40" y="695" font-size="14" fill="#555">根据提示词做否定回答，然后说出正确信息</text>
+
+  <text x="40" y="725" font-size="14" fill="#333">4. Will he go to Madrid? (Athens)</text>
+  <line x1="40" y1="743" x2="530" y2="743" stroke="#CE93D8" stroke-dasharray="4,3"/>
+  <text x="40" y="767" font-size="14" fill="#333">5. Will you return to London? (Paris)</text>
+  <line x1="40" y1="785" x2="530" y2="785" stroke="#CE93D8" stroke-dasharray="4,3"/>
+
+  <!-- Footer -->
+  <text x="298" y="825" font-size="12" fill="#aaa" text-anchor="middle">多多 ─ 每天15分钟，开心学习！ 2026-06-02</text>
+</svg>

@@ -1,0 +1,42 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 595 842" width="595" height="842">
+  <defs>
+    <linearGradient id="dh" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#4A90D9"/><stop offset="100%" stop-color="#67B8F7"/></linearGradient>
+    <linearGradient id="ds1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#E8F4FD"/><stop offset="100%" stop-color="#F0F8FF"/></linearGradient>
+    <linearGradient id="ds2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FFF8E1"/><stop offset="100%" stop-color="#FFFDE7"/></linearGradient>
+    <linearGradient id="ds3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#E8F5E9"/><stop offset="100%" stop-color="#F1F8E9"/></linearGradient>
+  </defs>
+  <rect width="595" height="842" fill="#F8FBFF"/>
+  <rect x="0" y="0" width="595" height="95" fill="url(#dh)" rx="0"/>
+  <text x="297" y="42" font-size="32" font-weight="bold" fill="#fff" text-anchor="middle">&#x2605; 多多 · 牛津自然拼读 第3册</text>
+  <text x="297" y="74" font-size="20" fill="#E3F2FD" text-anchor="middle">第
+2
+周 &lt;
+a_e 巩固
+&gt;  
+做纸飞机写单词，画画配对
+</text>
+  <rect x="30" y="110" width="535" height="55" rx="8" fill="#E3F2FD" opacity="0.6"/>
+  <text x="45" y="146" font-size="24" fill="#1565C0" font-weight="bold">&#x1F4D6; 单词跟读：</text>
+  <text x="200" y="146" font-size="24" fill="#333">
+late, snake, plane, plate
+</text>
+  <rect x="30" y="180" width="535" height="260" rx="10" fill="url(#ds1)" stroke="#BBDEFB" stroke-width="1.5"/>
+  <text x="297" y="214" font-size="24" font-weight="bold" fill="#1565C0" text-anchor="middle">&#x1F3B6; 按发音排序 — a_e</text>
+  <text x="297" y="240" font-size="16" fill="#78909C" text-anchor="middle">(在横线上填入正确的单词)</text>
+  <text x='60' y='268' font-size='26' fill='#333' font-family='monospace'>1. l<tspan fill='#E53935' font-weight='bold'>__</tspan>te (迟的)</text>
+  <text x='60' y='306' font-size='26' fill='#333' font-family='monospace'>2. sn<tspan fill='#E53935' font-weight='bold'>__</tspan>ke (蛇)</text>
+  <text x='60' y='344' font-size='26' fill='#333' font-family='monospace'>3. pl<tspan fill='#E53935' font-weight='bold'>__</tspan>ne (飞机)</text>
+  <text x='60' y='382' font-size='26' fill='#333' font-family='monospace'>4. pl<tspan fill='#E53935' font-weight='bold'>__</tspan>te (盘子)</text>
+  <rect x="30" y="455" width="535" height="195" rx="10" fill="url(#ds2)" stroke="#FFE082" stroke-width="1.5"/>
+  <text x="297" y="486" font-size="24" font-weight="bold" fill="#F57F17" text-anchor="middle">&#x1F4DD; 读句子填空</text>
+  <text x='60' y='500' font-size='24' fill='#333' font-family='monospace'>1. The train is l__te. (火车晚点)</text>
+  <text x='60' y='540' font-size='24' fill='#333' font-family='monospace'>2. A sn__ke is long. (蛇很长)</text>
+  <text x='60' y='580' font-size='24' fill='#333' font-family='monospace'>3. The pl__ne can fly. (飞机能飞)</text>
+  <text x='60' y='620' font-size='24' fill='#333' font-family='monospace'>4. Put it on the pl__te. (放盘子里)</text>
+  <rect x="30" y="662" width="535" height="170" rx="10" fill="url(#ds3)" stroke="#A5D6A7" stroke-width="1.5"/>
+  <text x="297" y="668" font-size="24" font-weight="bold" fill="#2E7D32" text-anchor="middle">&#x1F522; 数学 &#xB7; Numbers to 10</text>
+  <text x="297" y="694" font-size="16" fill="#558B2F" text-anchor="middle">写出缺少的数字</text>
+  <text x="70" y="740" font-size="30" fill="#333" font-family="monospace">1, 2, <tspan fill="#E53935" font-weight="bold">__</tspan>, 4, 5</text>
+  <text x="70" y="782" font-size="30" fill="#333" font-family="monospace">5, <tspan fill="#E53935" font-weight="bold">__</tspan>, 7, 8, 9</text>
+  <text x="70" y="824" font-size="30" fill="#333" font-family="monospace">8, 7, 6, <tspan fill="#E53935" font-weight="bold">__</tspan>, 4</text>
+</svg>
