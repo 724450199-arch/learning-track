@@ -1,0 +1,12 @@
+﻿{
+    "warned_low_video":  false,
+    "quota_expire_days":  90,
+    "warned_low_image":  false,
+    "video_seconds":  0,
+    "created_at":  "2026-06-08",
+    "warned_exhausted_image":  false,
+    "image_count":  1,
+    "quota_video_sec_max":  50,
+    "warned_exhausted_video":  false,
+    "quota_image_max":  500
+}
