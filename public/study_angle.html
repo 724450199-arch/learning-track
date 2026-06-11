@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>可调节角度学习角</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Microsoft YaHei', 'Comic Sans MS', sans-serif;
+  background: linear-gradient(180deg, #E8F4FD 0%, #FEF9E7 100%);
+  min-height: 100vh; display: flex; justify-content: center; align-items: center;
+}
+.container {
+  background: #fff; border-radius: 20px; padding: 24px 30px 30px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1); text-align: center; max-width: 760px;
+}
+h1 { font-size: 24px; color: #2C3E50; margin-bottom: 4px; }
+.subtitle { font-size: 14px; color: #7F8C8D; margin-bottom: 16px; }
+svg { display: block; margin: 0 auto; border: 1px solid #eee; border-radius: 12px; cursor: crosshair; }
+.controls { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-top: 16px; }
+.controls button {
+  padding: 10px 22px; border: none; border-radius: 8px; font-size: 15px;
+  font-weight: bold; color: #fff; cursor: pointer; transition: transform 0.15s;
+}
+.controls button:hover { transform: scale(1.08); }
+.controls button:active { transform: scale(0.92); }
+.info { margin-top: 14px; display: flex; align-items: center; justify-content: center; gap: 24px; }
+.angle-box { text-align: center; }
+.angle-box-label { font-size: 12px; color: #95A5A6; }
+.angle-display { font-size: 42px; font-weight: bold; color: #E74C3C; line-height: 1.1; }
+.angle-type-badge { display: inline-block; padding: 4px 18px; border-radius: 20px; color: #fff; font-weight: bold; font-size: 16px; }
+.legend { display: flex; gap: 20px; font-size: 13px; margin-top: 6px; justify-content: center; }
+.legend-item { display: flex; align-items: center; gap: 6px; }
+.legend-line { width: 24px; height: 4px; border-radius: 2px; }
+.slider-row { margin-top: 12px; display: flex; align-items: center; gap: 12px; justify-content: center; }
+.slider-row input[type=range] { width: 300px; accent-color: #E74C3C; }
+.slider-label { font-size: 12px; color: #95A5A6; min-width: 28px; }
+.tip { margin-top: 10px; font-size: 13px; color: #BDC3C7; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>📐 可调节角度学习角</h1>
+  <div class="subtitle">点击/拖拽任意位置 · 或拖动滑块 · 或点预设按钮</div>
+
+  <svg id="canvas" width="700" height="420" viewBox="0 0 700 420">
+    <defs>
+      <linearGradient id="armA" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#FF6B6B"/><stop offset="100%" stop-color="#EE5A24"/></linearGradient>
+      <linearGradient id="armB" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#2ECC71"/><stop offset="100%" stop-color="#27AE60"/></linearGradient>
+    </defs>
+
+    <!-- 半圆刻度 -->
+    <path d="M 160 340 A 180 180 0 0 1 520 340" fill="none" stroke="#E8E8E8" stroke-width="2"/>
+    <line x1="160" y1="340" x2="520" y2="340" stroke="#F0F0F0" stroke-width="1"/>
+
+    <!-- 刻度线和数字 -->
+    <g font-family="Arial" font-size="11" fill="#AAA">
+      <line x1="340" y1="160" x2="340" y2="170" stroke="#CCC" stroke-width="1"/>
+      <line x1="430" y1="168" x2="427" y2="178" stroke="#CCC" stroke-width="1"/>
+      <line x1="497" y1="205" x2="490" y2="213" stroke="#CCC" stroke-width="1"/>
+      <line x1="520" y1="270" x2="510" y2="274" stroke="#CCC" stroke-width="1"/>
+      <line x1="520" y1="340" x2="510" y2="340" stroke="#CCC" stroke-width="1"/>
+      <text x="340" y="185" text-anchor="middle">90°</text>
+      <text x="425" y="193" text-anchor="middle">60°</text>
+      <text x="488" y="225" text-anchor="middle">30°</text>
+      <text x="508" y="288" text-anchor="middle">10°</text>
+      <text x="340" y="358" text-anchor="middle">0° / 180°</text>
+    </g>
+
+    <!-- 标签：固定边 / 旋转边 -->
+    <text id="labelA" x="450" y="326" font-family="'Microsoft YaHei',sans-serif" font-size="13" fill="#E74C3C" font-weight="bold">固定边</text>
+    <text id="labelB" x="450" y="205" font-family="'Microsoft YaHei',sans-serif" font-size="13" fill="#27AE60" font-weight="bold">旋转边</text>
+
+    <!-- Arm A (固定 红色) 加粗 -->
+    <line id="armA" x1="340" y1="340" x2="540" y2="340" stroke="url(#armA)" stroke-width="8" stroke-linecap="round"/>
+
+    <!-- Arm B (旋转 绿色) 加粗 -->
+    <line id="armB" x1="340" y1="340" x2="480" y2="200" stroke="url(#armB)" stroke-width="8" stroke-linecap="round"/>
+
+    <!-- 角度弧 -->
+    <path id="arc" d="M 358 340 A 18 18 0 0 1 353 322" fill="none" stroke="#E74C3C" stroke-width="3"/>
+
+    <!-- 角度度数 -->
+    <text id="arcLabel" x="400" y="280" font-family="Arial" font-size="22" fill="#E74C3C" font-weight="bold">60°</text>
+
+    <!-- 顶点 -->
+    <circle cx="340" cy="340" r="12" fill="#2C3E50" stroke="#FFF" stroke-width="3"/>
+    <circle cx="340" cy="340" r="5" fill="#FFF"/>
+
+    <!-- 旋转边端点拖拽手柄 -->
+    <circle id="handleB" cx="480" cy="200" r="12" fill="#2ECC71" stroke="#FFF" stroke-width="3" cursor="grab"/>
+    <circle cx="480" cy="200" r="4" fill="#FFF"/>
+
+    <!-- 角类型大字 -->
+    <text id="typeLabel" x="340" y="120" text-anchor="middle" font-family="'Microsoft YaHei',sans-serif" font-size="32" font-weight="bold" fill="#27AE60">锐角</text>
+
+    <!-- 提示 -->
+    <text x="340" y="400" text-anchor="middle" font-family="'Microsoft YaHei',sans-serif" font-size="12" fill="#CCC">点击任意位置 或 拖拽绿色圆点 调整角度</text>
+  </svg>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-line" style="background:#E74C3C"></div> 固定边（向右）</div>
+    <div class="legend-item"><div class="legend-line" style="background:#2ECC71"></div> 旋转边（拖拽或点击调整）</div>
+  </div>
+
+  <div class="controls">
+    <button style="background:#FF6B6B" onclick="setAngle(30)">30° 锐角</button>
+    <button style="background:#F39C12" onclick="setAngle(45)">45° 锐角</button>
+    <button style="background:#2ECC71" onclick="setAngle(60)">60° 锐角</button>
+    <button style="background:#3498DB" onclick="setAngle(90)">90° 直角</button>
+    <button style="background:#9B59B6" onclick="setAngle(120)">120° 钝角</button>
+    <button style="background:#E74C3C" onclick="setAngle(180)">180° 平角</button>
+  </div>
+
+  <div class="info">
+    <div class="angle-box"><div class="angle-box-label">当前角度</div><div class="angle-display" id="angleDisplay">60°</div></div>
+    <div class="angle-box"><div class="angle-box-label">角类型</div><div class="angle-type-badge" id="angleTypeBadge" style="background:#2ECC71">锐角</div></div>
+  </div>
+
+  <div class="slider-row">
+    <span class="slider-label">0°</span>
+    <input type="range" id="angleSlider" min="0" max="180" value="60" oninput="setAngle(+this.value)">
+    <span class="slider-label">180°</span>
+  </div>
+
+  <div class="tip">💡 角 = 从一个顶点出发的两条射线组成的图形  &nbsp;|&nbsp;  锐角&lt;90°  直角=90°  钝角&lt;180°  平角=180°</div>
+</div>
+
+<script>
+const svg = document.getElementById('canvas');
+const armB = document.getElementById('armB');
+const handleB = document.getElementById('handleB');
+const labelB = document.getElementById('labelB');
+const arc = document.getElementById('arc');
+const arcLabel = document.getElementById('arcLabel');
+const typeLabel = document.getElementById('typeLabel');
+const angleDisplay = document.getElementById('angleDisplay');
+const angleTypeBadge = document.getElementById('angleTypeBadge');
+const slider = document.getElementById('angleSlider');
+
+const CX = 340, CY = 340, LEN = 190;
+
+function setAngle(deg) {
+  deg = Math.max(0, Math.min(180, Math.round(deg)));
+  const rad = deg * Math.PI / 180;
+  const x2 = CX + LEN * Math.cos(rad);
+  const y2 = CY - LEN * Math.sin(rad);
+
+  armB.setAttribute('x2', x2);
+  armB.setAttribute('y2', y2);
+  handleB.setAttribute('cx', x2);
+  handleB.setAttribute('cy', y2);
+  labelB.setAttribute('x', x2 + 20);
+  labelB.setAttribute('y', y2 + 5);
+
+  const aR = 22;
+  const ax = CX + aR * Math.cos(rad);
+  const ay = CY - aR * Math.sin(rad);
+  const largeArc = deg > 90 ? 1 : 0;
+  arc.setAttribute('d', `M ${CX + aR} ${CY} A ${aR} ${aR} 0 ${largeArc} 0 ${ax} ${ay}`);
+
+  const lR = 65;
+  const lx = CX + lR * Math.cos(rad / 2);
+  const ly = CY - lR * Math.sin(rad / 2) + 7;
+  arcLabel.setAttribute('x', lx);
+  arcLabel.setAttribute('y', ly);
+  arcLabel.textContent = deg + '\u00B0';
+
+  let type, color;
+  if (deg < 90) { type = '锐角'; color = '#2ECC71'; }
+  else if (deg === 90) { type = '直角'; color = '#3498DB'; }
+  else if (deg < 180) { type = '钝角'; color = '#9B59B6'; }
+  else { type = '平角'; color = '#E74C3C'; }
+
+  angleDisplay.textContent = deg + '\u00B0';
+  angleTypeBadge.textContent = type;
+  angleTypeBadge.style.background = color;
+  typeLabel.textContent = type;
+  typeLabel.style.fill = color;
+  slider.value = deg;
+}
+
+// 点击/拖拽 SVG 任意位置
+let dragging = false;
+
+function angleFromEvent(e) {
+  const rect = svg.getBoundingClientRect();
+  const mx = (e.clientX - rect.left) * (700 / rect.width);
+  const my = (e.clientY - rect.top) * (420 / rect.height);
+  const dx = mx - CX, dy = CY - my;
+  let deg = Math.atan2(dy, dx) * 180 / Math.PI;
+  return Math.max(0, Math.min(180, Math.round(deg)));
+}
+
+svg.addEventListener('pointerdown', (e) => {
+  dragging = true;
+  svg.setPointerCapture(e.pointerId);
+  setAngle(angleFromEvent(e));
+});
+svg.addEventListener('pointermove', (e) => {
+  if (!dragging) return;
+  setAngle(angleFromEvent(e));
+});
+svg.addEventListener('pointerup', () => { dragging = false; });
+svg.addEventListener('pointercancel', () => { dragging = false; });
+
+setAngle(60);
+</script>
+</body>
+</html>

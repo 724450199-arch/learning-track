@@ -1,0 +1,172 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#E8F4FD"/>
+      <stop offset="100%" stop-color="#FEF9E7"/>
+    </linearGradient>
+    <linearGradient id="desk" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#D4A76A"/>
+      <stop offset="100%" stop-color="#B8864E"/>
+    </linearGradient>
+    <linearGradient id="armA" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#FF6B6B"/>
+      <stop offset="100%" stop-color="#EE5A24"/>
+    </linearGradient>
+    <linearGradient id="armB" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#4ECDC4"/>
+      <stop offset="100%" stop-color="#2ECC71"/>
+    </linearGradient>
+    <filter id="shadow" x="-5%" y="-5%" width="115%" height="115%">
+      <feDropShadow dx="2" dy="3" stdDeviation="4" flood-opacity="0.15"/>
+    </filter>
+    <marker id="arrowSmall" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#7F8C8D"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="600" fill="url(#sky)" rx="12"/>
+
+  <!-- Title -->
+  <text x="400" y="45" text-anchor="middle" font-family="'Comic Sans MS', 'Microsoft YaHei', sans-serif" font-size="28" font-weight="bold" fill="#2C3E50">📐 可调节角度学习角</text>
+  <text x="400" y="70" text-anchor="middle" font-family="'Comic Sans MS', 'Microsoft YaHei', sans-serif" font-size="16" fill="#7F8C8D">拖动可调节角度大小 · 学习角的概念</text>
+
+  <!-- Wall -->
+  <rect x="50" y="85" width="700" height="5" fill="#BDC3C7" rx="2"/>
+  <rect x="50" y="85" width="5" height="350" fill="#BDC3C7" rx="2"/>
+
+  <!-- Floor -->
+  <rect x="0" y="430" width="800" height="170" fill="#E8DCC8" rx="0"/>
+
+  <!-- Desk -->
+  <rect x="200" y="370" width="400" height="18" fill="url(#desk)" rx="3" filter="url(#shadow)"/>
+  <rect x="210" y="388" width="12" height="50" fill="#A0724A" rx="2"/>
+  <rect x="390" y="388" width="12" height="50" fill="#A0724A" rx="2"/>
+  <rect x="578" y="388" width="12" height="50" fill="#A0724A" rx="2"/>
+
+  <!-- Books on desk -->
+  <rect x="230" y="330" width="18" height="40" fill="#E74C3C" rx="2"/>
+  <rect x="250" y="340" width="16" height="30" fill="#3498DB" rx="2"/>
+  <rect x="268" y="345" width="14" height="25" fill="#2ECC71" rx="2"/>
+
+  <!-- Pencil -->
+  <line x1="295" y1="365" x2="310" y2="340" stroke="#F39C12" stroke-width="4" stroke-linecap="round"/>
+  <polygon points="310,340 313,335 307,335" fill="#E74C3C"/>
+
+  <!-- ===== Angle Demonstrator (center of desk) ===== -->
+
+  <!-- Protractor arc -->
+  <path d="M 370 355 A 80 80 0 0 1 510 355" fill="none" stroke="#95A5A6" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+  <!-- Degree marks -->
+  <g font-family="Arial" font-size="10" fill="#7F8C8D">
+    <text x="400" y="363" text-anchor="middle">0°</text>
+    <text x="447" y="358" text-anchor="middle">45°</text>
+    <text x="482" y="343" text-anchor="middle">90°</text>
+    <text x="497" y="318" text-anchor="middle">135°</text>
+    <text x="490" y="290" text-anchor="middle">180°</text>
+  </g>
+
+  <!-- Arm A (horizontal, fixed) -->
+  <line x1="370" y1="355" x2="530" y2="355" stroke="url(#armA)" stroke-width="5" stroke-linecap="round"/>
+
+  <!-- Arm B (adjustable) - currently at ~60 degrees -->
+  <line x1="370" y1="355" x2="410" y2="285" stroke="url(#armB)" stroke-width="5" stroke-linecap="round"/>
+
+  <!-- Angle arc indicator -->
+  <path d="M 385 355 A 15 15 0 0 1 382 340" fill="none" stroke="#E74C3C" stroke-width="2"/>
+  <text x="378" y="338" font-family="Arial" font-size="14" fill="#E74C3C" font-weight="bold">60°</text>
+
+  <!-- Pivot point -->
+  <circle cx="370" cy="355" r="8" fill="#2C3E50" stroke="#FFF" stroke-width="2"/>
+  <circle cx="370" cy="355" r="3" fill="#FFF"/>
+
+  <!-- Rotation arrows -->
+  <path d="M 365 290 Q 350 300 355 315" fill="none" stroke="#7F8C8D" stroke-width="2" marker-end="url(#arrowSmall)"/>
+  <path d="M 420 280 Q 430 290 425 305" fill="none" stroke="#7F8C8D" stroke-width="2"/>
+
+  <!-- Angle presets buttons -->
+  <g transform="translate(540, 290)">
+    <rect x="0" y="0" width="200" height="140" rx="10" fill="#FFF" stroke="#E0E0E0" stroke-width="1.5" filter="url(#shadow)"/>
+    <text x="100" y="22" text-anchor="middle" font-family="'Microsoft YaHei', sans-serif" font-size="12" fill="#7F8C8D">预设角度</text>
+
+    <rect x="12" y="32" width="55" height="28" rx="5" fill="#FF6B6B" opacity="0.8"/>
+    <text x="39" y="50" text-anchor="middle" font-family="Arial" font-size="13" fill="#FFF" font-weight="bold">30°</text>
+
+    <rect x="72" y="32" width="55" height="28" rx="5" fill="#F39C12" opacity="0.8"/>
+    <text x="99" y="50" text-anchor="middle" font-family="Arial" font-size="13" fill="#FFF" font-weight="bold">45°</text>
+
+    <rect x="132" y="32" width="55" height="28" rx="5" fill="#2ECC71" opacity="0.8"/>
+    <text x="159" y="50" text-anchor="middle" font-family="Arial" font-size="13" fill="#FFF" font-weight="bold">60°</text>
+
+    <rect x="12" y="68" width="55" height="28" rx="5" fill="#3498DB" opacity="0.8"/>
+    <text x="39" y="86" text-anchor="middle" font-family="Arial" font-size="13" fill="#FFF" font-weight="bold">90°</text>
+
+    <rect x="72" y="68" width="55" height="28" rx="5" fill="#9B59B6" opacity="0.8"/>
+    <text x="99" y="86" text-anchor="middle" font-family="Arial" font-size="13" fill="#FFF" font-weight="bold">120°</text>
+
+    <rect x="132" y="68" width="55" height="28" rx="5" fill="#E74C3C" opacity="0.8"/>
+    <text x="159" y="86" text-anchor="middle" font-family="Arial" font-size="13" fill="#FFF" font-weight="bold">180°</text>
+
+    <!-- Adjustable slider -->
+    <text x="100" y="112" text-anchor="middle" font-family="Arial" font-size="10" fill="#95A5A6">角度可调节范围</text>
+    <rect x="15" y="118" width="170" height="6" rx="3" fill="#E0E0E0"/>
+    <circle cx="90" cy="121" r="6" fill="#E74C3C"/>
+    <text x="90" y="138" text-anchor="middle" font-family="Arial" font-size="9" fill="#E74C3C">◀ 拖动 ▶</text>
+  </g>
+
+  <!-- Angle type labels -->
+  <g transform="translate(50, 250)">
+    <text x="0" y="0" font-family="'Microsoft YaHei', sans-serif" font-size="13" font-weight="bold" fill="#2C3E50">角的知识点</text>
+    <circle cx="12" cy="18" r="4" fill="#FF6B6B"/>
+    <text x="22" y="22" font-family="Arial, sans-serif" font-size="11" fill="#555">锐角 &lt; 90°</text>
+    <circle cx="12" cy="38" r="4" fill="#2ECC71"/>
+    <text x="22" y="42" font-family="Arial, sans-serif" font-size="11" fill="#555">直角 = 90°</text>
+    <circle cx="12" cy="58" r="4" fill="#3498DB"/>
+    <text x="22" y="62" font-family="Arial, sans-serif" font-size="11" fill="#555">钝角 &gt; 90°</text>
+    <circle cx="12" cy="78" r="4" fill="#9B59B6"/>
+    <text x="22" y="82" font-family="Arial, sans-serif" font-size="11" fill="#555">平角 = 180°</text>
+  </g>
+
+  <!-- Kid's chair -->
+  <rect x="430" y="395" width="160" height="12" fill="#E67E22" rx="3"/>
+  <rect x="440" y="407" width="10" height="35" fill="#D35400" rx="2"/>
+  <rect x="575" y="407" width="10" height="35" fill="#D35400" rx="2"/>
+  <rect x="570" y="350" width="12" height="57" fill="#E67E22" rx="3"/>
+
+  <!-- Fun decorations -->
+  <!-- Light bulb (idea) -->
+  <g transform="translate(650, 120)">
+    <path d="M 0 20 Q 0 5 12 5 Q 24 5 24 20 Q 24 30 18 35 L 6 35 Q 0 30 0 20" fill="#F1C40F" stroke="#F39C12" stroke-width="1.5"/>
+    <line x1="8" y1="37" x2="16" y2="37" stroke="#F39C12" stroke-width="1.5"/>
+    <line x1="10" y1="40" x2="14" y2="40" stroke="#F39C12" stroke-width="1.5"/>
+    <line x1="12" y1="42" x2="12" y2="44" stroke="#F39C12" stroke-width="1.5"/>
+  </g>
+
+  <!-- Ruler -->
+  <rect x="580" y="360" width="60" height="8" fill="#F39C12" rx="1" transform="rotate(-15, 580, 360)"/>
+  <g transform="rotate(-15, 580, 360)">
+    <line x1="585" y1="360" x2="585" y2="368" stroke="#FFF" stroke-width="0.5"/>
+    <line x1="595" y1="360" x2="595" y2="368" stroke="#FFF" stroke-width="0.5"/>
+    <line x1="605" y1="360" x2="605" y2="368" stroke="#FFF" stroke-width="0.5"/>
+    <line x1="615" y1="360" x2="615" y2="368" stroke="#FFF" stroke-width="0.5"/>
+    <line x1="625" y1="360" x2="625" y2="368" stroke="#FFF" stroke-width="0.5"/>
+    <line x1="635" y1="360" x2="635" y2="368" stroke="#FFF" stroke-width="0.5"/>
+  </g>
+
+  <!-- Protractor on desk -->
+  <path d="M 330 358 A 25 25 0 0 1 360 358" fill="none" stroke="#3498DB" stroke-width="2"/>
+  <text x="330" y="370" font-family="Arial" font-size="8" fill="#3498DB">量角器</text>
+
+  <!-- Bottom info bar -->
+  <rect x="180" y="500" width="440" height="55" rx="10" fill="#FFF" opacity="0.85" filter="url(#shadow)"/>
+  <text x="400" y="523" text-anchor="middle" font-family="'Microsoft YaHei', sans-serif" font-size="13" fill="#2C3E50">
+    💡 角 = 从一个顶点出发的两条射线组成的图形
+  </text>
+  <text x="400" y="544" text-anchor="middle" font-family="'Microsoft YaHei', sans-serif" font-size="12" fill="#7F8C8D">
+    锐角 &lt; 90° &nbsp;|&nbsp; 直角 = 90° &nbsp;|&nbsp; 钝角 &lt; 180° &nbsp;|&nbsp; 平角 = 180°
+  </text>
+
+  <!-- Corner decoration -->
+  <text x="720" y="580" font-family="Arial" font-size="11" fill="#BDC3C7" text-anchor="end">🎯 学习角 · 生图技能</text>
+</svg>
