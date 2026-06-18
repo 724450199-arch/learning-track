@@ -1,5 +1,5 @@
 ﻿param(
-  [string]$PushPlusToken
+  [string]$SendKey
 )
 
 # ====== 配置 ======
@@ -102,31 +102,31 @@ $($item.link)
 $Body += "---
 自动采集于 $DateStr $TimeStr | 来源: 36氪 / IT之家 / Reuters"
 
-# ====== 推送 ======
-if (-not $PushPlusToken) {
-  $ConfigFile = "$PSScriptRoot\pushplus_token.txt"
+# ====== 方糖推送 ======
+if (-not $SendKey) {
+  $ConfigFile = "$PSScriptRoot\sendkey.txt"
   if (Test-Path $ConfigFile) {
-    $PushPlusToken = (Get-Content $ConfigFile -Raw).Trim()
+    $SendKey = (Get-Content $ConfigFile -Raw).Trim()
   }
 }
 
-if ($PushPlusToken) {
+if ($SendKey) {
   try {
-    $resp = Invoke-RestMethod -Uri "https://www.pushplus.plus/send" -Method Post `
-      -Body (@{ token = $PushPlusToken; title = "每日科技早报 $DateStr"; content = $Body; template = "markdown" } | ConvertTo-Json) `
-      -ContentType "application/json" -TimeoutSec 30
-    if ($resp.code -eq 200) {
-      Write-Log "推送成功"
+    $resp = Invoke-RestMethod -Uri "https://sctapi.ftqq.com/$SendKey.send" -Method Post `
+      -Body @{ title = "每日科技早报 $DateStr"; content = $Body } `
+      -TimeoutSec 30
+    if ($resp.code -eq 0) {
+      Write-Log "方糖推送成功 (pushid: $($resp.data.pushid))"
     } else {
-      Write-Log "推送失败: $($resp.msg)"
+      Write-Log "方糖推送失败: code=$($resp.code) msg=$($resp.message)"
     }
   } catch {
-    Write-Log "推送异常: $_"
+    Write-Log "方糖推送异常: $_"
   }
 } else {
   $out = "$PSScriptRoot\daily_news_$DateStr.md"
   $Body | Out-File -FilePath $out -Encoding utf8
-  Write-Log "Token 未配置，日报已保存到: $out"
+  Write-Log "SendKey 未配置，日报已保存到: $out"
   Write-Host "已保存到 $out"
 }
 

@@ -18,6 +18,6 @@ jobs:
       - name: Run news collector
         shell: pwsh
         env:
-          PUSHPLUS_TOKEN: ${{ secrets.PUSHPLUS_TOKEN }}
+          SENDKEY: ${{ secrets.SENDKEY }}
         run: |
-          pwsh ./daily_news.ps1 -PushPlusToken "$env:PUSHPLUS_TOKEN"
+          pwsh ./daily_news.ps1 -SendKey "$env:SENDKEY"
