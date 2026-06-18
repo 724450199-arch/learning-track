@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-18T13:08:00+08:00",
+  "last_updated": "2026-06-18T13:25:00+08:00",
   "current_tasks": [],
   "session_history": [
     {
@@ -8,6 +8,15 @@
       "decisions": [
         "opencode-mem 插件因 ES module 兼容问题被移除",
         "改用 AGENTS.md + memory.json + 本地文件做上下文持久化"
+      ]
+    },
+    {
+      "date": "2026-06-18",
+      "summary": "创建每日科技早报脚本 daily_news.ps1，采集 36氪/IT之家/Reuters 科技资讯",
+      "decisions": [
+        "脚本部署到 GitHub Actions 定时 08:00 执行，不依赖本地电脑",
+        "推送到微信使用 PushPlus，需要用户扫码获取 token",
+        "脚本已本地测试通过，采集过滤 30 条相关新闻"
       ]
     }
   ],
