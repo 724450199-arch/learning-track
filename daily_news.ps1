@@ -117,12 +117,13 @@ $ChineseWeek = [Math]::Min([Math]::Max(1, $RawWeek), 13)
 $Dow = [int](Get-Date).DayOfWeek
 $DayIndex = if ($Dow -eq 0 -or $Dow -eq 6) { 5 } else { $Dow }
 $cnPoems = $ChineseContent[$ChineseWeek].poems
-$PoemTitle = ""; $PoemAuthor = ""; $PoemText = ""
-if ($cnPoems -and $cnPoems.Count -ge 1) {
-  $idx = (($DayIndex - 1) * 2) % $cnPoems.Count
-  $PoemTitle = $cnPoems[$idx].title
-  $PoemAuthor = $cnPoems[$idx].author
-  $PoemText = $cnPoems[$idx].text
+$PoemsToday = @()
+if ($cnPoems -and $cnPoems.Count -ge 2) {
+  $idx1 = (($DayIndex - 1) * 2) % $cnPoems.Count
+  $idx2 = (($DayIndex - 1) * 2 + 1) % $cnPoems.Count
+  $PoemsToday = @($cnPoems[$idx1], $cnPoems[$idx2])
+} elseif ($cnPoems -and $cnPoems.Count -eq 1) {
+  $PoemsToday = @($cnPoems[0])
 }
 $WeekCN = @{1="一";2="二";3="三";4="四";5="五";6="六";7="七";8="八";9="九";10="十";11="十一";12="十二";13="十三"}[$ChineseWeek]
 
@@ -199,8 +200,13 @@ $Body = @"
 "@
 
 # ====== 添加今日古诗 ======
-if ($PoemText) {
-  $Body += "---`n📜 **今日古诗（语文第${WeekCN}周）**`n**${PoemTitle} - ${PoemAuthor}**`n${PoemText}`n---`n`n"
+if ($PoemsToday.Count -gt 0) {
+  $PoemBlock = "---`n📜 **今日古诗（语文第${WeekCN}周）**`n"
+  foreach ($p in $PoemsToday) {
+    $PoemBlock += "**${p.title} - ${p.author}**`n${p.text}`n"
+  }
+  $PoemBlock += "---`n"
+  $Body += $PoemBlock
 }
 
 $i = 1
