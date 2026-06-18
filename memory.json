@@ -1,0 +1,15 @@
+{
+  "last_updated": "2026-06-18T13:08:00+08:00",
+  "current_tasks": [],
+  "session_history": [
+    {
+      "date": "2026-06-18",
+      "summary": "修复 opencode 启动慢问题 - 删除了损坏的 opencode-mem 插件，清空了 306MB 缓存",
+      "decisions": [
+        "opencode-mem 插件因 ES module 兼容问题被移除",
+        "改用 AGENTS.md + memory.json + 本地文件做上下文持久化"
+      ]
+    }
+  ],
+  "learned_preferences": {}
+}
