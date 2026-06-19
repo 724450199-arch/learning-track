@@ -8,6 +8,10 @@
     {
       "timestamp": "2026-06-18T20:53:00+08:00",
       "summary": "已完成 GitHub Actions 配置：创建 repo 724450199-arch/learning-track，推送代码，配置 SENDKEY secret，测试 workflow 运行成功。每天早上 08:00 CST 自动采集 36氪/IT之家/Reuters 科技新闻并推送微信。"
+    },
+    {
+      "timestamp": "2026-06-19T21:00:00+08:00",
+      "summary": "今早 GitHub Actions 定时延迟 13 小时（08:00 的 cron 拖到 21:00 才执行）。改用 Windows 计划任务 07:55 本地触发 GitHub API workflow_dispatch，避免调度延迟。创建 trigger_news.ps1 脚本 + 计划任务 LearningEnglish-TriggerNews，手动测试成功。GitHub push 因网络阻断失败，仅推送到 Gitee。"
     }
   ],
   "current_tasks": [],
