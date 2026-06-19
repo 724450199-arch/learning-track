@@ -203,7 +203,7 @@ $Body = @"
 if ($PoemsToday.Count -gt 0) {
   $PoemBlock = "---`n📜 **今日古诗（语文第${WeekCN}周）**`n"
   foreach ($p in $PoemsToday) {
-    $PoemBlock += "**${p.title} - ${p.author}**`n${p.text}`n"
+    $PoemBlock += "**$($p.title) - $($p.author)**`n$($p.text)`n"
   }
   $PoemBlock += "---`n"
   $Body += $PoemBlock
