@@ -2,23 +2,23 @@
     "start_date":  "2026-05-31",
     "duo_duo":  {
                     "page_id":  "b80cd768-6ef5-4da6-a257-e2afe8d388ac",
-                    "current_week":  3,
+                    "current_week":  4,
                     "total_weeks":  12,
                     "name":  "多多"
                 },
     "xiao_ming":  {
                       "page_id":  "8169ce9a-efd8-47bd-b671-2d0b8fa4c6e6",
-                      "current_week":  3,
+                      "current_week":  4,
                       "total_weeks":  33,
                       "name":  "小铭"
                   },
     "duo_duo_math":  {
-                         "current_week":  3,
+                         "current_week":  4,
                          "total_weeks":  31,
                          "name":  "多多数学"
                      },
     "duo_duo_chinese":  {
-                            "current_week":  3,
+                            "current_week":  4,
                             "total_weeks":  13,
                             "name":  "多多语文"
                         },
