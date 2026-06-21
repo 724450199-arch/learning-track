@@ -10,7 +10,8 @@ $DuoDuoUrl = "https://flowus.cn/b80cd768-6ef5-4da6-a257-e2afe8d388ac"
 $XiaoMingUrl = "https://flowus.cn/8169ce9a-efd8-47bd-b671-2d0b8fa4c6e6"
 $MathUrl = "https://flowus.cn/47549cdb-db3c-4f67-b902-e0d947cdc60c"
 $ChineseUrl = "https://flowus.cn/74179223-c084-4be9-a08f-0dbebe16a55f"
-$ServerChanKey = "SCT357593T6RJQiHZRwcLRN61jTWM5Dg3L"
+$ServerChanKey = [Environment]::GetEnvironmentVariable("SENDKEY")
+if (-not $ServerChanKey) { $ServerChanKey = "SCT357593T6RJQiHZRwcLRN61jTWM5Dg3L" }
 
 if (-not (Test-Path $WorksheetDir)) { New-Item -ItemType Directory -Path $WorksheetDir -Force | Out-Null }
 
