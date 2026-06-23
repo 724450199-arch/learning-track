@@ -4,7 +4,7 @@
 
 # ====== 配置 ======
 $LogFile = "$PSScriptRoot\news.log"
-$MaxItems = 40
+$MaxItems = 20
 $RequestTimeout = 15
 
 function Write-Log {
