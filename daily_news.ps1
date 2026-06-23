@@ -4,7 +4,7 @@
 
 # ====== 配置 ======
 $LogFile = "$PSScriptRoot\news.log"
-$MaxItems = 30
+$MaxItems = 40
 $RequestTimeout = 15
 
 function Write-Log {
@@ -132,15 +132,24 @@ $Sources = @(
   @{ Name = "36氪"; Url = "https://36kr.com/feed" }
   @{ Name = "IT之家"; Url = "https://www.ithome.com/rss/" }
   @{ Name = "Reuters Tech"; Url = "https://feeds.reuters.com/reuters/technologyNews" }
+  @{ Name = "EE Times"; Url = "https://www.eetimes.com/feed/" }
+  @{ Name = "Tom's Hardware"; Url = "https://www.tomshardware.com/feeds/all" }
+  @{ Name = "TechPowerUp"; Url = "https://www.techpowerup.com/rss/news" }
+  @{ Name = "集微网"; Url = "https://www.laoyaoba.com/api/rss/hbb" }
 )
 
 # ====== 关键词 ======
 $Keywords = @(
-  "AI","人工智能","大模型","LLM","AGI","OpenAI","ChatGPT","GPT","Claude","Gemini",
+  "AI","人工智能","大模型","LLM","AGI","OpenAI","ChatGPT","GPT","Claude","Gemini","DeepSeek",
   "芯片","半导体","封装","Chiplet","先进封装","CoWoS","HBM","TSMC","台积电","ASML",
-  "GPU","CPU","算力","数据中心","HPC","英伟达","NVIDIA","AMD","Intel",
-  "光刻机","EDA","RISC-V","Arm",
-  "科技","互联网","量子计算","5G","6G","机器人","自动驾驶"
+  "GPU","CPU","算力","数据中心","HPC","英伟达","NVIDIA","AMD","Intel","Qualcomm",
+  "光刻机","EDA","RISC-V","Arm","Rapidus","GlobalFoundries","格芯","UMC","联电",
+  "晶圆","代工","fab","foundry","制程","工艺节点","2nm","3nm","5nm","7nm",
+  "存储","DRAM","NAND","Flash","SSD","Samsung","SK海力士","美光","Micron",
+  "先进封装","SiP","2.5D","3D","FOWLP","CoPoS","玻璃基板",
+  "碳化硅","SiC","GaN","氮化镓","功率半导体","IGBT","MOSFET",
+  "AI芯片","AI加速器","NPU","TPU","推理芯片","存算一体",
+  "科技","互联网","量子计算","5G","6G","机器人","自动驾驶","IoT"
 )
 
 # ====== 采集 ======
@@ -222,7 +231,7 @@ $($item.link)
 }
 
 $Body += "---
-自动采集于 $DateStr $TimeStr | 来源: 36氪 / IT之家 / Reuters"
+自动采集于 $DateStr $TimeStr | 来源: 36氪 / IT之家 / Reuters / EE Times / Tom's Hardware / TechPowerUp / 集微网"
 
 # ====== 方糖推送 ======
 if (-not $SendKey) {
