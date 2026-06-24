@@ -13,6 +13,18 @@ function Write-Log {
   "$time $Msg" | Out-File -FilePath $LogFile -Encoding utf8 -Append
 }
 
+# ====== 本地代理自动检测 ======
+$Script:Proxy = $null
+try {
+  $proxyCfg = Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -ErrorAction Stop
+  if ($proxyCfg.ProxyEnable -eq 1 -and $proxyCfg.ProxyServer) {
+    $proxyUrl = $proxyCfg.ProxyServer
+    if ($proxyUrl -notmatch '^https?://') { $proxyUrl = "http://$proxyUrl" }
+    $Script:Proxy = $proxyUrl
+    Write-Log "检测到系统代理: $proxyUrl"
+  }
+} catch { }
+
 Write-Log "===== 新闻采集开始 ====="
 
 # ====== 古诗词（65首，13周x5首，同 daily_learning.ps1） ======
@@ -157,7 +169,9 @@ $AllItems = @()
 foreach ($Src in $Sources) {
   try {
     Write-Log "正在采集: $($Src.Name)"
-    $resp = Invoke-WebRequest -Uri $Src.Url -TimeoutSec $RequestTimeout -UseBasicParsing -ErrorAction Stop
+    $iwrParams = @{ Uri = $Src.Url; TimeoutSec = $RequestTimeout; UseBasicParsing = $true; ErrorAction = 'Stop' }
+    if ($Script:Proxy) { $iwrParams['Proxy'] = $Script:Proxy }
+    $resp = Invoke-WebRequest @iwrParams
     $xml = [System.Xml.XmlDocument]::new()
     $xml.LoadXml($resp.Content)
     $items = $xml.rss.channel.item | Select-Object -First 25
@@ -243,9 +257,9 @@ if (-not $SendKey) {
 
 if ($SendKey) {
   try {
-    $resp = Invoke-RestMethod -Uri "https://sctapi.ftqq.com/$SendKey.send" -Method Post `
-      -Body @{ title = "每日科技早报 $DateStr"; content = $Body } `
-      -TimeoutSec 30
+    $irmParams = @{ Uri = "https://sctapi.ftqq.com/$SendKey.send"; Method = 'Post'; Body = @{ title = "每日科技早报 $DateStr"; content = $Body }; TimeoutSec = 30 }
+    if ($Script:Proxy) { $irmParams['Proxy'] = $Script:Proxy }
+    $resp = Invoke-RestMethod @irmParams
     if ($resp.code -eq 0) {
       Write-Log "方糖推送成功 (pushid: $($resp.data.pushid))"
     } else {
