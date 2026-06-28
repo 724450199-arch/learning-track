@@ -151,6 +151,9 @@ $Sources = @(
   @{ Name = "Semiconductor Engineering"; Url = "https://semiengineering.com/feed/" }
   @{ Name = "IEEE Spectrum"; Url = "https://spectrum.ieee.org/feeds/rss" }
   @{ Name = "AnandTech"; Url = "https://www.anandtech.com/rss/" }
+  @{ Name = "Semiconductor Digest"; Url = "https://semiconductordigest.com/feed/" }
+  @{ Name = "All About Circuits"; Url = "https://www.allaboutcircuits.com/feed/" }
+  @{ Name = "EDN Network"; Url = "https://www.edn.com/feed/" }
 )
 
 # ====== 关键词 ======
@@ -248,7 +251,7 @@ $($item.link)
 }
 
 $Body += "---
-自动采集于 $DateStr $TimeStr | 来源: 36氪 / IT之家 / Reuters / EE Times / Tom's Hardware / TechPowerUp / 集微网 / Semiconductor Engineering / IEEE Spectrum / AnandTech"
+自动采集于 $DateStr $TimeStr | 来源: 36氪 / IT之家 / Reuters / EE Times / Tom's Hardware / TechPowerUp / 集微网 / Semiconductor Engineering / IEEE Spectrum / AnandTech / Semiconductor Digest / All About Circuits / EDN Network"
 
 # ====== 方糖推送 ======
 if (-not $SendKey) {
