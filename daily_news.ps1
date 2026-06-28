@@ -199,9 +199,21 @@ foreach ($Src in $Sources) {
 
 Write-Log "共采集 $($AllItems.Count) 条新闻"
 
+# ====== 芯片半导体优先关键词（高权重） ======
+$ChipKeywords = @(
+  "芯片","半导体","封装","Chiplet","先进封装","CoWoS","HBM","TSMC","台积电","ASML",
+  "GPU","CPU","光刻机","EDA","RISC-V","Arm","晶圆","代工","fab","foundry",
+  "制程","工艺节点","2nm","3nm","5nm","7nm","存储","DRAM","NAND","Flash",
+  "SiP","FOWLP","CoPoS","玻璃基板","碳化硅","SiC","GaN","氮化镓","功率半导体",
+  "IGBT","MOSFET","AI芯片","AI加速器","NPU","TPU","推理芯片","存算一体",
+  "NVIDIA","AMD","Intel","Qualcomm","Samsung","SK海力士","美光","Micron",
+  "GlobalFoundries","格芯","Rapidus"
+)
+
 # ====== 关键词过滤去重 ======
 $Filtered = @()
 $KeywordsPattern = "($($Keywords -join '|'))"
+$ChipPattern = "($($ChipKeywords -join '|'))"
 $Seen = @{}
 
 foreach ($item in $AllItems) {
@@ -212,11 +224,13 @@ foreach ($item in $AllItems) {
       $Seen[$key] = $true
       $MatchesList = [regex]::Matches($text, $KeywordsPattern) | ForEach-Object { $_.Value }
       $item.matchCount = ($MatchesList | Select-Object -Unique).Count
+      $chipMatches = [regex]::Matches($text, $ChipPattern)
+      $item.chipScore = ($chipMatches | Select-Object -Unique).Count
       $Filtered += $item
     }
   }
 }
-$Filtered = $Filtered | Sort-Object matchCount -Descending | Select-Object -First $MaxItems
+$Filtered = $Filtered | Sort-Object chipScore, matchCount -Descending | Select-Object -First $MaxItems
 Write-Log "过滤后 $($Filtered.Count) 条相关新闻"
 
 # ====== 格式化 ======
