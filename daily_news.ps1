@@ -148,6 +148,9 @@ $Sources = @(
   @{ Name = "Tom's Hardware"; Url = "https://www.tomshardware.com/feeds/all" }
   @{ Name = "TechPowerUp"; Url = "https://www.techpowerup.com/rss/news" }
   @{ Name = "集微网"; Url = "https://www.laoyaoba.com/api/rss/hbb" }
+  @{ Name = "Semiconductor Engineering"; Url = "https://semiengineering.com/feed/" }
+  @{ Name = "IEEE Spectrum"; Url = "https://spectrum.ieee.org/feeds/rss" }
+  @{ Name = "AnandTech"; Url = "https://www.anandtech.com/rss/" }
 )
 
 # ====== 关键词 ======
@@ -245,7 +248,7 @@ $($item.link)
 }
 
 $Body += "---
-自动采集于 $DateStr $TimeStr | 来源: 36氪 / IT之家 / Reuters / EE Times / Tom's Hardware / TechPowerUp / 集微网"
+自动采集于 $DateStr $TimeStr | 来源: 36氪 / IT之家 / Reuters / EE Times / Tom's Hardware / TechPowerUp / 集微网 / Semiconductor Engineering / IEEE Spectrum / AnandTech"
 
 # ====== 方糖推送 ======
 if (-not $SendKey) {
