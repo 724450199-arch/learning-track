@@ -92,14 +92,14 @@ foreach ($rd in $L.reading) {
   $lines += "\pard\fs32\b " + (Fmt $rd) + "\b0\par"
 }
 
-$lines += "\pard\cf6\b\fs28 " + (Fmt "顺口溜: $($L.jingle)") + "\cf1\b0\par"
+$lines += "\pard\cf6\b\fs28 " + (Fmt "☆ 顺口溜: $($L.jingle)") + "\cf1\b0\par\par"
 
 $lines += "\pard\cb2\cf2\b\fs36 " + (Fmt "书写练习 - 描红") + "\cf1\b0\par"
-$lines += "\pard\fs24 " + (Fmt "(在横线上描红, 注意占中格位置)") + "\par"
+$lines += "\pard\fs24 " + (Fmt "(在横线上描红, 注意占中格位置)") + "\par\par"
 
 foreach ($ch in $L.chars) {
   $e = Fmt $ch
-  $lines += "\pard\fs60\cf1\f1 ${e}\cf7       ${e}  ${e}  ${e}  ${e}\cf1\f0\par"
+  $lines += "\pard\fs120\cf1\f1 ${e}\cf7\f1\fs80   ${e}       ${e}       ${e}       ${e}\cf1\f0\par\par"
 }
 
 $lines += "\pard\cb3\cf4\b\fs36 " + (Fmt "课后练习") + "\cf1\b0\par"
