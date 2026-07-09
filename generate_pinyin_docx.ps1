@@ -207,10 +207,23 @@ foreach ($hw in $L.homework) {
   $idx++
 }
 
-$pngResult = New-LessonIconsPng $Lesson
-if ($pngResult -and $pngResult.hex) {
-  $lines += "\pard\cb3\cf4\b\fs36 " + (Fmt "词汇图片") + "\cf1\b0\par"
-  $lines += "{\pict\pngblip\picw$($pngResult.w)\pich$($pngResult.h) $($pngResult.hex)}\par"
+# 连一连：拼音配汉字
+$pairs = @()
+foreach ($hw in $L.homework) {
+  $m = [regex]::Matches($hw, '([a-zü:0-9]+)\(([\u4e00-\u9fff]+)\)')
+  foreach ($match in $m) { $pairs += @{pinyin=$match.Groups[1].Value; word=$match.Groups[2].Value} }
+}
+if ($pairs.Count -ge 3) {
+  $lines += "\pard\cb3\cf4\b\fs36 " + (Fmt "连一连：将拼音与对应的汉字连线") + "\cf1\b0\par"
+  $shuffled = $pairs | Sort-Object { Get-Random }
+  $lines += "{\trowd\cellx3500\cellx7000\intbl"
+  $lines += "\pard\intbl\cf2\b\fs28 " + (Fmt "拼音") + "\cell \pard\intbl\cf2\b\fs28 " + (Fmt "汉字") + "\cell\row\b0\cf1"
+  for ($i = 0; $i -lt $pairs.Count; $i++) {
+    $py = (Convert-ToneMarks $pairs[$i].pinyin)
+    $wd = $shuffled[$i].word
+    $lines += "\pard\intbl\fs28\cf1\f1 " + (Escape-RtfUnicode $py) + "\cell \pard\intbl\fs28\cf7 " + (Escape-RtfUnicode $wd) + "\cell\row"
+  }
+  $lines += "}"
 }
 
 $lines += "\pard\fs20 " + (Fmt "生成日期: ${DateStr}") + "\par"
