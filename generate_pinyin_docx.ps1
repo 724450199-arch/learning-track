@@ -221,7 +221,7 @@ if ($pairs.Count -ge 3) {
   for ($i = 0; $i -lt $pairs.Count; $i++) {
     $py = (Convert-ToneMarks $pairs[$i].pinyin)
     $wd = $shuffled[$i].word
-    $lines += "\pard\intbl\fs28\cf1\f1 " + (Escape-RtfUnicode $py) + "\cell \pard\intbl\fs28\cf7 " + (Escape-RtfUnicode $wd) + "\cell\row"
+    $lines += "\pard\intbl\fs28\cf1\f1 " + (Escape-RtfUnicode $py) + "\cell \pard\intbl\fs28\cf1 " + (Escape-RtfUnicode $wd) + "\cell\row"
   }
   $lines += "}"
 }
