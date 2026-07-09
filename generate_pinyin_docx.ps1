@@ -77,7 +77,7 @@ function Escape-RtfUnicode {
   return $sb.ToString()
 }
 
-$colors = "red0\green0\blue0;\red229\green57\blue53;\red255\green243\blue224;\red251\green233\blue231;\red230\green81\blue0;\red191\green54\blue12;\red255\green255\blue255;\red232\green245\blue253;\red0\green51\blue153"
+$colors = "\red0\green0\blue0;\red229\green57\blue53;\red255\green243\blue224;\red230\green81\blue0;\red191\green54\blue12;\red232\green245\blue253;\red245\green248\blue252;\red0\green51\blue153;\red255\green255\blue255"
 
 function Fmt([string]$s) {
   return Escape-RtfUnicode (Convert-ToneMarks $s)
@@ -183,16 +183,16 @@ function New-LessonIconsPng {
 
 $lines = @()
 $lines += "\pard\cf2\b\fs44 " + (Fmt "第${Lesson}课 - $($L.title) 拼音练习") + "\cf1\b0\par"
-$lines += "\pard\cf8\fs24 " + (Fmt "$($L.subtitle)  生成日期: ${DateStr}") + "\cf1\par"
-$lines += "\pard\cb3\cf9\b\fs36 " + (Fmt "朗读练习 - 大声读3遍") + "\cf1\b0\par"
+$lines += "\pard\cf6\fs24 " + (Fmt "$($L.subtitle)  生成日期: ${DateStr}") + "\cf1\par"
+$lines += "\pard\cb3\cf8\b\fs36 " + (Fmt "朗读练习 - 大声读3遍") + "\cf1\b0\par"
 
 foreach ($rd in $L.reading) {
   $lines += "\pard\fs36\b " + (Fmt $rd) + "\b0\par"
 }
 
-$lines += "\pard\cf6\b\fs28 " + (Fmt "顺口溜: $($L.jingle)") + "\cf1\b0\par"
+$lines += "\pard\cf5\b\fs28 " + (Fmt "顺口溜: $($L.jingle)") + "\cf1\b0\par"
 
-$lines += "\pard\cb2\cf2\b\fs36 " + (Fmt "书写练习 - 描红") + "\cf1\b0\par"
+$lines += "\pard\cb3\cf2\b\fs36 " + (Fmt "书写练习 - 描红") + "\cf1\b0\par"
 $lines += "\pard\fs24 " + (Fmt "(在横线上描红, 注意占中格位置)") + "\par"
 
 foreach ($ch in $L.chars) {
