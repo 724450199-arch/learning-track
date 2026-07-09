@@ -20,8 +20,12 @@
     {
       "timestamp": "2026-07-09T22:18:00+08:00",
       "summary": "为多多创建幼小衔接拼音专项课程（16课时/8周）：（1）在 FlowUs 多多语文冲刺页添加拼音专项课程计划，含课程总览表格+16课详细读写练习（读→写→课后）；（2）创建 generate_pinyin_svg.ps1 脚本，可参数化生成任意一课练习纸SVG（含朗读四声调/拼读+四线三格描红+课后作业）；（3）生成第1课(a o e)练习纸SVG；（4）所有文件同步到桌面作业文件夹+已推送Gitee。"
+    },
+    {
+      "timestamp": "2026-07-10T12:00:00+08:00",
+      "summary": "implement SVG illustration PNGs via WebBrowser for pinyin lessons. Problems: `FromXYWH` method not exist in .NET → use `New-Object Rectangle(0,0,w,h)`. `rgba()` not supported in IE/Trident SVG → replace with `fill-opacity` + `fill=\"white\"`. `data:image/svg+xml` data URI not render in WebBrowser → change to inline SVG in HTML body. `New-LessonIconsPng` now returns object with `hex`, `w`, `h` for correct RTF `\\picw`/`\\pich`. All 16 lessons regenerate with illustration PNGs, sync to 作业 folder and push to Gitee."
     }
   ],
-  "current_tasks": [],
+  "current_tasks": ["Verify WebBrowser SVG illustration renders correctly in Word"],
   "learned_preferences": {}
 }
