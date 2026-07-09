@@ -95,17 +95,12 @@ foreach ($rd in $L.reading) {
 $lines += "\pard\cb2\cf2\b\fs36 " + (Fmt "书写练习 - 四线三格描红") + "\cf1\b0\par"
 $lines += "\pard\fs24 " + (Fmt "(在四线三格中描红, 注意占格位置)") + "\par"
 
-$isFirstChar = $true
 foreach ($ch in $L.chars) {
   $e = Fmt $ch
-  $topBdr = "\clbrdrt\brdrs\brdrw10"
-  $midBdr = "\clbrdrt\brdrs\brdrw10\clbrdrb\brdrs\brdrw10"
-  $botBdr = "\clbrdrb\brdrs\brdrw10"
-  $firstTop = if ($isFirstChar) { $topBdr } else { "" }
-  $lines += "\trowd\trrh120\cellx9500${firstTop}\pard\intbl\ql\li100 \par\cell\row"
-  $lines += "\trowd\trrh450\cellx9500${midBdr}\pard\intbl\qc\li100\fs60\cf1 ${e}\cf7       ${e}  ${e}  ${e}  ${e}\cf1\cell\row"
-  $lines += "\trowd\trrh120\cellx9500${botBdr}\pard\intbl\ql\li100 \par\cell\row"
-  $isFirstChar = $false
+  $bdr = "\clbrdrt\brdrs\brdrw10\clbrdrb\brdrs\brdrw10"
+  $lines += "\trowd\trgaph0\trrh280\cellx9500${bdr}\pard\intbl\ql\li100 \par\cell\row"
+  $lines += "\trowd\trgaph0\trrh240\cellx9500\pard\intbl\qc\li100\fs48\cf1 ${e}\cf7       ${e}  ${e}  ${e}  ${e}\cf1\cell\row"
+  $lines += "\trowd\trgaph0\trrh280\cellx9500${bdr}\pard\intbl\ql\li100 \par\cell\row"
 }
 
 $lines += "\pard\cb3\cf4\b\fs36 " + (Fmt "课后练习") + "\cf1\b0\par"
