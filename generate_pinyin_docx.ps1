@@ -67,11 +67,12 @@ function Escape-RtfUnicode {
   $sb = New-Object System.Text.StringBuilder
   for ($i = 0; $i -lt $s.Length; $i++) {
     $c = $s[$i]; $code = [int]$c
-    if ($code -eq 92) { [void]$sb.Append("\\") }
-    elseif ($code -eq 123) { [void]$sb.Append("\{") }
-    elseif ($code -eq 125) { [void]$sb.Append("\}") }
-    elseif ($code -le 127) { [void]$sb.Append($c) }
-    else { [void]$sb.Append($c) }
+    if ($code -le 127) {
+      if ($code -eq 92) { [void]$sb.Append("\\") }
+      elseif ($code -eq 123) { [void]$sb.Append("\{") }
+      elseif ($code -eq 125) { [void]$sb.Append("\}") }
+      else { [void]$sb.Append($c) }
+    } else { [void]$sb.Append("\u${code}?") }
   }
   return $sb.ToString()
 }
@@ -227,11 +228,11 @@ if ($pairs.Count -ge 3) {
 
 $lines += "\pard\fs20 " + (Fmt "生成日期: ${DateStr}") + "\par"
 
-$header = "{\rtf1\ansi\ansicpg65001\deff0{\fonttbl{\f0\fnil\fcharset134 SimSun;}{\f1\fnil\fcharset0 Century Gothic;}}{\colortbl;$colors}\paperw11900\paperh16840\margl1134\margr1134\margt567\margb567\pard\f0\fs28"
+$header = "{\rtf1\ansi\deff0{\fonttbl{\f0\fnil\fcharset134 SimSun;}{\f1\fnil\fcharset0 Century Gothic;}}{\colortbl;$colors}\paperw11900\paperh16840\margl1134\margr1134\margt567\margb567\pard\f0\fs28"
 $body = $lines -join ""
 $rtf = $header + $body + "}"
 
-$bytes = [System.Text.Encoding]::UTF8.GetBytes($rtf)
+$bytes = [System.Text.Encoding]::ASCII.GetBytes($rtf)
 
 $path = Join-Path $printableDir "pinyin_lesson${Lesson}.doc"
 [System.IO.File]::WriteAllBytes($path, $bytes)
