@@ -140,9 +140,29 @@ if ($cnPoems -and $cnPoems.Count -ge 2) {
 $WeekCN = @{1="一";2="二";3="三";4="四";5="五";6="六";7="七";8="八";9="九";10="十";11="十一";12="十二";13="十三"}[$ChineseWeek]
 
 # ====== RSS 来源 ======
+# ====== 网页抓取（无 RSS 的网站） ======
+try {
+  Write-Log "正在抓取: 每日经济新闻科技"
+  $r = Invoke-WebRequest -Uri "https://www.nbd.com.cn/columns/3" -TimeoutSec 15 -UseBasicParsing -UserAgent "Mozilla/5.0" -ErrorAction Stop
+  $html = $r.Content
+  $matches = [regex]::Matches($html, 'https://www\.nbd\.com\.cn/articles/[^"<>]+\.html"[^>]*>(.+?)</a>', 'IgnoreCase')
+  $seen = @{}
+  foreach ($m in $matches) {
+    $url = $m.Value -replace '\"[^>]*>.*',''
+    $title = ($m.Groups[1].Value -replace '<[^>]+>','').Trim()
+    if (-not $seen.ContainsKey($url) -and $title -ne '') {
+      $seen[$url] = $true
+      $AllItems += @{
+        title   = ($title -replace '\s+',' ').Trim()
+        summary = ""
+        link    = $url
+        source  = "每日经济新闻"
+      }
+    }
+  }
+} catch { Write-Log "抓每日经济新闻失败: $_" }
+
 $Sources = @(
-  @{ Name = "雷锋网"; Url = "https://www.leiphone.com/feed" }
-  @{ Name = "少数派"; Url = "https://sspai.com/feed" }
   @{ Name = "36氪"; Url = "https://36kr.com/feed" }
   @{ Name = "IT之家"; Url = "https://www.ithome.com/rss/" }
   @{ Name = "Reuters Tech"; Url = "https://feeds.reuters.com/reuters/technologyNews" }
@@ -232,7 +252,10 @@ foreach ($item in $AllItems) {
     }
   }
 }
-$Filtered = $Filtered | Sort-Object chipScore, matchCount -Descending | Select-Object -First $MaxItems
+# 新华社和每日经济新闻的条目置顶（按出现顺序），其余按关键词得分排序
+$Preferred = $Filtered | Where-Object { $_.source -eq "每日经济新闻" }
+$Others = $Filtered | Where-Object { $_.source -ne "每日经济新闻" } | Sort-Object chipScore, matchCount -Descending
+$Filtered = @($Preferred) + $Others | Select-Object -First $MaxItems
 Write-Log "过滤后 $($Filtered.Count) 条相关新闻"
 
 # ====== 格式化 ======
@@ -267,7 +290,7 @@ $($item.link)
 }
 
 $Body += "---
-自动采集于 $DateStr $TimeStr | 来源: 36氪 / IT之家 / Reuters / EE Times / Tom's Hardware / TechPowerUp / 集微网 / Semiconductor Engineering / IEEE Spectrum / AnandTech / Semiconductor Digest / All About Circuits / EDN Network"
+自动采集于 $DateStr $TimeStr | 来源: 每日经济新闻 / 36氪 / IT之家 / Reuters / EE Times / Tom's Hardware / TechPowerUp / 集微网 / Semiconductor Engineering / IEEE Spectrum / AnandTech / Semiconductor Digest / All About Circuits / EDN Network"
 
 # ====== 方糖推送 ======
 if (-not $SendKey) {
