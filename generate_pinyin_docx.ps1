@@ -77,7 +77,7 @@ function Escape-RtfUnicode {
   return $sb.ToString()
 }
 
-$colors = "red0\green0\blue0;\red229\green57\blue53;\red255\green243\blue224;\red251\green233\blue231;\red230\green81\blue0;\red191\green54\blue12;\red255\green255\blue255;\red232\green245\blue253;\red33\green150\blue243"
+$colors = "red0\green0\blue0;\red229\green57\blue53;\red255\green243\blue224;\red251\green233\blue231;\red230\green81\blue0;\red191\green54\blue12;\red255\green255\blue255;\red232\green245\blue253;\red0\green51\blue153"
 
 function Fmt([string]$s) {
   return Escape-RtfUnicode (Convert-ToneMarks $s)
@@ -89,7 +89,7 @@ $lines += "\pard\cf8\fs24 " + (Fmt "$($L.subtitle)  生成日期: ${DateStr}") +
 $lines += "\pard\cb3\cf9\b\fs36 " + (Fmt "朗读练习 - 大声读3遍") + "\cf1\b0\par"
 
 foreach ($rd in $L.reading) {
-  $lines += "\pard\fs36\b " + (Fmt $rd) + "\b0\par\par"
+  $lines += "\pard\fs36\b " + (Fmt $rd) + "\b0\par"
 }
 
 $lines += "\pard\cf6\b\fs28 " + (Fmt "顺口溜: $($L.jingle)") + "\cf1\b0\par"
@@ -105,7 +105,7 @@ foreach ($ch in $L.chars) {
 $lines += "\pard\cb3\cf4\b\fs36 " + (Fmt "课后练习") + "\cf1\b0\par"
 $idx = 1
 foreach ($hw in $L.homework) {
-  $lines += "\pard\fs28 " + (Fmt "${idx}. ${hw}") + "\par"
+  $lines += "\pard\sl420\fs28 " + (Fmt "${idx}. ${hw}") + "\par"
   $idx++
 }
 
