@@ -12,6 +12,7 @@ $DateStr = Get-Date -Format "yyyy-MM-dd"
 function Convert-ToneMarks {
   param($s)
   $r = $s
+  # 1) Handle u: (ü with tone or bare)
   $r = $r -replace 'u:1', ([char]0x01D6)
   $r = $r -replace 'u:2', ([char]0x01D8)
   $r = $r -replace 'u:3', ([char]0x01DA)
@@ -19,26 +20,34 @@ function Convert-ToneMarks {
   $r = $r -replace 'u:e', ([char]0x00FC + "e")
   $r = $r -replace 'u:n', ([char]0x00FC + "n")
   $r = $r -replace 'u:', ([char]0x00FC)
-  $r = $r -replace 'a1', ([char]0x0101)
-  $r = $r -replace 'a2', ([char]0x00E1)
-  $r = $r -replace 'a3', ([char]0x01CE)
-  $r = $r -replace 'a4', ([char]0x00E0)
-  $r = $r -replace 'o1', ([char]0x014D)
-  $r = $r -replace 'o2', ([char]0x00F3)
-  $r = $r -replace 'o3', ([char]0x01D2)
-  $r = $r -replace 'o4', ([char]0x00F2)
-  $r = $r -replace 'e1', ([char]0x0113)
-  $r = $r -replace 'e2', ([char]0x00E9)
-  $r = $r -replace 'e3', ([char]0x011B)
-  $r = $r -replace 'e4', ([char]0x00E8)
-  $r = $r -replace 'i1', ([char]0x012B)
-  $r = $r -replace 'i2', ([char]0x00ED)
-  $r = $r -replace 'i3', ([char]0x01D0)
-  $r = $r -replace 'i4', ([char]0x00EC)
-  $r = $r -replace 'u1', ([char]0x016B)
-  $r = $r -replace 'u2', ([char]0x00FA)
-  $r = $r -replace 'u3', ([char]0x01D4)
-  $r = $r -replace 'u4', ([char]0x00F9)
+  # 2) Handle v (alternate for ü, e.g. nv3→nǚ, lv4→lǜ)
+  $r = $r -replace 'v1', ([char]0x01D6)
+  $r = $r -replace 'v2', ([char]0x01D8)
+  $r = $r -replace 'v3', ([char]0x01DA)
+  $r = $r -replace 'v4', ([char]0x01DC)
+  $r = $r -replace 'v', ([char]0x00FC)
+  # 3) Handle tone numbers with regex:
+  #    Match vowel sequence + optional coda (n/ng) + tone digit
+  #    Determine which vowel gets the tone mark per standard pinyin rules:
+  #    a > o/e > last vowel
+  $tonemark = @{
+    'a' = @{1=[char]0x0101;2=[char]0x00E1;3=[char]0x01CE;4=[char]0x00E0}
+    'o' = @{1=[char]0x014D;2=[char]0x00F3;3=[char]0x01D2;4=[char]0x00F2}
+    'e' = @{1=[char]0x0113;2=[char]0x00E9;3=[char]0x011B;4=[char]0x00E8}
+    'i' = @{1=[char]0x012B;2=[char]0x00ED;3=[char]0x01D0;4=[char]0x00EC}
+    'u' = @{1=[char]0x016B;2=[char]0x00FA;3=[char]0x01D4;4=[char]0x00F9}
+  }
+  $r = [regex]::Replace($r, '([aeiou]+(?:n|ng)?)([1-4])', {
+    param($m)
+    $syl = $m.Groups[1].Value
+    $tone = [int]$m.Groups[2].Value
+    # Determine tone vowel
+    if ($syl.Contains('a')) { $tv = 'a' }
+    elseif ($syl.Contains('o')) { $tv = 'o' }
+    elseif ($syl.Contains('e')) { $tv = 'e' }
+    else { $v = $syl -replace '(?:n|ng)$', ''; $tv = "$($v[$v.Length - 1])" }
+    $syl.Replace($tv, $tonemark[$tv][$tone])
+  })
   return $r
 }
 
