@@ -109,7 +109,7 @@ foreach ($hw in $L.homework) {
 
 $lines += "\pard\fs20 " + (Fmt "生成日期: ${DateStr}") + "\par"
 
-$header = "{\rtf1\ansi\deff0{\fonttbl{\f0\fnil\fcharset134\cpg936 KaiTi;}}{\colortbl;$colors}\paperw11900\paperh16840\margl1134\margr1134\margt567\margb567\pard\f0\fs28"
+$header = "{\rtf1\ansi\deff0{\fonttbl{\f0\fnil\fcharset0 Century Gothic;}}{\colortbl;$colors}\paperw11900\paperh16840\margl1134\margr1134\margt567\margb567\pard\f0\fs28"
 $body = $lines -join ""
 $rtf = $header + $body + "}"
 
