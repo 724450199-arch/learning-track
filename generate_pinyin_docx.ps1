@@ -83,105 +83,48 @@ function Fmt([string]$s) {
   return Escape-RtfUnicode (Convert-ToneMarks $s)
 }
 
-function Get-WordIconSvg {
-  param($word, $pinyin)
-  $pinyin = Convert-ToneMarks $pinyin
-  $bg=@("#FF6B35","#2196F3","#4CAF50","#9C27B0","#FF9800","#E91E63","#00BCD4","#795548")[$word.Length % 8]
-  $svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 70" width="80" height="70">'
-  $svg += '<rect x="1" y="2" width="78" height="66" rx="8" fill="' + $bg + '"/>'
-  $svg += '<text x="40" y="22" text-anchor="middle" font-family="sans-serif" font-size="11" fill="rgba(255,255,255,0.9)">' + [System.Security.SecurityElement]::Escape($pinyin) + '</text>'
-  $svg += Get-WordIllustration $word
-  $svg += '<text x="40" y="62" text-anchor="middle" font-family="sans-serif" font-weight="bold" font-size="18" fill="white">' + $word + '</text>'
-  $svg += '</svg>'
-  return $svg
-}
-
-function Get-WordIllustration {
-  param($word)
-  $hw = $word[-1]
-  $drawings = @{
-    "姨"='<circle cx="40" cy="38" r="10" fill="rgba(255,255,255,0.3)"/><circle cx="37" cy="36" r="1.5" fill="white"/><circle cx="43" cy="36" r="1.5" fill="white"/><path d="M36 42 Q40 46 44 42" stroke="white" stroke-width="1.5" fill="none"/><circle cx="32" cy="30" r="3" fill="rgba(255,255,255,0.2)"/>'
-    "爸"='<circle cx="40" cy="38" r="10" fill="rgba(255,255,255,0.3)"/><circle cx="37" cy="36" r="1.5" fill="white"/><circle cx="43" cy="36" r="1.5" fill="white"/><path d="M36 42 Q40 44 44 42" stroke="white" stroke-width="1.5" fill="none"/>'
-    "妈"='<circle cx="40" cy="38" r="10" fill="rgba(255,255,255,0.3)"/><circle cx="37" cy="36" r="1.5" fill="white"/><circle cx="43" cy="36" r="1.5" fill="white"/><path d="M36 42 Q40 46 44 42" stroke="white" stroke-width="1.5" fill="none"/>'
-    "哥"='<circle cx="40" cy="38" r="10" fill="rgba(255,255,255,0.3)"/><circle cx="37" cy="36" r="1.5" fill="white"/><circle cx="43" cy="36" r="1.5" fill="white"/><path d="M36 42 Q40 44 44 42" stroke="white" stroke-width="1.5" fill="none"/><rect x="25" y="32" width="6" height="4" rx="2" fill="rgba(255,255,255,0.2)"/><rect x="49" y="32" width="6" height="4" rx="2" fill="rgba(255,255,255,0.2)"/>'
-    "弟"='<circle cx="40" cy="40" r="8" fill="rgba(255,255,255,0.3)"/><circle cx="37" cy="38" r="1.5" fill="white"/><circle cx="43" cy="38" r="1.5" fill="white"/><path d="M36 43 Q40 45 44 43" stroke="white" stroke-width="1.5" fill="none"/><rect x="26" y="30" width="5" height="3" rx="1.5" fill="rgba(255,255,255,0.2)"/><rect x="49" y="30" width="5" height="3" rx="1.5" fill="rgba(255,255,255,0.2)"/>'
-    "姐"='<circle cx="40" cy="38" r="10" fill="rgba(255,255,255,0.3)"/><circle cx="37" cy="36" r="1.5" fill="white"/><circle cx="43" cy="36" r="1.5" fill="white"/><path d="M36 42 Q40 46 44 42" stroke="white" stroke-width="1.5" fill="none"/><rect x="33" y="28" width="5" height="4" rx="2.5" fill="rgba(255,255,255,0.2)"/>'
-    "鹅"='<ellipse cx="40" cy="42" rx="8" ry="6" fill="rgba(255,255,255,0.3)"/><path d="M40 36 Q42 30 46 32" stroke="white" stroke-width="1.5" fill="none"/><circle cx="46" cy="31" r="1" fill="white"/>'
-    "鱼"='<ellipse cx="40" cy="40" rx="12" ry="5" fill="rgba(255,255,255,0.3)"/><path d="M52 40 L56 36 L56 44 Z" fill="rgba(255,255,255,0.3)"/><circle cx="34" cy="39" r="1" fill="white"/>'
-    "猫"='<ellipse cx="40" cy="42" rx="8" ry="7" fill="rgba(255,255,255,0.3)"/><path d="M32 36 L34 30 L37 35" stroke="white" stroke-width="1" fill="none"/><path d="M48 36 L46 30 L43 35" stroke="white" stroke-width="1" fill="none"/><circle cx="37" cy="40" r="1" fill="white"/><circle cx="43" cy="40" r="1" fill="white"/><path d="M38 43 Q40 45 42 43" stroke="white" stroke-width="1" fill="none"/>'
-    "狗"='<ellipse cx="35" cy="44" rx="10" ry="6" fill="rgba(255,255,255,0.3)"/><circle cx="45" cy="40" r="6" fill="rgba(255,255,255,0.2)"/><ellipse cx="43" cy="36" rx="3" ry="5" fill="rgba(255,255,255,0.15)"/><circle cx="44" cy="39" r="1" fill="white"/>'
-    "牛"='<ellipse cx="40" cy="44" rx="8" ry="5" fill="rgba(255,255,255,0.3)"/><circle cx="40" cy="38" r="6" fill="rgba(255,255,255,0.2)"/><path d="M36 33 L34 28 M44 33 L46 28" stroke="white" stroke-width="1.5" fill="none"/><circle cx="37" cy="37" r="1" fill="white"/><circle cx="43" cy="37" r="1" fill="white"/>'
-    "马"='<ellipse cx="40" cy="44" rx="10" ry="4" fill="rgba(255,255,255,0.3)"/><path d="M38 40 Q40 32 44 30 Q46 28 48 30" stroke="white" stroke-width="1.5" fill="none"/><ellipse cx="44" cy="32" rx="3" ry="5" fill="rgba(255,255,255,0.15)"/><circle cx="43" cy="31" r="1" fill="white"/>'
-    "鸡"='<ellipse cx="40" cy="44" rx="7" ry="5" fill="rgba(255,255,255,0.3)"/><circle cx="40" cy="36" r="5" fill="rgba(255,255,255,0.2)"/><path d="M47 34 L52 32 L49 36" fill="rgba(255,255,255,0.2)"/><circle cx="38" cy="35" r="1" fill="white"/><path d="M30 40 L28 38" stroke="white" stroke-width="1"/>'
-    "星"='<polygon points="40,30 42,36 48,36 44,40 46,46 40,42 34,46 36,40 32,36 38,36" fill="rgba(255,255,255,0.6)"/>'
-    "月"='<path d="M30 38 Q30 30 40 30 Q32 34 32 44 Q32 50 40 50 Q30 46 30 38" fill="rgba(255,255,255,0.5)"/>'
-    "山"='<path d="M20 55 L35 32 L45 45 L55 28 L68 55" stroke="white" stroke-width="2" fill="none"/><path d="M20 55 L68 55" stroke="white" stroke-width="1" fill="none"/>'
-    "花"='<circle cx="36" cy="38" r="3" fill="rgba(255,255,255,0.4)"/><circle cx="40" cy="34" r="3" fill="rgba(255,255,255,0.4)"/><circle cx="44" cy="38" r="3" fill="rgba(255,255,255,0.4)"/><circle cx="36" cy="42" r="3" fill="rgba(255,255,255,0.4)"/><circle cx="44" cy="42" r="3" fill="rgba(255,255,255,0.4)"/><circle cx="40" cy="38" r="2.5" fill="rgba(255,255,255,0.7)"/><path d="M40 45 L40 55" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" fill="none"/>'
-    "屋"='<path d="M25 50 L25 38 L40 28 L55 38 L55 50" stroke="white" stroke-width="1.5" fill="none"/><rect x="33" y="42" width="14" height="8" rx="1" fill="rgba(255,255,255,0.2)"/>'
-    "灯"='<rect x="35" y="45" width="10" height="4" rx="1" fill="rgba(255,255,255,0.3)"/><path d="M38 45 L37 38 L43 38 L42 45" fill="rgba(255,255,255,0.2)"/><circle cx="40" cy="35" r="4" fill="rgba(255,255,255,0.6)"/>'
-    "钟"='<circle cx="40" cy="40" r="10" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/><line x1="40" y1="40" x2="40" y2="34" stroke="white" stroke-width="1"/><line x1="40" y1="40" x2="44" y2="40" stroke="white" stroke-width="1"/>'
-    "车"='<rect x="22" y="40" width="36" height="12" rx="3" fill="rgba(255,255,255,0.3)"/><rect x="28" y="36" width="24" height="8" rx="2" fill="rgba(255,255,255,0.2)"/><circle cx="30" cy="53" r="3" fill="rgba(255,255,255,0.3)"/><circle cx="50" cy="53" r="3" fill="rgba(255,255,255,0.3)"/>'
-    "书"='<rect x="30" y="28" width="20" height="24" rx="2" fill="rgba(255,255,255,0.3)"/><line x1="35" y1="33" x2="45" y2="33" stroke="white" stroke-width="1"/><line x1="35" y1="37" x2="45" y2="37" stroke="white" stroke-width="1"/><line x1="35" y1="41" x2="42" y2="41" stroke="white" stroke-width="1"/>'
-    "河"='<path d="M18 45 Q30 38 40 45 Q50 52 62 45" stroke="rgba(255,255,255,0.4)" stroke-width="2" fill="none"/><path d="M18 48 Q30 41 40 48 Q50 55 62 48" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" fill="none"/>'
-    "云"='<ellipse cx="35" cy="42" rx="10" ry="6" fill="rgba(255,255,255,0.4)"/><ellipse cx="45" cy="40" rx="8" ry="5" fill="rgba(255,255,255,0.3)"/><ellipse cx="38" cy="38" rx="6" ry="4" fill="rgba(255,255,255,0.5)"/>'
-    "水"='<path d="M30 50 Q35 36 40 28 Q45 36 50 50" fill="rgba(255,255,255,0.2)" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/><path d="M34 42 L46 42" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>'
-    "火"='<path d="M40 28 Q36 38 32 42 Q36 40 38 44 Q36 48 40 52 Q44 48 42 44 Q44 40 48 42 Q44 38 40 28" fill="rgba(255,255,255,0.5)"/>'
-    "衣"='<path d="M30 35 L40 28 L50 35 L48 52 L32 52 Z" fill="rgba(255,255,255,0.3)" stroke="rgba(255,255,255,0.4)" stroke-width="1"/><line x1="40" y1="28" x2="40" y2="52" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>'
-    "果"='<circle cx="40" cy="40" r="8" fill="rgba(255,255,255,0.3)"/><path d="M40 32 L40 28 M36 30 L44 30" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" fill="none"/>'
-    "白"='<circle cx="40" cy="40" r="10" fill="rgba(255,255,255,0.3)"/><text x="40" y="46" text-anchor="middle" font-size="14" fill="rgba(255,255,255,0.7)">白</text>'
-    "大"='<path d="M40 30 L40 50 M28 36 L40 30 L52 36" stroke="rgba(255,255,255,0.5)" stroke-width="2" fill="none"/>'
-    "小"='<path d="M32 35 L40 28 L48 35 M40 28 L40 50" stroke="rgba(255,255,255,0.5)" stroke-width="2" fill="none"/>'
-    "红"='<circle cx="40" cy="40" r="10" fill="rgba(255,255,200,0.3)"/><text x="40" y="46" text-anchor="middle" font-size="16" fill="rgba(255,255,255,0.7)">红</text>'
-    "绿"='<circle cx="40" cy="40" r="10" fill="rgba(255,255,200,0.3)"/><text x="40" y="46" text-anchor="middle" font-size="16" fill="rgba(255,255,255,0.7)">绿</text>'
-    "蓝"='<circle cx="40" cy="40" r="10" fill="rgba(255,255,200,0.3)"/><text x="40" y="46" text-anchor="middle" font-size="16" fill="rgba(255,255,255,0.7)">蓝</text>'
-    "人"='<circle cx="40" cy="34" r="6" fill="rgba(255,255,255,0.3)"/><line x1="40" y1="40" x2="40" y2="50" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/><line x1="34" y1="44" x2="46" y2="44" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>'
-    "日"='<circle cx="40" cy="40" r="10" fill="rgba(255,255,255,0.3)"/><circle cx="40" cy="40" r="4" fill="rgba(255,255,255,0.5)"/><line x1="40" y1="26" x2="40" y2="30" stroke="rgba(255,255,255,0.4)" stroke-width="1"/><line x1="40" y1="50" x2="40" y2="54" stroke="rgba(255,255,255,0.4)" stroke-width="1"/><line x1="26" y1="40" x2="30" y2="40" stroke="rgba(255,255,255,0.4)" stroke-width="1"/><line x1="50" y1="40" x2="54" y2="40" stroke="rgba(255,255,255,0.4)" stroke-width="1"/>'
-    "耳"='<ellipse cx="34" cy="40" rx="4" ry="7" fill="rgba(255,255,255,0.3)"/><ellipse cx="46" cy="40" rx="4" ry="7" fill="rgba(255,255,255,0.3)"/>'
-    "鼻"='<ellipse cx="40" cy="42" rx="5" ry="4" fill="rgba(255,255,255,0.3)"/><circle cx="38" cy="38" r="2.5" fill="rgba(255,255,255,0.2)"/><circle cx="42" cy="38" r="2.5" fill="rgba(255,255,255,0.2)"/>'
-    "足"='<ellipse cx="40" cy="48" rx="8" ry="3" fill="rgba(255,255,255,0.3)"/><line x1="40" y1="48" x2="34" y2="34" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>'
-    "手"='<ellipse cx="40" cy="42" rx="6" ry="4" fill="rgba(255,255,255,0.3)"/><line x1="28" y1="42" x2="52" y2="42" stroke="rgba(255,255,255,0.3)" stroke-width="1"/><line x1="40" y1="42" x2="38" y2="32" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>'
-    "头"='<circle cx="40" cy="36" r="8" fill="rgba(255,255,255,0.3)"/><circle cx="37" cy="34" r="1" fill="white"/><circle cx="43" cy="34" r="1" fill="white"/>'
-    "眼"='<ellipse cx="36" cy="38" rx="3" ry="2" fill="rgba(255,255,255,0.3)"/><ellipse cx="44" cy="38" rx="3" ry="2" fill="rgba(255,255,255,0.3)"/><circle cx="36" cy="38" r="1" fill="white"/><circle cx="44" cy="38" r="1" fill="white"/>'
-    "嘴"='<path d="M35 44 Q40 48 45 44" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" fill="none"/>'
-    "吃"='<path d="M30 42 Q35 38 40 42 Q45 38 50 42" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" fill="none"/>'
-    "喝"='<rect x="34" y="36" width="12" height="14" rx="2" fill="rgba(255,255,255,0.3)"/><path d="M38 36 L36 32 L44 32 L42 36" fill="rgba(255,255,255,0.2)"/>'
-    "家"='<path d="M25 50 L25 38 L40 30 L55 38 L55 50" stroke="white" stroke-width="1.5" fill="none"/><rect x="34" y="42" width="12" height="8" rx="1" fill="rgba(255,255,255,0.2)"/>'
-    "学"='<text x="40" y="48" text-anchor="middle" font-size="24" fill="rgba(255,255,255,0.7)">学</text>'
-  }
-  if ($drawings.ContainsKey($hw)) { return $drawings[$hw] }
-  if ($drawings.ContainsKey($word)) { return $drawings[$word] }
-  return "<circle cx=`"40`" cy=`"40`" r=`"8`" fill=`"rgba(255,255,255,0.25)`"/>"
-}
-
 function New-LessonIconsPng {
   param($lessonNum)
   $L2 = $Lessons[$lessonNum]
   $pairs = @()
   foreach ($hw in $L2.homework) {
     $m = [regex]::Matches($hw, '([\u4e00-\u9fff]{1,4})')
-    foreach ($word in $m.Value) { if ($pairs.Count -lt 6) { $pairs += @($word) } }
+    foreach ($word in $m.Value) {
+      if ($pairs.Count -ge 8) { break }
+      if ($word -match '^(读|例|描|复|默|用|平|区|翘|前|后|整|写|拼|顺|复习|前后对比|区分|翘舌音|平翘舌|23|默写|声母|韵母|全部|名字|自己|的)') { continue }
+      if ($pairs -notcontains $word) { $pairs += $word }
+    }
   }
   if ($pairs.Count -eq 0) { return $null }
-  $w = 80 * [Math]::Min($pairs.Count, 6)
-  $svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + $w + ' 80" width="' + $w + '" height="80">'
-  $svg += '<rect width="' + $w + '" height="80" fill="white"/>'
-  for ($i = 0; $i -lt $pairs.Count; $i++) {
-    $svg += '<g transform="translate(' + ($i * 80) + ', 5)">' + (Get-WordIconSvg $pairs[$i] "") + '</g>'
+  $n = [Math]::Min($pairs.Count, 8); $w = 80 * $n; $h = 80
+  Add-Type -AssemblyName System.Drawing
+  $bmp = New-Object System.Drawing.Bitmap($w, $h)
+  $g = [System.Drawing.Graphics]::FromImage($bmp)
+  $g.SmoothingMode = [System.Drawing.Drawing2D.SmoothingMode]::HighQuality
+  $g.Clear([System.Drawing.Color]::White)
+  $colors = @("#FF6B35","#2196F3","#4CAF50","#9C27B0","#FF9800","#E91E63","#00BCD4","#795548")
+  $font = New-Object System.Drawing.Font("Microsoft YaHei", 14, [System.Drawing.FontStyle]::Bold)
+  for ($i = 0; $i -lt $n; $i++) {
+    $x = $i * 80
+    $c = [System.Drawing.ColorTranslator]::FromHtml($colors[$i % 8])
+    $brush = New-Object System.Drawing.SolidBrush($c)
+    $g.FillRectangle($brush, $x+2, 5, 76, 70)
+    $brush.Dispose()
+    $wb = New-Object System.Drawing.SolidBrush([System.Drawing.Color]::White)
+    $word = $pairs[$i]
+    $sf = New-Object System.Drawing.StringFormat
+    $sf.Alignment = [System.Drawing.StringAlignment]::Center
+    $sf.LineAlignment = [System.Drawing.StringAlignment]::Center
+    $g.DrawString($word, $font, $wb, $x+40, 50, $sf)
+    $wb.Dispose(); $sf.Dispose()
   }
-  $svg += '</svg>'
-  $tmpDir = "$env:TEMP\pinyin_img"
-  if (!(Test-Path $tmpDir)) { New-Item -ItemType Directory -Path $tmpDir -Force | Out-Null }
-  $htmlPath = "$tmpDir\lesson${lessonNum}.html"; $pngPath = "$tmpDir\lesson${lessonNum}.png"
-  $enc = [System.Uri]::EscapeDataString($svg)
-  $html = "<!DOCTYPE html><html><body style='margin:0'><img src='data:image/svg+xml,$enc'/></body></html>"
-  Set-Content -Path $htmlPath -Value $html -Encoding UTF8
-  & "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" --headless --disable-gpu --screenshot="$pngPath" --window-size=$($w,80) "file:///$htmlPath" 2>&1 | Out-Null
-  if (Test-Path $pngPath) {
-    $bytes = [System.IO.File]::ReadAllBytes($pngPath); $hex = [System.BitConverter]::ToString($bytes) -replace '-',''
-    Remove-Item $pngPath, $htmlPath -Force -ErrorAction SilentlyContinue
-    return $hex
-  }
-  return $null
+  $g.Dispose()
+  $ms = New-Object System.IO.MemoryStream
+  $bmp.Save($ms, [System.Drawing.Imaging.ImageFormat]::Png)
+  $bmp.Dispose()
+  $hex = [System.BitConverter]::ToString($ms.ToArray()) -replace '-',''
+  $ms.Close()
+  return $hex
 }
 
 $lines = @()
