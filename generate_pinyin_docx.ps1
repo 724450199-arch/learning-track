@@ -86,10 +86,10 @@ function Fmt([string]$s) {
 $lines = @()
 $lines += "\pard\cf2\b\fs44 " + (Fmt "第${Lesson}课 - $($L.title) 拼音练习") + "\cf1\b0\par"
 $lines += "\pard\cf8\fs24 " + (Fmt "$($L.subtitle)  生成日期: ${DateStr}") + "\cf1\par"
-$lines += "\pard\cb3\cf4\b\fs36 " + (Fmt "朗读练习 - 大声读3遍") + "\cf1\b0\par"
+$lines += "\pard\cb3\cf9\b\fs36 " + (Fmt "朗读练习 - 大声读3遍") + "\cf1\b0\par"
 
 foreach ($rd in $L.reading) {
-  $lines += "\pard\fs32\b " + (Fmt $rd) + "\b0\par"
+  $lines += "\pard\fs36\b " + (Fmt $rd) + "\b0\par\par"
 }
 
 $lines += "\pard\cf6\b\fs28 " + (Fmt "顺口溜: $($L.jingle)") + "\cf1\b0\par"
