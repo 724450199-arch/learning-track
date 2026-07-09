@@ -97,7 +97,7 @@ $lines += "\pard\fs24 " + (Fmt "(在横线上描红, 注意占中格位置)") + 
 
 foreach ($ch in $L.chars) {
   $e = Fmt $ch
-  $lines += "\pard\fs60\cf1 ${e}\cf7       ${e}  ${e}  ${e}  ${e}\cf1\par"
+  $lines += "\pard\fs60\cf1\f1 ${e}\cf7       ${e}  ${e}  ${e}  ${e}\cf1\f0\par"
 }
 
 $lines += "\pard\cb3\cf4\b\fs36 " + (Fmt "课后练习") + "\cf1\b0\par"
@@ -109,7 +109,7 @@ foreach ($hw in $L.homework) {
 
 $lines += "\pard\fs20 " + (Fmt "生成日期: ${DateStr}") + "\par"
 
-$header = "{\rtf1\ansi\deff0{\fonttbl{\f0\fnil\fcharset0 Century Gothic;}}{\colortbl;$colors}\paperw11900\paperh16840\margl1134\margr1134\margt567\margb567\pard\f0\fs28"
+$header = "{\rtf1\ansi\deff0{\fonttbl{\f0\fnil\fcharset134 SimSun;}{\f1\fnil\fcharset0 Century Gothic;}}{\colortbl;$colors}\paperw11900\paperh16840\margl1134\margr1134\margt567\margb567\pard\f0\fs28"
 $body = $lines -join ""
 $rtf = $header + $body + "}"
 
