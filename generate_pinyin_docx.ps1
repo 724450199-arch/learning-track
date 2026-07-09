@@ -86,7 +86,7 @@ function Escape-RtfUnicode {
   return $sb.ToString()
 }
 
-$colors = "\red0\green0\blue0;\red229\green57\blue53;\red255\green243\blue224;\red230\green81\blue0;\red191\green54\blue12;\red232\green245\blue253;\red245\green248\blue252;\red0\green51\blue153;\red255\green255\blue255"
+$colors = "\red0\green0\blue0;\red229\green57\blue53;\red255\green243\blue224;\red230\green81\blue0;\red191\green54\blue12;\red232\green245\blue253;\red200\green205\blue215;\red0\green51\blue153;\red255\green255\blue255"
 
 function Fmt([string]$s) {
   return Escape-RtfUnicode (Convert-ToneMarks $s)
