@@ -92,15 +92,12 @@ foreach ($rd in $L.reading) {
   $lines += "\pard\fs32\b " + (Fmt $rd) + "\b0\par"
 }
 
-$lines += "\pard\cb2\cf2\b\fs36 " + (Fmt "书写练习 - 四线三格描红") + "\cf1\b0\par"
-$lines += "\pard\fs24 " + (Fmt "(在四线三格中描红, 注意占格位置)") + "\par"
+$lines += "\pard\cb2\cf2\b\fs36 " + (Fmt "书写练习 - 描红") + "\cf1\b0\par"
+$lines += "\pard\fs24 " + (Fmt "(在横线上描红, 注意占中格位置)") + "\par"
 
 foreach ($ch in $L.chars) {
   $e = Fmt $ch
-  $bdr = "\clbrdrt\brdrs\brdrw10\clbrdrb\brdrs\brdrw10"
-  $lines += "\trowd\trgaph0\trrh280\cellx9500${bdr}\pard\intbl\ql\li100 \par\cell\row"
-  $lines += "\trowd\trgaph0\trrh240\cellx9500\pard\intbl\qc\li100\fs48\cf1 ${e}\cf7       ${e}  ${e}  ${e}  ${e}\cf1\cell\row"
-  $lines += "\trowd\trgaph0\trrh280\cellx9500${bdr}\pard\intbl\ql\li100 \par\cell\row"
+  $lines += "\pard\fs60\cf1 ${e}\cf7       ${e}  ${e}  ${e}  ${e}\cf1\par"
 }
 
 $lines += "\pard\cb3\cf4\b\fs36 " + (Fmt "课后练习") + "\cf1\b0\par"
