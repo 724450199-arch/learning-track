@@ -141,6 +141,8 @@ $WeekCN = @{1="一";2="二";3="三";4="四";5="五";6="六";7="七";8="八";9="�
 
 # ====== RSS 来源 ======
 $Sources = @(
+  @{ Name = "雷锋网"; Url = "https://www.leiphone.com/feed" }
+  @{ Name = "少数派"; Url = "https://sspai.com/feed" }
   @{ Name = "36氪"; Url = "https://36kr.com/feed" }
   @{ Name = "IT之家"; Url = "https://www.ithome.com/rss/" }
   @{ Name = "Reuters Tech"; Url = "https://feeds.reuters.com/reuters/technologyNews" }
