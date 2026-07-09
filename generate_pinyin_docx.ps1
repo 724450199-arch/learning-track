@@ -72,7 +72,8 @@ function Escape-RtfUnicode {
       elseif ($code -eq 123) { [void]$sb.Append("\{") }
       elseif ($code -eq 125) { [void]$sb.Append("\}") }
       else { [void]$sb.Append($c) }
-    } else { [void]$sb.Append("\u${code}?") }
+    } elseif ($code -ge 0x4E00) { [void]$sb.Append("\u${code}?") }
+    else { [void]$sb.Append("\u${code} ") }
   }
   return $sb.ToString()
 }
