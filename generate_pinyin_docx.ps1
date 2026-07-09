@@ -9,6 +9,39 @@ if (-not (Test-Path $printableDir)) { New-Item -ItemType Directory -Path $printa
 
 $DateStr = Get-Date -Format "yyyy-MM-dd"
 
+function Convert-ToneMarks {
+  param($s)
+  $r = $s
+  $r = $r -replace 'u:1', ([char]0x01D6)
+  $r = $r -replace 'u:2', ([char]0x01D8)
+  $r = $r -replace 'u:3', ([char]0x01DA)
+  $r = $r -replace 'u:4', ([char]0x01DC)
+  $r = $r -replace 'u:e', ([char]0x00FC + "e")
+  $r = $r -replace 'u:n', ([char]0x00FC + "n")
+  $r = $r -replace 'u:', ([char]0x00FC)
+  $r = $r -replace 'a1', ([char]0x0101)
+  $r = $r -replace 'a2', ([char]0x00E1)
+  $r = $r -replace 'a3', ([char]0x01CE)
+  $r = $r -replace 'a4', ([char]0x00E0)
+  $r = $r -replace 'o1', ([char]0x014D)
+  $r = $r -replace 'o2', ([char]0x00F3)
+  $r = $r -replace 'o3', ([char]0x01D2)
+  $r = $r -replace 'o4', ([char]0x00F2)
+  $r = $r -replace 'e1', ([char]0x0113)
+  $r = $r -replace 'e2', ([char]0x00E9)
+  $r = $r -replace 'e3', ([char]0x011B)
+  $r = $r -replace 'e4', ([char]0x00E8)
+  $r = $r -replace 'i1', ([char]0x012B)
+  $r = $r -replace 'i2', ([char]0x00ED)
+  $r = $r -replace 'i3', ([char]0x01D0)
+  $r = $r -replace 'i4', ([char]0x00EC)
+  $r = $r -replace 'u1', ([char]0x016B)
+  $r = $r -replace 'u2', ([char]0x00FA)
+  $r = $r -replace 'u3', ([char]0x01D4)
+  $r = $r -replace 'u4', ([char]0x00F9)
+  return $r
+}
+
 $Lessons = @{}
 $Lessons[1]  = @{title="a o e"; subtitle="单韵母入门"; reading=@("a1 a2 a3 a4","o1 o2 o3 o4","e1 e2 e3 e4"); chars=@("a","o","e"); homework=@("读 a o e 卡片 3 遍","找 a 音物品(苹果)","描红 a o e 各 1 行")}
 $Lessons[2]  = @{title="i u u:"; subtitle="单韵母进阶"; reading=@("i1 i2 i3 i4","u1 u2 u3 u4","u:1 u:2 u:3 u:4"); chars=@("i","u","u:"); homework=@("6 个单韵母四声朗读","描红 i u u: 各 1 行","家长读声调孩子指韵母")}
@@ -30,56 +63,61 @@ $Lessons[16] = @{title="总复习+闯关"; subtitle="结课"; reading=@("23 个�
 $L = $Lessons[$Lesson]
 
 function Escape-RtfUnicode {
-    param($s)
-    $sb = New-Object System.Text.StringBuilder
-    for ($i = 0; $i -lt $s.Length; $i++) {
-        $c = $s[$i]
-        $code = [int]$c
-        if ($code -le 127) {
-            if ($code -eq 92) { [void]$sb.Append("\\") }
-            elseif ($code -eq 123) { [void]$sb.Append("\{") }
-            elseif ($code -eq 125) { [void]$sb.Append("\}") }
-            else { [void]$sb.Append($c) }
-        } else {
-            [void]$sb.Append("\u${code}?")
-        }
-    }
-    return $sb.ToString()
+  param($s)
+  $sb = New-Object System.Text.StringBuilder
+  for ($i = 0; $i -lt $s.Length; $i++) {
+    $c = $s[$i]; $code = [int]$c
+    if ($code -le 127) {
+      if ($code -eq 92) { [void]$sb.Append("\\") }
+      elseif ($code -eq 123) { [void]$sb.Append("\{") }
+      elseif ($code -eq 125) { [void]$sb.Append("\}") }
+      else { [void]$sb.Append($c) }
+    } else { [void]$sb.Append("\u${code}?") }
+  }
+  return $sb.ToString()
 }
 
 $colors = "red0\green0\blue0;\red229\green57\blue53;\red255\green243\blue224;\red251\green233\blue231;\red230\green81\blue0;\red191\green54\blue12;\red255\green255\blue255;\red232\green245\blue253;\red33\green150\blue243"
 
-function Wr([string]$s) {
-    return Escape-RtfUnicode $s
+function Fmt([string]$s) {
+  return Escape-RtfUnicode (Convert-ToneMarks $s)
 }
 
 $lines = @()
-$lines += "\pard\cf2\b\fs44 " + (Wr "第${Lesson}课 - $($L.title) 拼音练习") + "\cf1\b0\par"
-$lines += "\pard\cf8\fs24 " + (Wr "$($L.subtitle)  生成日期: ${DateStr}") + "\cf1\par"
-$lines += "\pard\cb3\cf4\b\fs36 " + (Wr "朗读练习 - 大声读3遍") + "\cf1\b0\par"
+$lines += "\pard\cf2\b\fs44 " + (Fmt "第${Lesson}课 - $($L.title) 拼音练习") + "\cf1\b0\par"
+$lines += "\pard\cf8\fs24 " + (Fmt "$($L.subtitle)  生成日期: ${DateStr}") + "\cf1\par"
+$lines += "\pard\cb3\cf4\b\fs36 " + (Fmt "朗读练习 - 大声读3遍") + "\cf1\b0\par"
 
 foreach ($rd in $L.reading) {
-    $lines += "\pard\fs32\b " + (Wr $rd) + "\b0\par"
+  $lines += "\pard\fs32\b " + (Fmt $rd) + "\b0\par"
 }
 
-$lines += "\pard\cb2\cf2\b\fs36 " + (Wr "书写练习 - 描红") + "\cf1\b0\par"
-$lines += "\pard\fs24 " + (Wr "(在横线上描红, 注意占中格位置)") + "\par"
+$lines += "\pard\cb2\cf2\b\fs36 " + (Fmt "书写练习 - 四线三格描红") + "\cf1\b0\par"
+$lines += "\pard\fs24 " + (Fmt "(在四线三格中描红, 注意占格位置)") + "\par"
 
+$isFirstChar = $true
 foreach ($ch in $L.chars) {
-    $e = Wr $ch
-    $lines += "\pard\fs60\cf1 ${e}\cf7       ${e}  ${e}  ${e}  ${e}\cf1\par"
+  $e = Fmt $ch
+  $topBdr = "\clbrdrt\brdrs\brdrw10"
+  $midBdr = "\clbrdrt\brdrs\brdrw10\clbrdrb\brdrs\brdrw10"
+  $botBdr = "\clbrdrb\brdrs\brdrw10"
+  $firstTop = if ($isFirstChar) { $topBdr } else { "" }
+  $lines += "\trowd\trrh120\cellx9500${firstTop}\pard\intbl\ql\li100 \par\cell\row"
+  $lines += "\trowd\trrh450\cellx9500${midBdr}\pard\intbl\qc\li100\fs60\cf1 ${e}\cf7       ${e}  ${e}  ${e}  ${e}\cf1\cell\row"
+  $lines += "\trowd\trrh120\cellx9500${botBdr}\pard\intbl\ql\li100 \par\cell\row"
+  $isFirstChar = $false
 }
 
-$lines += "\pard\cb3\cf4\b\fs36 " + (Wr "课后练习") + "\cf1\b0\par"
+$lines += "\pard\cb3\cf4\b\fs36 " + (Fmt "课后练习") + "\cf1\b0\par"
 $idx = 1
 foreach ($hw in $L.homework) {
-    $lines += "\pard\fs28 " + (Wr "${idx}. ${hw}") + "\par"
-    $idx++
+  $lines += "\pard\fs28 " + (Fmt "${idx}. ${hw}") + "\par"
+  $idx++
 }
 
-$lines += "\pard\fs20 " + (Wr "生成日期: ${DateStr}") + "\par"
+$lines += "\pard\fs20 " + (Fmt "生成日期: ${DateStr}") + "\par"
 
-$header = "{\rtf1\ansi\deff0{\fonttbl{\f0\fnil\fcharset134 SimSun;}}{\colortbl;$colors}\paperw11900\paperh16840\margl1134\margr1134\margt567\margb567\pard\f0\fs28"
+$header = "{\rtf1\ansi\deff0{\fonttbl{\f0\fnil\fcharset134\cpg936 KaiTi;}}{\colortbl;$colors}\paperw11900\paperh16840\margl1134\margr1134\margt567\margb567\pard\f0\fs28"
 $body = $lines -join ""
 $rtf = $header + $body + "}"
 
