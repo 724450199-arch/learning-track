@@ -4,7 +4,7 @@
 
 # ====== 配置 ======
 $LogFile = "$PSScriptRoot\news.log"
-$MaxItems = 30
+$MaxItems = 20
 $RequestTimeout = 15
 
 function Write-Log {
@@ -12,6 +12,18 @@ function Write-Log {
   $time = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
   "$time $Msg" | Out-File -FilePath $LogFile -Encoding utf8 -Append
 }
+
+# ====== 本地代理自动检测 ======
+$Script:Proxy = $null
+try {
+  $proxyCfg = Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -ErrorAction Stop
+  if ($proxyCfg.ProxyEnable -eq 1 -and $proxyCfg.ProxyServer) {
+    $proxyUrl = $proxyCfg.ProxyServer
+    if ($proxyUrl -notmatch '^https?://') { $proxyUrl = "http://$proxyUrl" }
+    $Script:Proxy = $proxyUrl
+    Write-Log "检测到系统代理: $proxyUrl"
+  }
+} catch { }
 
 Write-Log "===== 新闻采集开始 ====="
 
@@ -128,19 +140,56 @@ if ($cnPoems -and $cnPoems.Count -ge 2) {
 $WeekCN = @{1="一";2="二";3="三";4="四";5="五";6="六";7="七";8="八";9="九";10="十";11="十一";12="十二";13="十三"}[$ChineseWeek]
 
 # ====== RSS 来源 ======
+# ====== 网页抓取（无 RSS 的网站） ======
+try {
+  Write-Log "正在抓取: 每日经济新闻科技"
+  $r = Invoke-WebRequest -Uri "https://www.nbd.com.cn/columns/3" -TimeoutSec 15 -UseBasicParsing -UserAgent "Mozilla/5.0" -ErrorAction Stop
+  $html = $r.Content
+  $matches = [regex]::Matches($html, 'https://www\.nbd\.com\.cn/articles/[^"<>]+\.html"[^>]*>(.+?)</a>', 'IgnoreCase')
+  $seen = @{}
+  foreach ($m in $matches) {
+    $url = $m.Value -replace '\"[^>]*>.*',''
+    $title = ($m.Groups[1].Value -replace '<[^>]+>','').Trim()
+    if (-not $seen.ContainsKey($url) -and $title -ne '') {
+      $seen[$url] = $true
+      $AllItems += @{
+        title   = ($title -replace '\s+',' ').Trim()
+        summary = ""
+        link    = $url
+        source  = "每日经济新闻"
+      }
+    }
+  }
+} catch { Write-Log "抓每日经济新闻失败: $_" }
+
 $Sources = @(
   @{ Name = "36氪"; Url = "https://36kr.com/feed" }
   @{ Name = "IT之家"; Url = "https://www.ithome.com/rss/" }
   @{ Name = "Reuters Tech"; Url = "https://feeds.reuters.com/reuters/technologyNews" }
+  @{ Name = "EE Times"; Url = "https://www.eetimes.com/feed/" }
+  @{ Name = "Tom's Hardware"; Url = "https://www.tomshardware.com/feeds/all" }
+  @{ Name = "TechPowerUp"; Url = "https://www.techpowerup.com/rss/news" }
+  @{ Name = "集微网"; Url = "https://www.laoyaoba.com/api/rss/hbb" }
+  @{ Name = "Semiconductor Engineering"; Url = "https://semiengineering.com/feed/" }
+  @{ Name = "IEEE Spectrum"; Url = "https://spectrum.ieee.org/feeds/rss" }
+  @{ Name = "AnandTech"; Url = "https://www.anandtech.com/rss/" }
+  @{ Name = "Semiconductor Digest"; Url = "https://semiconductordigest.com/feed/" }
+  @{ Name = "All About Circuits"; Url = "https://www.allaboutcircuits.com/feed/" }
+  @{ Name = "EDN Network"; Url = "https://www.edn.com/feed/" }
 )
 
 # ====== 关键词 ======
 $Keywords = @(
-  "AI","人工智能","大模型","LLM","AGI","OpenAI","ChatGPT","GPT","Claude","Gemini",
+  "AI","人工智能","大模型","LLM","AGI","OpenAI","ChatGPT","GPT","Claude","Gemini","DeepSeek",
   "芯片","半导体","封装","Chiplet","先进封装","CoWoS","HBM","TSMC","台积电","ASML",
-  "GPU","CPU","算力","数据中心","HPC","英伟达","NVIDIA","AMD","Intel",
-  "光刻机","EDA","RISC-V","Arm",
-  "科技","互联网","量子计算","5G","6G","机器人","自动驾驶"
+  "GPU","CPU","算力","数据中心","HPC","英伟达","NVIDIA","AMD","Intel","Qualcomm",
+  "光刻机","EDA","RISC-V","Arm","Rapidus","GlobalFoundries","格芯","UMC","联电",
+  "晶圆","代工","fab","foundry","制程","工艺节点","2nm","3nm","5nm","7nm",
+  "存储","DRAM","NAND","Flash","SSD","Samsung","SK海力士","美光","Micron",
+  "先进封装","SiP","2.5D","3D","FOWLP","CoPoS","玻璃基板",
+  "碳化硅","SiC","GaN","氮化镓","功率半导体","IGBT","MOSFET",
+  "AI芯片","AI加速器","NPU","TPU","推理芯片","存算一体",
+  "科技","互联网","量子计算","5G","6G","机器人","自动驾驶","IoT"
 )
 
 # ====== 采集 ======
@@ -148,7 +197,9 @@ $AllItems = @()
 foreach ($Src in $Sources) {
   try {
     Write-Log "正在采集: $($Src.Name)"
-    $resp = Invoke-WebRequest -Uri $Src.Url -TimeoutSec $RequestTimeout -UseBasicParsing -ErrorAction Stop
+    $iwrParams = @{ Uri = $Src.Url; TimeoutSec = $RequestTimeout; UseBasicParsing = $true; ErrorAction = 'Stop' }
+    if ($Script:Proxy) { $iwrParams['Proxy'] = $Script:Proxy }
+    $resp = Invoke-WebRequest @iwrParams
     $xml = [System.Xml.XmlDocument]::new()
     $xml.LoadXml($resp.Content)
     $items = $xml.rss.channel.item | Select-Object -First 25
@@ -170,9 +221,21 @@ foreach ($Src in $Sources) {
 
 Write-Log "共采集 $($AllItems.Count) 条新闻"
 
+# ====== 芯片半导体优先关键词（高权重） ======
+$ChipKeywords = @(
+  "芯片","半导体","封装","Chiplet","先进封装","CoWoS","HBM","TSMC","台积电","ASML",
+  "GPU","CPU","光刻机","EDA","RISC-V","Arm","晶圆","代工","fab","foundry",
+  "制程","工艺节点","2nm","3nm","5nm","7nm","存储","DRAM","NAND","Flash",
+  "SiP","FOWLP","CoPoS","玻璃基板","碳化硅","SiC","GaN","氮化镓","功率半导体",
+  "IGBT","MOSFET","AI芯片","AI加速器","NPU","TPU","推理芯片","存算一体",
+  "NVIDIA","AMD","Intel","Qualcomm","Samsung","SK海力士","美光","Micron",
+  "GlobalFoundries","格芯","Rapidus"
+)
+
 # ====== 关键词过滤去重 ======
 $Filtered = @()
 $KeywordsPattern = "($($Keywords -join '|'))"
+$ChipPattern = "($($ChipKeywords -join '|'))"
 $Seen = @{}
 
 foreach ($item in $AllItems) {
@@ -183,11 +246,16 @@ foreach ($item in $AllItems) {
       $Seen[$key] = $true
       $MatchesList = [regex]::Matches($text, $KeywordsPattern) | ForEach-Object { $_.Value }
       $item.matchCount = ($MatchesList | Select-Object -Unique).Count
+      $chipMatches = [regex]::Matches($text, $ChipPattern)
+      $item.chipScore = ($chipMatches | Select-Object -Unique).Count
       $Filtered += $item
     }
   }
 }
-$Filtered = $Filtered | Sort-Object matchCount -Descending | Select-Object -First $MaxItems
+# 新华社和每日经济新闻的条目置顶（按出现顺序），其余按关键词得分排序
+$Preferred = $Filtered | Where-Object { $_.source -eq "每日经济新闻" }
+$Others = $Filtered | Where-Object { $_.source -ne "每日经济新闻" } | Sort-Object chipScore, matchCount -Descending
+$Filtered = @($Preferred) + $Others | Select-Object -First $MaxItems
 Write-Log "过滤后 $($Filtered.Count) 条相关新闻"
 
 # ====== 格式化 ======
@@ -222,7 +290,7 @@ $($item.link)
 }
 
 $Body += "---
-自动采集于 $DateStr $TimeStr | 来源: 36氪 / IT之家 / Reuters"
+自动采集于 $DateStr $TimeStr | 来源: 每日经济新闻 / 36氪 / IT之家 / Reuters / EE Times / Tom's Hardware / TechPowerUp / 集微网 / Semiconductor Engineering / IEEE Spectrum / AnandTech / Semiconductor Digest / All About Circuits / EDN Network"
 
 # ====== 方糖推送 ======
 if (-not $SendKey) {
@@ -234,9 +302,9 @@ if (-not $SendKey) {
 
 if ($SendKey) {
   try {
-    $resp = Invoke-RestMethod -Uri "https://sctapi.ftqq.com/$SendKey.send" -Method Post `
-      -Body @{ title = "每日科技早报 $DateStr"; content = $Body } `
-      -TimeoutSec 30
+    $irmParams = @{ Uri = "https://sctapi.ftqq.com/$SendKey.send"; Method = 'Post'; Body = @{ title = "每日科技早报 $DateStr"; content = $Body }; TimeoutSec = 30 }
+    if ($Script:Proxy) { $irmParams['Proxy'] = $Script:Proxy }
+    $resp = Invoke-RestMethod @irmParams
     if ($resp.code -eq 0) {
       Write-Log "方糖推送成功 (pushid: $($resp.data.pushid))"
     } else {
