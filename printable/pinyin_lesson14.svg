@@ -1,0 +1,53 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 595 842" width="595" height="842">
+  <defs>
+    <linearGradient id="h" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#E53935"/><stop offset="100%" stop-color="#FF7043"/></linearGradient>
+    <linearGradient id="s1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FFF3E0"/><stop offset="100%" stop-color="#FFF8E1"/></linearGradient>
+    <linearGradient id="s2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#FBE9E7"/><stop offset="100%" stop-color="#FFF0E8"/></linearGradient>
+    <linearGradient id="s3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#E8EAF6"/><stop offset="100%" stop-color="#F3F4FD"/></linearGradient>
+  </defs>
+  <rect width="595" height="842" fill="#FFFBF5"/>
+  <rect x="0" y="0" width="595" height="85" fill="url(#h)" rx="0"/>
+  <text x='297' y='40' font-size='26' font-weight='bold' fill='#fff' text-anchor='middle'>&#x1F524; 拼音专项练习 &#xB7; 第14课</text>
+  <text x='297' y='68' font-size='18' fill='#FFEBEE' text-anchor='middle'>ang eng ing ong &#xB7; 后鼻韵母</text>
+  <rect x="30" y="100" width="535" height="50" rx="8" fill="#FFEBEE" opacity="0.6"/>
+  <text x="45" y="132" font-size="20" fill="#C62828" font-weight="bold">&#x1F444; 朗读练习：大声读 3 遍</text>
+  <rect x="30" y="165" width="535" height="200" rx="10" fill="url(#s1)" stroke="#FFCC80" stroke-width="1.5"/>
+  <text x="297" y="196" font-size="22" font-weight="bold" fill="#E65100" text-anchor="middle">&#x1F4E2; 四声调 / 拼读练习</text>
+  <text x='50' y='230' font-size='26' fill='#333' font-family='monospace'>āng áng ǎng àng</text>
+  <text x='50' y='264' font-size='26' fill='#333' font-family='monospace'>ēng éng ěng èng</text>
+  <text x='50' y='298' font-size='26' fill='#333' font-family='monospace'>īng íng ǐng ìng</text>
+  <text x='50' y='332' font-size='26' fill='#333' font-family='monospace'>ōng óng ǒng òng</text>
+  <rect x="30" y="380" width="535" height="240" rx="10" fill="url(#s2)" stroke="#FFAB91" stroke-width="1.5"/>
+  <text x="297" y="410" font-size="22" font-weight="bold" fill="#BF360C" text-anchor="middle">&#x270F;&#xFE0F; 书写练习 &#xB7; 描红</text>
+  <text x="297" y="435" font-size="14" fill="#9E9E9E" text-anchor="middle">在四线三格中描红，注意占格位置</text>
+  <text x='50' y='470' font-size='28' fill='#D32F2F' font-weight='bold'>ang</text>
+  <line x1='90' y1='455' x2='560' y2='455' stroke='#CFD8DC' stroke-width='0.5'/>
+  <line x1='90' y1='465' x2='560' y2='465' stroke='#B0BEC5' stroke-width='0.5'/>
+  <line x1='90' y1='475' x2='560' y2='475' stroke='#B0BEC5' stroke-width='0.5'/>
+  <line x1='90' y1='485' x2='560' y2='485' stroke='#CFD8DC' stroke-width='0.5'/>
+  <text x='110' y='475' font-size='22' fill='#E0E0E0' font-family='monospace'>ang  ang  ang  ang  ang</text>
+  <text x='50' y='508' font-size='28' fill='#1565C0' font-weight='bold'>eng</text>
+  <line x1='90' y1='493' x2='560' y2='493' stroke='#CFD8DC' stroke-width='0.5'/>
+  <line x1='90' y1='503' x2='560' y2='503' stroke='#B0BEC5' stroke-width='0.5'/>
+  <line x1='90' y1='513' x2='560' y2='513' stroke='#B0BEC5' stroke-width='0.5'/>
+  <line x1='90' y1='523' x2='560' y2='523' stroke='#CFD8DC' stroke-width='0.5'/>
+  <text x='110' y='513' font-size='22' fill='#E0E0E0' font-family='monospace'>eng  eng  eng  eng  eng</text>
+  <text x='50' y='546' font-size='28' fill='#2E7D32' font-weight='bold'>ing</text>
+  <line x1='90' y1='531' x2='560' y2='531' stroke='#CFD8DC' stroke-width='0.5'/>
+  <line x1='90' y1='541' x2='560' y2='541' stroke='#B0BEC5' stroke-width='0.5'/>
+  <line x1='90' y1='551' x2='560' y2='551' stroke='#B0BEC5' stroke-width='0.5'/>
+  <line x1='90' y1='561' x2='560' y2='561' stroke='#CFD8DC' stroke-width='0.5'/>
+  <text x='110' y='551' font-size='22' fill='#E0E0E0' font-family='monospace'>ing  ing  ing  ing  ing</text>
+  <text x='50' y='584' font-size='28' fill='#F57F17' font-weight='bold'>ong</text>
+  <line x1='90' y1='569' x2='560' y2='569' stroke='#CFD8DC' stroke-width='0.5'/>
+  <line x1='90' y1='579' x2='560' y2='579' stroke='#B0BEC5' stroke-width='0.5'/>
+  <line x1='90' y1='589' x2='560' y2='589' stroke='#B0BEC5' stroke-width='0.5'/>
+  <line x1='90' y1='599' x2='560' y2='599' stroke='#CFD8DC' stroke-width='0.5'/>
+  <text x='110' y='589' font-size='22' fill='#E0E0E0' font-family='monospace'>ong  ong  ong  ong  ong</text>
+  <rect x='30' y='635' width='535' height='195' rx='10' fill='url(#s3)' stroke='#9FA8DA' stroke-width='1.5'/>
+  <text x='297' y='665' font-size='20' font-weight='bold' fill='#283593' text-anchor='middle'>&#x1F3E0; 课后练习</text>
+  <text x='50' y='700' font-size='18' fill='#333'>1. 后鼻韵母朗读</text>
+  <text x='50' y='732' font-size='18' fill='#333'>2. 前后对比 an-ang en-eng in-ing</text>
+  <text x='50' y='764' font-size='18' fill='#333'>3. 描红后鼻韵母各 1 行</text>
+  <text x='297' y='830' font-size='14' fill='#B0BEC5' text-anchor='middle'>生成日期：2026-07-12 | 多多加油！</text>
+</svg>

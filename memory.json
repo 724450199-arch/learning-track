@@ -26,19 +26,37 @@
       "summary": "implement SVG illustration PNGs via WebBrowser for pinyin lessons. Problems: `FromXYWH` method not exist in .NET → use `New-Object Rectangle(0,0,w,h)`. `rgba()` not supported in IE/Trident SVG → replace with `fill-opacity` + `fill=\"white\"`. `data:image/svg+xml` data URI not render in WebBrowser → change to inline SVG in HTML body. `New-LessonIconsPng` now returns object with `hex`, `w`, `h` for correct RTF `\\picw`/`\\pich`. All 16 lessons regenerate with illustration PNGs, sync to 作业 folder and push to Gitee."
     }
   ],
-  "current_tasks": ["Verify WebBrowser SVG illustration renders correctly in Word"],
+  "current_tasks": ["确认 360 看门狗运行正常；确认发送到桌面快捷方式菜单可用"],
   "learned_preferences": {
     "称呼": "磊哥",
     "代码托管": "Gitee 为主",
-    "GitHub": "网络不可达",
+    "GitHub": "网络不可达（Git Bash 可用）",
+    "GitHub_443": "clash-verge-rev 未连接时不通，需先启动 VPN",
     "Agnes AI 脚本": "已新建 agnes_ai.ps1（真实 Agnes AI API）",
     "通义万相脚本": "已重命名 生图技能.ps1（原 Agnes→Wanx）",
-    "opencode使用方式": "从临时目录运行，重启后丢失。如重装需注意持久化。"
+    "opencode使用方式": "从临时目录运行，重启后丢失。如重装需注意持久化。",
+    "夸克网盘": "已安装 v6.9.7.761 于 %LOCALAPPDATA%\\Programs\\QuarkCloudDrive",
+    "360 看门狗": "protect_desktop.ps1 开机启动，1s 轮询桌面文件，自动恢复被删文件",
+    "发送到桌面快捷方式": "SendTo 文件夹已有 bat 文件，需重启 Explorer 生效"
   },
   "session_20260711": [
     {
       "timestamp": "2026-07-11T20:00:00+08:00",
       "summary": "恢复 GitHub 仓库 learning-track 到本地；检查 Agnes AI 配置（原脚本误将通义万相标注为 Agnes AI）；重命名 生图技能.ps1 中 Agnes→Wanx（通义万相）；新建真实 Agnes AI 对接脚本 agnes_ai.ps1；配置 ~/.agnes/api_key；改推 Gitee 成功。"
+    }
+  ],
+  "session_20260712": [
+    {
+      "timestamp": "2026-07-12T00:00:00+08:00",
+      "summary": "桌面被 360 CleanSoft 于 22:57 再次清空；从回收站恢复桌面文件（微信、Clash Verge、ToDesk 等快捷方式 + 视频/文档共 37 项）；Clash Verge 程序在 E:\\VPN\\安装文件 处重建，配置文件完好保留在 Roaming；从 GitHub API 获取 FlowUs Token（zQC5s3N1auj4cFKXCAxZ8WLLJi1g7Wy80QZBuTfj）；Gitee remote 重新配置为 yql8981229/learning-track 并推送成功；桌面作业文件夹已放入 GitHub 仓库中的 printable 练习纸。"
+    },
+    {
+      "timestamp": "2026-07-12T01:00:00+08:00",
+      "summary": "360 防桌面删除方案：创建 protect_desktop.ps1（FileSystemWatcher 轮询+备份恢复）+ desktop_utils.ps1（New-DesktopShortcut 工具函数）+ send_to_desktop.ps1（SendTo 集成）。看门狗已添加开机启动（protect_desktop.bat），SendTo 文件夹已写入 发送到桌面快捷方式.bat（重启 Explorer 后右击→发送到可用）。360 自保护阻止直接修改 cleancfg.xml/DesktopGC.xml 和终止 360tray.exe。360 清理配置存储在 C:\\Program Files (x86)\\360\\360Safe\\sweeper\\（protected），用户配置在 %APPDATA%\\360Safe\\Clean\\（writable）。"
+    },
+    {
+      "timestamp": "2026-07-12T01:15:00+08:00",
+      "summary": "检查各服务连接状态：Gitee 正常（Token 内嵌 remote URL）；GitHub remote 已配但 443 不通（需 Clash Verge VPN）；FlowUs Token 硬编码在 upload_to_flowus.ps1 和 AGENTS.md 中；Agnes AI 环境变量 AGNES_API_KEY 已设 + ~/.agnes/api_key 存在。"
     }
   ]
 }
