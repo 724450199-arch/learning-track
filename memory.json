@@ -32,7 +32,8 @@
     "代码托管": "Gitee 为主",
     "GitHub": "网络不可达",
     "Agnes AI 脚本": "已新建 agnes_ai.ps1（真实 Agnes AI API）",
-    "通义万相脚本": "已重命名 生图技能.ps1（原 Agnes→Wanx）"
+    "通义万相脚本": "已重命名 生图技能.ps1（原 Agnes→Wanx）",
+    "opencode使用方式": "从临时目录运行，重启后丢失。如重装需注意持久化。"
   },
   "session_20260711": [
     {
