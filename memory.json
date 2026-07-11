@@ -27,5 +27,17 @@
     }
   ],
   "current_tasks": ["Verify WebBrowser SVG illustration renders correctly in Word"],
-  "learned_preferences": {}
+  "learned_preferences": {
+    "称呼": "磊哥",
+    "代码托管": "Gitee 为主",
+    "GitHub": "网络不可达",
+    "Agnes AI 脚本": "已新建 agnes_ai.ps1（真实 Agnes AI API）",
+    "通义万相脚本": "已重命名 生图技能.ps1（原 Agnes→Wanx）"
+  },
+  "session_20260711": [
+    {
+      "timestamp": "2026-07-11T20:00:00+08:00",
+      "summary": "恢复 GitHub 仓库 learning-track 到本地；检查 Agnes AI 配置（原脚本误将通义万相标注为 Agnes AI）；重命名 生图技能.ps1 中 Agnes→Wanx（通义万相）；新建真实 Agnes AI 对接脚本 agnes_ai.ps1；配置 ~/.agnes/api_key；改推 Gitee 成功。"
+    }
+  ]
 }
