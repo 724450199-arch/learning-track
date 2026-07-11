@@ -1,15 +1,15 @@
 ﻿@(
-' Agnes-AI API Helper (通义万相 · 阿里云百炼)'
+' 通义万相 API Helper (阿里云百炼 DashScope)'
 ' ============================================'
 ' Models: wanx-v1 (image), wan2.6-t2v/i2v (video)'
 ' API Base: https://dashscope.aliyuncs.com'
 ''
 
-$QuotaFile = Join-Path (Join-Path $env:LOCALAPPDATA "LearningEnglish") "agnes_quota.json"
+$QuotaFile = Join-Path (Join-Path $env:LOCALAPPDATA "LearningEnglish") "wanx_quota.json"
 
 # -------- Quota Tracking -------- #
 
-function Get-AgnesQuota {
+function Get-WanxQuota {
     $default = @{
         image_count = 0
         video_seconds = 0
@@ -33,12 +33,12 @@ function Get-AgnesQuota {
     return $default
 }
 
-function Save-AgnesQuota($data) {
+function Save-WanxQuota($data) {
     $data | ConvertTo-Json | Set-Content $QuotaFile -Encoding UTF8
 }
 
-function Test-AgnesQuota($type, $amount = 1) {
-    $q = Get-AgnesQuota
+function Test-WanxQuota($type, $amount = 1) {
+    $q = Get-WanxQuota
     if ($type -eq "image") {
         $used = [int]$q.image_count
         $max = [int]$q.quota_image_max
@@ -50,12 +50,12 @@ function Test-AgnesQuota($type, $amount = 1) {
             Write-Host "  续费: https://bailian.console.aliyun.com/" -ForegroundColor Red
             Write-Host "==============================================" -ForegroundColor Red
             $q.warned_exhausted_image = $true
-            Save-AgnesQuota $q
+            Save-WanxQuota $q
         }
         elseif ($remaining -le 50 -and -not $q.warned_low_image) {
             Write-Host "⚠ wanx-v1 免费额度剩余仅 $remaining/$max 张" -ForegroundColor Yellow
             $q.warned_low_image = $true
-            Save-AgnesQuota $q
+            Save-WanxQuota $q
         }
         return $remaining -gt 0
     }
@@ -70,34 +70,34 @@ function Test-AgnesQuota($type, $amount = 1) {
             Write-Host "  续费: https://bailian.console.aliyun.com/" -ForegroundColor Red
             Write-Host "==============================================" -ForegroundColor Red
             $q.warned_exhausted_video = $true
-            Save-AgnesQuota $q
+            Save-WanxQuota $q
         }
         elseif ($remaining -le 10 -and -not $q.warned_low_video) {
             Write-Host "⚠ wan2.6 免费额度剩余仅 $remaining/$max 秒" -ForegroundColor Yellow
             $q.warned_low_video = $true
-            Save-AgnesQuota $q
+            Save-WanxQuota $q
         }
         return $remaining -ge $amount
     }
     return $true
 }
 
-function Update-AgnesQuota($type, $amount = 1) {
-    $q = Get-AgnesQuota
+function Update-WanxQuota($type, $amount = 1) {
+    $q = Get-WanxQuota
     if ($type -eq "image") {
         $q.image_count = [int]$q.image_count + $amount
     }
     elseif ($type -eq "video") {
         $q.video_seconds = [int]$q.video_seconds + $amount
     }
-    Save-AgnesQuota $q
+    Save-WanxQuota $q
     $used = if ($type -eq "image") { $q.image_count } else { $q.video_seconds }
     $max = if ($type -eq "image") { $q.quota_image_max } else { $q.quota_video_sec_max }
     Write-Host "已用: $used/$max ($([math]::Round(($max-$used)/$max*100))% 剩余)" -ForegroundColor Cyan
 }
 
-function Show-AgnesQuota {
-    $q = Get-AgnesQuota
+function Show-WanxQuota {
+    $q = Get-WanxQuota
     Write-Host "`n========== 通义万相 免费额度 ==========" -ForegroundColor Cyan
     $imgRemain = [int]$q.quota_image_max - [int]$q.image_count
     Write-Host "  wanx-v1 图片: $($q.image_count)/$($q.quota_image_max) 张 (剩余 $imgRemain)" -ForegroundColor $(if ($imgRemain -le 0){"Red"}elseif($imgRemain -le 50){"Yellow"}else{"Green"})
@@ -125,7 +125,7 @@ function Get-DashScopeApiKey {
 
 # -------- Image Generation -------- #
 
-function Invoke-AgnesImage {
+function Invoke-WanxImage {
     param(
         [string]$Prompt,
         [string]$Model = "wanx-v1",
@@ -135,7 +135,7 @@ function Invoke-AgnesImage {
         [int]$PollInterval = 5
     )
 
-    if (-not (Test-AgnesQuota "image" $N)) {
+    if (-not (Test-WanxQuota "image" $N)) {
         Write-Error "wanx-v1 免费额度已用完！"
         return $null
     }
@@ -177,7 +177,7 @@ function Invoke-AgnesImage {
                 Write-Host "Saved: $OutputFile"
             }
             Write-Host "Image URL: $url"
-            Update-AgnesQuota "image" $N
+            Update-WanxQuota "image" $N
             return $result
         } else {
             Write-Error "Generation failed: $($result.output.task_status)"
@@ -191,7 +191,7 @@ function Invoke-AgnesImage {
 
 # -------- Video Generation -------- #
 
-function Invoke-AgnesVideo {
+function Invoke-WanxVideo {
     param(
         [string]$Prompt,
         [string]$Model = "wan2.6-t2v",
@@ -201,7 +201,7 @@ function Invoke-AgnesVideo {
         [int]$PollInterval = 10
     )
 
-    if (-not (Test-AgnesQuota "video" $Duration)) {
+    if (-not (Test-WanxQuota "video" $Duration)) {
         Write-Error "wan2.6 免费额度已用完！"
         return $null
     }
@@ -248,7 +248,7 @@ function Invoke-AgnesVideo {
                 Write-Host "Saved: $OutputFile"
             }
             Write-Host "Video URL: $videoUrl"
-            Update-AgnesQuota "video" $Duration
+            Update-WanxQuota "video" $Duration
             return $result
         } else {
             Write-Error "Video generation failed: $($result.output.task_status)"
@@ -260,12 +260,12 @@ function Invoke-AgnesVideo {
     }
 }
 
-function Show-AgnesHelp {
+function Show-WanxHelp {
     @"
-Agnes-AI (通义万相) Commands:
-  Invoke-AgnesImage -Prompt "desc" [-Size 1024*1024] [-OutputFile path]
-  Invoke-AgnesVideo -Prompt "desc" [-Duration 5] [-OutputFile path]
-  Show-AgnesQuota                        - 查看剩余额度
+通义万相 (DashScope 阿里云百炼) Commands:
+  Invoke-WanxImage -Prompt "desc" [-Size 1024*1024] [-OutputFile path]
+  Invoke-WanxVideo -Prompt "desc" [-Duration 5] [-OutputFile path]
+  Show-WanxQuota                        - 查看剩余额度
 
 Models:
   wanx-v1      - Text-to-image (async)
@@ -275,7 +275,7 @@ Models:
 Usage:
   Powershell -ExecutionPolicy Bypass -Command ".
   '$env:USERPROFILE\AppData\Local\LearningEnglish\生图技能.ps1';
-  Invoke-AgnesImage -Prompt '...' -OutputFile 'out.png'"
+  Invoke-WanxImage -Prompt '...' -OutputFile 'out.png'"
 "@
 }
 )
