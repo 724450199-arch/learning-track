@@ -4,7 +4,7 @@
 
 # ====== 配置 ======
 $LogFile = "$PSScriptRoot\news.log"
-$MaxItems = 20
+$MaxItems = 10
 $RequestTimeout = 15
 
 function Write-Log {
@@ -221,6 +221,43 @@ foreach ($Src in $Sources) {
 
 Write-Log "共采集 $($AllItems.Count) 条新闻"
 
+# ====== 金银持仓行情 ======
+Write-Log "正在获取金银行情"
+$GoldPrice = $null; $SilverPrice = $null; $GoldChange = $null; $SilverChange = $null; $DXY = $null
+try {
+    $r = Invoke-RestMethod -Uri "https://query1.finance.yahoo.com/v8/finance/chart/GC=F?interval=1d" -TimeoutSec 10 -ErrorAction Stop
+    $m = $r.chart.result[0].meta
+    $GoldPrice = $m.regularMarketPrice
+    $GoldChange = [math]::Round(($m.regularMarketPrice - $m.chartPreviousClose) / $m.chartPreviousClose * 100, 2)
+} catch { Write-Log "抓黄金失败: $_" }
+if ($GoldPrice) {
+    try {
+        $r = Invoke-RestMethod -Uri "https://query1.finance.yahoo.com/v8/finance/chart/SI=F?interval=1d" -TimeoutSec 10 -ErrorAction Stop
+        $m = $r.chart.result[0].meta
+        $SilverPrice = $m.regularMarketPrice
+        $SilverChange = [math]::Round(($m.regularMarketPrice - $m.chartPreviousClose) / $m.chartPreviousClose * 100, 2)
+    } catch { Write-Log "抓白银失败: $_" }
+    try {
+        $r = Invoke-RestMethod -Uri "https://query1.finance.yahoo.com/v8/finance/chart/DX-Y.NYB?interval=1d" -TimeoutSec 10 -ErrorAction Stop
+        $DXY = $r.chart.result[0].meta.regularMarketPrice
+    } catch {}
+}
+if (-not $GoldPrice) {
+    try {
+        $resp = Invoke-WebRequest -Uri "https://gold.cngold.org" -TimeoutSec 10 -UseBasicParsing -UserAgent "Mozilla/5.0" -ErrorAction Stop
+        $text = $resp.Content
+        if ($text -match '现货黄金[^0-9]*?(\d+\.\d+)') { $GoldPrice = [double]$matches[1] }
+        if ($text -match '现货白银[^0-9]*?(\d+\.\d+)') { $SilverPrice = [double]$matches[1] }
+    } catch { Write-Log "备选源失败: $_" }
+}
+if (-not $GoldPrice) { Write-Log "金银行情获取失败，使用参考价"; $GoldPrice = 4080; $SilverPrice = 19.50 }
+$GSRatio = if ($GoldPrice -and $SilverPrice -and $SilverPrice -gt 0) { [math]::Round($GoldPrice / $SilverPrice, 1) } else { "N/A" }
+$goldDir = if ($null -eq $GoldChange) { "暂无数据" } elseif ($GoldChange -gt 1.5) { "隔夜大涨 +$GoldChange%" } elseif ($GoldChange -gt 0.5) { "偏多 +$GoldChange%" } elseif ($GoldChange -gt -0.5) { "震荡 $GoldChange%" } elseif ($GoldChange -gt -1.5) { "偏弱 $GoldChange%" } else { "大跌 $GoldChange%" }
+$silverDir = if ($null -eq $SilverChange) { "暂无数据" } elseif ($SilverChange -gt 2) { "大涨 +$SilverChange%" } elseif ($SilverChange -gt 1) { "偏多 +$SilverChange%" } elseif ($SilverChange -gt -1) { "震荡 $SilverChange%" } elseif ($SilverChange -gt -2) { "偏弱 $SilverChange%" } else { "大跌 $SilverChange%" }
+$goldAdvice = if ($null -eq $GoldChange) { "等待数据更新" } elseif ($GoldChange -gt 1.5) { "高开预期。若高开超4%+放量，减1/4锁利；否则持有等银价补涨。" } elseif ($GoldChange -gt 0.5) { "温和上涨，持有。观察前30分钟，缩量涨则持有，放量滞涨注意。" } elseif ($GoldChange -gt -0.5) { "窄幅震荡，不动。多看少动。" } elseif ($GoldChange -gt -1.5) { "小幅回调，不杀跌。观察4000支撑。" } else { "跌幅较大。关注4000关口，跌破则减1/3，等3950附近接回。" }
+$silverAdvice = if ($null -eq $SilverChange) { "等待数据更新" } elseif ($SilverChange -gt 2) { "银价强势！兴业银锡大概率高开3-5%，持仓不动。" } elseif ($SilverChange -gt 1) { "银价上涨，持有。弹性大涨幅会放大。" } elseif ($SilverChange -gt -1) { "窄幅震荡，不动。金银比仍高，补涨只是时间问题。" } elseif ($SilverChange -gt -2) { "回调可控。金银比仍高，不建议杀跌，等反弹。" } else { "跌幅较大。减1/4避险，关注19.0支撑。" }
+$gsNote = if ($GSRatio -ne "N/A") { if ($GSRatio -gt 200) { "极端高位！白银严重被低估" } elseif ($GSRatio -gt 150) { "明显偏高，白银低估" } elseif ($GSRatio -gt 120) { "偏高，白银偏低" } else { "正常" } } else { "暂无" }
+
 # ====== 芯片半导体优先关键词（高权重） ======
 $ChipKeywords = @(
   "芯片","半导体","封装","Chiplet","先进封装","CoWoS","HBM","TSMC","台积电","ASML",
@@ -261,11 +298,32 @@ Write-Log "过滤后 $($Filtered.Count) 条相关新闻"
 # ====== 格式化 ======
 $DateStr = Get-Date -Format "yyyy-MM-dd"
 $TimeStr = Get-Date -Format "HH:mm"
+
+# ====== 金银简报头部 ======
+$DXYDisplay = if ($DXY) { "$" + $DXY } else { "暂无" }
+$GoldBriefing = @"
+
+## 金银持仓简报
+黄金: $GoldPrice 美元/盎司 ($goldDir)
+白银: $SilverPrice 美元/盎司 ($silverDir)
+金银比: $GSRatio | 美元指数: $DXYDisplay
+
+【操作建议】
+中金黄金(600489): $goldAdvice
+兴业银锡(000426): $silverAdvice
+金银比: $gsNote
+
+关键位: 金支撑4000/3950 阻力4150/4200 | 银支撑19.0/18.5 阻力20.5/21.5
+
+---
+"@
+
 $Body = @"
 ## 每日科技早报
 **$DateStr** | 共 $($Filtered.Count) 条精选
 
 "@
+$Body = $GoldBriefing + $Body
 
 # ====== 添加今日古诗 ======
 if ($PoemsToday.Count -gt 0) {
