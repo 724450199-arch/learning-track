@@ -17,11 +17,25 @@ function Write-Log {
 $Script:Proxy = $null
 try {
   $proxyCfg = Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -ErrorAction Stop
-  if ($proxyCfg.ProxyEnable -eq 1 -and $proxyCfg.ProxyServer) {
+  if ($proxyCfg.ProxyServer) {
     $proxyUrl = $proxyCfg.ProxyServer
     if ($proxyUrl -notmatch '^https?://') { $proxyUrl = "http://$proxyUrl" }
-    $Script:Proxy = $proxyUrl
-    Write-Log "检测到系统代理: $proxyUrl"
+    if ($proxyCfg.ProxyEnable -eq 1) {
+      $Script:Proxy = $proxyUrl
+      Write-Log "检测到系统代理: $proxyUrl"
+    } else {
+      # 系统代理开关关闭，但代理进程(如Clash)可能仍在运行，尝试探测端口
+      try {
+        $testUri = [Uri]$proxyUrl
+        $tcp = New-Object Net.Sockets.TcpClient
+        $tcp.Connect($testUri.Host, $testUri.Port)
+        $tcp.Close()
+        $Script:Proxy = $proxyUrl
+        Write-Log "代理进程活跃(开关关闭)，使用代理: $proxyUrl"
+      } catch {
+        Write-Log "代理进程不可达，跳过代理: $proxyUrl"
+      }
+    }
   }
 } catch { }
 
