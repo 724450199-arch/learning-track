@@ -2,7 +2,7 @@
 .SYNOPSIS
   错题拍照转文字并录入息流(FlowUs)错题数据库
 .DESCRIPTION
-  拖拽或选择一张错题照片 -> Windows OCR 识别文字 -> 显示并确认 -> 写入多多错题数据库
+  拖拽或选择一张错题照片 -> Agnes AI 视觉识别（算式/应用题更准，失败则 Windows OCR 兜底） -> 显示并确认 -> 写入多多错题数据库
 .EXAMPLE
   .\record_mistake.ps1 -Image "D:\错题\多多_数学_01.jpg"
   .\record_mistake.ps1   (弹出文件选择框)
@@ -21,7 +21,47 @@ $base = "https://api.flowus.cn/v2"
 $dbClass = "b072234a-0207-418c-bdd0-b19ec19b4e98"   # 课堂练习错题
 $dbAo    = "da6af8d0-4aeb-43d2-b914-c338035f05de"   # 浅奥错题
 
+# Agnes AI 视觉识别配置（Agent AI 系统，OpenAI 兼容多模态）
+$agnesBase = "https://apihub.agnes-ai.com/v1"
+$agnesModel = "agnes-2.0-flash"
+function Get-AgnesKey {
+  $k = $env:AGNES_API_KEY
+  if (-not $k) {
+    $kf = Join-Path (Join-Path $env:USERPROFILE ".agnes") "api_key"
+    if (Test-Path $kf) { $k = [IO.File]::ReadAllText($kf, [Text.Encoding]::UTF8).Trim() }
+  }
+  if (-not $k) { throw "未找到 Agnes API key（环境变量 AGNES_API_KEY 或 ~/.agnes/api_key）" }
+  return $k
+}
+
 # ====== 工具函数 ======
+
+# Agnes AI 视觉识别（识别错题图片文字/算式/应用题）
+function Get-AgnesVisionText([string]$imgPath) {
+  $b64 = [Convert]::ToBase64String([IO.File]::ReadAllBytes($imgPath))
+  $dataUri = "data:image/png;base64,$b64"
+  $sys = "你是一年级数学错题识别助手。请完整读出图片中的题目文字与算式，按原样逐条列出。若为计算/应用题请把题目、条件和要求的算式都读出。不要输出思考过程，直接把识别到的文字结果写出来。"
+  $body = @{
+    model = $agnesModel
+    messages = @(@{ role = "user"; content = @(
+      @{ type = "text"; text = $sys }
+      @{ type = "image_url"; image_url = @{ url = $dataUri } }
+    )})
+    max_tokens = 1024
+    temperature = 0.2
+  }
+  $r = Invoke-RestMethod -Uri "$agnesBase/chat/completions" -Method Post `
+    -Body ($body | ConvertTo-Json -Depth 12 -Compress) -ContentType "application/json" `
+    -Headers @{ Authorization = "Bearer $(Get-AgnesKey)" } -TimeoutSec 120
+  $content = $r.choices[0].message.content
+  if (-not [string]::IsNullOrWhiteSpace($content)) { return $content.Trim() }
+  # 兜底：答案落入 reasoning_content
+  $reason = $r.choices[0].message.reasoning_content
+  if ($reason) { return $reason.Trim() }
+  return $null
+}
+
+# Windows 自带 OCR（后备方案）
 Add-Type -AssemblyName System.Runtime.WindowsRuntime
 $asTaskGeneric = ([System.WindowsRuntimeSystemExtensions].GetMethods() | Where-Object {
   $_.Name -eq 'AsTask' -and $_.GetParameters().Count -eq 1 -and $_.GetParameters()[0].ParameterType.Name -eq 'IAsyncOperation`1'
@@ -96,12 +136,21 @@ if (-not $Image) {
 }
 if (-not (Test-Path -LiteralPath $Image)) { Write-Error "文件不存在: $Image"; exit 1 }
 
-# ====== OCR 识别 ======
-Write-Host "正在识别图片文字..."
-$text = Get-OcrText -imgPath $Image
-Write-Host "`n========== OCR 识别结果 =========="
+# ====== 识别（Agnes AI 视觉优先，失败则 Windows OCR 兜底） ======
+Write-Host "正在用 Agnes AI 识别图片（算式/应用题更准）..."
+$text = $null
+try {
+  $text = Get-AgnesVisionText -imgPath $Image
+} catch {
+  Write-Host ("Agnes 识别失败: " + $_.Exception.Message + "，改用 Windows OCR")
+}
+if (-not $text) {
+  Write-Host "正在用 Windows OCR 识别..."
+  $text = Get-OcrText -imgPath $Image
+}
+Write-Host "`n========== 识别结果 =========="
 Write-Host $text
-Write-Host "==================================="
+Write-Host "============================="
 
 # ====== 确认/编辑题目 ======
 Write-Host ""
