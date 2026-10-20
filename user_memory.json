@@ -1,0 +1,170 @@
+{
+  "user_profile": {
+    "os_username": "yang",
+    "git_email": "724450199@QQ",
+    "github_username": "724450199-arch",
+    "github_repo": "learning-track (PowerShell, 2026-08-02更新)",
+    "profession": "药学专业，担任药学主任，985研究生出身；考虑给孩子日常普及药学知识（2mm，2026-08-31添加）"
+  },
+  "gitee_username": "yql8981229",
+  "gitee_repo": "https://gitee.com/yql8981229/learning-track.git",
+  "gitee_note": "E:\\learning-track 已配置 gitee remote；用户要求代码改动后实时同步到 Gitee（每次修改提交后 push 到 gitee 分支）",
+  "flowus": {
+    "base_url": "https://mcp.flowus.cn/v2",
+    "page_duoduo": "b80cd768-6ef5-4da6-a257-e2afe8d388ac",
+    "page_xiaoming": "8169ce9a-efd8-47bd-b671-2d0b8fa4c6e6",
+    "token_source": "位于 learning-track 仓库 upload_to_flowus.ps1 中（token 本身不写入此文件）",
+    "note": "朵朵和小明两个页面，疑似孩子英语学习相关"
+  },
+  "kids": {
+    "note": "用户(yang)的两个儿子；设计姓名牌/作业/学习材料时用到",
+    "yangmingze": {
+      "name": "杨明泽",
+      "nickname": "多多（FlowUs 页面名为『朵朵』，系写错）",
+      "gender": "男生",
+      "grade": "小学一年级（2026年开学）",
+      "added": "2026-08-14",
+      "first_grade_modules": "计划为多多制作并同步到息流(FlowUs)的两个一年级模块：1)课堂练习错题部分；2)浅奥错题",
+      "flowus_databases": {
+        "note": "已建好两个错题数据库（挂在多多页面 b80cd768 下，2026-08-14）",
+        "class_mistakes": {
+          "id": "b072234a-0207-418c-bdd0-b19ec19b4e98",
+          "url": "https://flowus.cn/b072234a-0207-418c-bdd0-b19ec19b4e98",
+          "title": "课堂练习错题",
+          "props": ["题目(title)", "日期(date)", "学科(select)", "错因分析(select)", "掌握情况(select)", "订正与备注(rich_text)"]
+        },
+        "ao_mistakes": {
+          "id": "da6af8d0-4aeb-43d2-b914-c338035f05de",
+          "url": "https://flowus.cn/da6af8d0-4aeb-43d2-b914-c338035f05de",
+          "title": "浅奥错题",
+          "props": ["题目(title)", "日期(date)", "专题(select)", "错因(select)", "掌握情况(select)", "思路与订正(rich_text)"]
+        }
+      },
+      "record_mistake_tool": {
+        "note": "错题拍照转文字录入息流工具，位于 E:\\learning-track\\record_mistake.ps1（已推Gitee），2026-08-31",
+        "usage": "拖图或 -Image 路径 -> Agnes AI 视觉识别(agnes-2.0-flash，算式/应用题更准) 失败则 Windows OCR 兜底 -> 确认/编辑 -> 写入错题数据库；-Db class(课堂练习)/ao(浅奥) 或交互选择",
+        "tech": "识别优先用 Agnes AI 视觉(OpenAI兼容多模态，max_tokens≥1024把答案写入content)；息流空间存储已满(约2.4GB>200MB配额)无法传图，故改用转文字记录方案；已实测验证 Agnes 能读出一年级算式(12+8=20)并生成完整中文句子"
+      }
+    },
+    "yangmingming": {
+      "name": "杨明铭",
+      "nickname": "小明",
+      "gender": "男生",
+      "note": "FlowUs 页面『小明』对应他",
+      "added": "2026-08-14"
+    }
+  },
+  "learning_track": {
+    "purpose": "英语学习自动化脚本仓库，含 daily_learning.ps1、daily_news.ps1、generate_docx.ps1 等，可生成练习题、打印材料并上传 FlowUs"
+  },
+  "gold_operation": {
+    "script": "E:\\learning-track\\daily_news.ps1",
+    "purpose": "每日金银持仓简报+操作建议（用户称之为『黄金操作』）",
+    "details": "抓取黄金(GC=F)/白银(SI=F)/美元指数(DX-Y.NYB)行情，计算金银比，生成中金黄金(600489)和兴业银锡(000426)操作建议，含支撑/阻力位（金4000/3950/4150/4200，银19.0/18.5/20.5/21.5）",
+    "trigger": "用户问起黄金操作/金银简报/操作建议时想到此脚本",
+    "params": "-SendKey 可选推送key"
+  },
+  "proxy": {
+    "clash_port": 7897,
+    "system_proxy_settings": "ProxyServer=127.0.0.1:7897（Clash 7897 端口运行）",
+    "usage_rule": "用户要求：下次需要联网抓取被墙数据（如 Yahoo 行情）时，自动打开系统代理。",
+    "helper": "E:\\learning-track\\proxy_helper.ps1 (on/off/status)",
+    "status": "2026-08-05 已开启系统代理"
+  },
+  "wechat_push": {
+    "method": "Server酱(方糖)推送，通过 GitHub Actions (daily-news.yml) 每天 08:00 定时执行",
+    "sendkey_source": "GitHub 仓库 secret SENDKEY（本地无 sendkey.txt）",
+    "trigger_script": "E:\\learning-track\\trigger_news.ps1（本地触发 GitHub Actions workflow_dispatch）",
+    "github_actions_runs": "run #56 已验证含黄金操作推送成功",
+    "timing_note": "GitHub Actions schedule 不保证准点：cron 为 0 0 * * *（北京08:00），但近10次实际触发约北京09:44-10:03（延迟1.5-2h）。用户曾要求准时8点，2026-08-05确认仍用 GitHub Actions 方案、接受实际延迟",
+    "note": "方案B备选：把 SendKey 存本地 sendkey.txt 后本地运行 daily_news.ps1 也可推送（未实施，用户暂选 GitHub Actions 方案）"
+  },
+  "skills_user_has": {
+    "agnes_ai": {
+      "script": "learning-track/agnes_ai.ps1",
+      "purpose": "Agnes AI 是 Agent AI 系统/平台(https://agnes-ai.com)，画图/视频只是其众多功能之一",
+      "api_base": "https://apihub.agnes-ai.com/v1",
+      "models": ["agnes-image-2.0-flash (文生图)", "agnes-video-v2.0 (文生视频/图生视频)", "agnes-2.0-flash (chat/推理，OpenAI兼容，支持图片多模态输入)"],
+      "vision_capable": "已验证(2026-08-31)：agnes-2.0-flash 经 /v1/chat/completions 的 content 数组[text+image_url(data:image/png;base64)] 成功识别图片算式(如 12+8=20)；返回带 reasoning_content 字段，需调大 max_tokens(如1024) 让答案写入 content(text_tokens>0)；image_tokens 证明图片已编码传入。中文乱码为控制台编码/测试图渲染差所致，真实照片效果更好",
+      "usage": "Invoke-AgnesImage -Prompt \"描述\" -Size 1024x1024 -OutputFile xxx.png ; Invoke-AgnesVideo -Prompt \"描述\" -Width 1152 -Height 768 -NumFrames 121 -FrameRate 24 [-InputImage url] -OutputFile xxx.mp4",
+      "api_key_location": "~/.agnes/api_key (已配置) 或环境变量 AGNES_API_KEY",
+      "note": "用户要求记住此技能并会使用；用户问到画画/生图/生视频时优先想到它"
+    },
+    "generate_svg": {
+      "script": "learning-track/generate_svg.ps1",
+      "purpose": "生成 SVG 矢量图"
+    }
+  },
+  "desktop_protection": {
+    "purpose": "桌面文件保护/删除自动恢复",
+    "startup": "C:\\Users\\yang\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\protect_desktop.bat",
+    "script": "E:\\learning-track\\protect_desktop.ps1（每秒监控桌面，删除时自动从备份恢复）",
+    "utils": "E:\\learning-track\\desktop_utils.ps1（含备份目录、Backup-File/Restore-File 等）",
+    "status": "2026-08-05 用户要求已删除看门狗程序（protect_desktop.ps1、desktop_utils.ps1 已删除，开机启动项已删），永久禁用不再恢复；send_to_desktop.ps1 保留（独立工具）"
+  },
+  "opencode_deepseek_api": {
+    "status": "2026-08-13 已配置到 ~/.config/opencode/opencode.jsonc（model=deepseek/deepseek-chat），但 API 返回 402 余额不足，待用户充值后重启 opencode 生效",
+    "key_location": "~/.config/opencode/opencode.jsonc 的 provider.deepseek.options.apiKey（key 本身不写入记忆文件）"
+  },
+  "pharmacy_education": {
+    "note": "用户为药学主任/985研究生，要给两个孩子普及药学知识；在息流建了独立『药学启蒙』页面，2026-08-31",
+    "page_id": "7753269a-6e98-4d55-a016-b49e8517d91d",
+    "url": "https://flowus.cn/7753269a-6e98-4d55-a016-b49e8517d91d",
+    "build_script": "E:\\learning-track\\build_pharmacy_page.ps1（已推Gitee，UTF-8 BOM）",
+    "content": "三部分：一、小明4岁（安全/生活+每周计划）；二、多多6岁（科学思维/简单化学+小实验+每两周计划）；三、亲子问答卡+用药数学应用题",
+    "flowus_utf8_lesson": "【关键坑】PowerShell 5.1 的 Invoke-RestMethod -Body string 按 ASCII 编码发送，中文/emoji 全变'?'；必须用 [Text.Encoding]::UTF8.GetBytes($json) 做 Body 发送，且 .ps1 脚本需存为 UTF-8 BOM 才能被 PS5.1 正确解析中文；响应读取也用原始字节+UTF8 解码，控制台显示乱码不代表实际写入乱码（用 unicode 码点/写UTF8文件验证）。FlowUs 页面 title 属性需包一层 type='title'（properties.title = {type:'title'; title=[...]}），漏了会 title 为空"
+  },
+  "storyfun1": {
+    "note": "Storyfun 1 学生用书（YLE Starters 备考，第二版 Karen Saxby，2017 ISBN 9781316617014）扫描PDF整册提取+OCR+教案，多多的英语启蒙材料",
+    "src_pdf": "E:\\临时文件\\story fun\\182_1- Storyfun 1. Student's book_Saxby Karen_2017 -80p .pdf（82页全扫描无文本层，每页1张1568x2215 JPEG）",
+    "imgs": "C:\\Users\\yang\\AppData\\Local\\Temp\\opencode\\storyfun_imgs\\page_001~082.jpg（顺序与页码一致）",
+    "ocr": "C:\\Users\\yang\\AppData\\Local\\Temp\\opencode\\storyfun_ocr\\page_001~082.txt（Windows.Media.Ocr，仅zh-Hans-CN引擎，英文有噪音但可用）",
+    "json": "C:\\Users\\yang\\AppData\\Local\\Temp\\opencode\\storyfun1.json（135KB，pages=82 title正确）",
+    "full_text": "C:\\Users\\yang\\AppData\\Local\\Temp\\opencode\\storyfun_full.txt",
+    "lesson_plan_md": "E:\\临时文件\\story fun\\Storyfun1_教案.md（8单元同构：单元地图→词汇分层→核心单词(10个带音标)→重点句型→Day1-3教案，另含复习板块ABC+家长12周计划；U7首词已修正为badminton）",
+    "lesson_plan_docx": "E:\\临时文件\\story fun\\Storyfun1_教案.docx（pandoc转）",
+    "lesson_plan_pdf": "E:\\临时文件\\story fun\\Storyfun1_教案.pdf（Chrome headless --print-to-pdf转）",
+    "flowus_page": {
+      "id": "43d44d69-0129-4074-9a82-5e213273b894",
+      "url": "https://flowus.cn/43d44d69-0129-4074-9a82-5e213273b894",
+      "title": "Storyfun 1 · 单元教案全集（YLE Starters 备考）",
+      "icon": "📚",
+      "parent": "workspace顶部（不与孩子页面挂靠），600块已全量写入并验证（8个Unit标题完整）"
+    },
+    "hints": {
+      "pandoc_path": "C:\\Users\\yang\\AppData\\Local\\Pandoc\\pandoc.exe（winget装的不进PATH，需全路径）",
+      "wps_not_found": "有WPS但全盘/快捷方式未找到 wps.exe（Kingsoft office6下仅wpscloudsvr.exe），导出走pandoc+Chrome headless方案已够用",
+      "flowus_api_base": "https://api.flowus.cn/v2（upload_to_flowus.ps1 里的 mcp.flowus.cn/v2 已404废弃）",
+      "flowus_workspace_page": "API支持 parent={type:'workspace'} 在息流顶层建页（不需要父页面ID）",
+      "flowus_paging": "children 分页字段是 next_cursor（不是page_cursor），start_cursor 传next_cursor值",
+      "ps_ascii_scripts": "PS5.1跑含中文字面量的.ps1会ANSI乱码→脚本纯ASCII，中文从UTF-8-only外部文件读入（WriteAllText with UTF8Encoding($false)），JSON body用 [Text.Encoding]::UTF8.GetBytes 发送"
+    }
+  },
+  "hisuite": {
+    "status": "2026-09-21 已安装并启动成功（Windows 版 V14.0.0.380，适配 HarmonyOS 4.3 及以下/EMUI；HarmonyOS 5+ 需 V16.0.0.130 版）",
+    "installer_dl": "C:\\Users\\yang\\AppData\\Local\\Temp\\opencode\\HiSuite_v14.exe（官方直链 consumer-tkb.huawei.com/weknow/servlet/download/public?contextNo=W00018217，NSIS /S 静默安装，exit 0）",
+    "install_dir": "C:\\Program Files (x86)\\HiSuite（主程序 HiSuite.exe；driver/ 目录含 USB 驱动）",
+    "version_dl_urls": {
+      "harmonyos5_v16": "https://consumer-tkb.huawei.com/weknow/servlet/download/public?contextNo=W00065635（V16.0.0.130）",
+      "harmonyos4_v14": "https://consumer-tkb.huawei.com/weknow/servlet/download/public?contextNo=W00018217（V14.0.0.380）"
+    },
+    "note": "华为手机助手下载链接位于官网 hisuite 页的 a.btn href（JS渲染，dump-dom 可得）；链接带 contextNo=Wxxxx 签名参数"
+  },
+  "math_sort_2026": {
+    "note": "2026-09-26 多多(一年级) 5以内减法排序专项错题集：OCR识别微信图片(趋势·推导页：减号前面不变，减号后面越大得数越小)后出的排序练习题，已建息流页面并同步，另存错题文件",
+    "source_pic": "C:\\Users\\yang\\Documents\\xwechat_files\\yangqinlei_bd98\\temp\\RWTemp\\2026-09\\3b4f7ae10bd4387f516b46c29c5739f4.jpg",
+    "ocr_script": "C:\\Users\\yang\\AppData\\Local\\Temp\\opencode\\ocr_image.ps1（-ImagePath -OutFile，Windows.Media.Ocr zh-Hans-CN）",
+    "exercise_md": "C:\\Users\\yang\\AppData\\Local\\Temp\\opencode\\sort_exercise.md（六大区块：算一算比一比/从大到小排序/减数相同被减数变/混合排序/想一想填一填/自评）",
+    "flowus_page": {
+      "id": "7684d727-0a3d-45e6-8fdc-83f346e1cf34",
+      "url": "https://flowus.cn/7684d727-0a3d-45e6-8fdc-83f346e1cf34",
+      "title": "5以内减法 · 排序专项练习（错题）",
+      "icon": "🔢",
+      "parent": "多多页面 b80cd768 下新建子页，32块写入成功已验证"
+    },
+    "reusable_script": "C:\\Users\\yang\\AppData\\Local\\Temp\\opencode\\flowus_push_child.ps1（-ParentPage -TitleFile -IconFile -ContentFile；md转块批量PATCH，UTF-8安全，可复用于在某个父页面下新建内容页）"
+  },
+  "last_session_summary": "2026-09-26 会话：多任务收尾。(1)Storyfun 1 教案已全链完成并同步息流（页面 https://flowus.cn/43d44d69-0129-4074-9a82-5e213273b894，600块）。2026-09-21 装好华为手机助手 HiSuite V14.0.0.380（hisuite 字段），并答过 ECMO 2050 预充视频出处。(2)多多一年级"5以内减法排序专项"：微信图OCR识别（ocr_image.ps1）→出于排序练习题（sort_exercise.md）→同步到息流新建错题页面 https://flowus.cn/7684d727-0a3d-45e6-8fdc-83f346e1cf34（挂多多页面下，32块，详见 math_sort_2026 字段）。重要：当前模型不支持直接读图片，需要图片内容时用 Windows OCR 脚本兜底。息流 push 脚本 mcp.flowus.cn/v2 已废弃，用 api.flowus.cn/v2。",
+  "secrets_never_save": ["FlowUs token、Agnes API key 等敏感信息一律不写入记忆文件，如需使用从 ~/.agnes/api_key 或仓库脚本读取"]
+  "secrets_never_save": ["FlowUs token、Agnes API key 等敏感信息一律不写入记忆文件，如需使用从 ~/.agnes/api_key 或仓库脚本读取"]
+}
