@@ -208,6 +208,24 @@
     },
     "rules": "读图一律派 reader；worker+reviewer 流程；子 agent 只传必要上下文；超简单任务不分工；失败按需要返工"
   },
+  "gout_edu": {
+    "note": "2026-10-29 痛风科普项目：把 docx 原文改写成通俗版，并产出漫画+长图两种科普作品",
+    "dir": "E:\\临时文件\\痛风科普",
+    "src": "E:\\临时文件\\痛风科普文案.docx（原文偏恐吓式、术语多）",
+    "outputs": ["痛风科普_通俗版.md/.docx", "痛风科普_长图.png（2160x7817）+_手机版（1080）", "痛风科普_漫画.png（2160x14779）+_手机版（1080）", "panels/p1~p6.png（6格插画原图）", "长图.html / 漫画.html（源文件，改文字后重渲染即可）"],
+    "pipeline": "AI 只画插画（无文字），中文全部用 HTML 叠加，再用 Chrome headless 截图 + 自动裁掉底部空白 → 高清长图",
+    "scripts": {
+      "render": "C:\\Users\\yang\\AppData\\Local\\Temp\\opencode\\render_html.ps1（-HtmlPath -OutPath -Width -MaxHeight -Scale；用 System.Drawing 扫描最后一行非背景色自动裁剪）",
+      "gen_comic": "C:\\Users\\yang\\AppData\\Local\\Temp\\opencode\\gen_gout_comic.ps1（批量生图+下载）"
+    },
+    "lessons": [
+      "Agnes 生图返回的 CDN platform-outputs.agnes-ai.space 直连超时，必须 -Proxy http://127.0.0.1:7897 下载（apihub 本身直连没问题）",
+      "中文文字绝不能让生图模型画，会乱码；插画只画场景，文字用 HTML/CSS 排版",
+      "Agnes 免费额度会触发 rate limit（reader 子 agent 报 API rate limit），视觉复核可改用 opencode/nemotron-3.5-super-vl-free",
+      "人物一致性靠固定 style 前缀 + 同一主角描述（短黑发中国男性）",
+      "PS 5.1 下 Chrome headless 的 stderr 会触发 NativeCommandError，需临时 ErrorActionPreference=Continue；脚本里不要用 $args 变量名"
+    ]
+  },
   "last_session_summary": "2026-10-29 会话：①排查 opencode 启动报错——根因是 Desktop 升级到 2.2.1 后免费模型改名，配置里的 opencode/deepseek-v4-flash-free 已不存在，已全局改为 opencode/deepseek-v4.1-flash-free（opencode.jsonc + 4 个 agent md），子 agent 恢复可用；另修好 user_memory.json 的 JSON 结构错误（image_gen 后面多了游离键、last_session_summary 缺逗号），把方案A 的 provider/agents 收进 multi_agent 节点。②按『平时本地、用 OpenAI 才走 VPN』重做分流：opencode 是 bun 运行时只认 https_proxy/no_proxy 环境变量、不读系统代理，故设用户级 HTTPS_PROXY/HTTP_PROXY=127.0.0.1:7897 + NO_PROXY 放行 opencode.ai/deepseek/agnes/models.dev/gitee，系统代理保持关闭，OpenAI 自动经 Clash 走机场；proxy_helper.ps1 增加 env-on/env-off，已推 Gitee(296c277)。待办：OpenAI key 仍是 placeholder；.git/config 与 opencode.jsonc 有明文凭据需处理。",
   "secrets_never_save": ["FlowUs token、Agnes API key 等敏感信息一律不写入记忆文件，如需使用从 ~/.agnes/api_key 或仓库脚本读取"]
 }
