@@ -2,3 +2,5 @@
 worksheets/
 
 sendkey.txt
+opencode_config_backup_*.jsonc
+*.jsonc.bak
