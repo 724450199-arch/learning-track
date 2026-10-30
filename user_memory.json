@@ -229,7 +229,8 @@
   "newyear_coloring": {
     "note": "2026-10-30 元旦主题『旦愿有光』A4 儿童涂色画报（一年级男孩向）",
     "dir": "E:\\临时文件\\元旦涂色画报",
-    "outputs": ["旦愿有光_A4涂色画报.png（2480x3508 = A4 300dpi，可直接打印）", "涂色画报.html（源文件）", "line_art.png（2048x3072 黑白线稿插画原图）"],
+    "outputs": ["旦愿有光_元旦A4涂色画报_横版.png（3508x2480 = A4 横版 300dpi，最终版）", "旦愿有光_A4涂色画报.png（2480x3508 竖版，早期版本）", "涂色画报_横版.html / 涂色画报.html（源文件）", "art.png（横版插画线稿 2048x2048）、line_art.png（竖版插画 2048x3072）"],
+    "design": "横版两栏：左=2027+旦愿有光（实心粗黑）+元旦快乐横幅+1月1日日历卡；右=AI 黑白线稿（男孩披风举灯笼、烟花、气球、礼物、火箭）；外圆角框+四角星",
     "pipeline": "AI 只画黑白线稿（coloring book 风格，无文字）→ HTML/SVG 叠加空心标题『旦愿有光』+ 圆角外框 + 分隔线 → Chrome headless 定尺截图 2480x3508",
     "scripts": {
       "gen_lineart": "C:\\Users\\yang\\AppData\\Local\\Temp\\opencode\\gen_newyear_lineart.ps1（-OutFile -Size -Proxy，Agnes 生图+代理下载）",
@@ -239,7 +240,9 @@
       "Agnes 图片尺寸：请求 1024x1536 实际返回 832x1248；请求 2048x3072 返回真实 2048x3072（要高清就直接要 2048x3072）",
       "CSS -webkit-text-stroke 做空心字会在『愿/有』这类多部件汉字内部出现杂乱交叉线（轮廓重叠处描边外露）",
       "空心字正确做法：SVG 里画两遍同一 <text>，底层 fill=#000 + feMorphology dilate 半径≈9 扩张成实心块，上层 fill=#fff 覆盖字内 → 得到粗细均匀、无内部杂线的空心字",
-      "A4 300dpi = 2480x3508；逻辑尺寸用 1240x1754 + Scale 2 精确得到，Chrome --window-size 配合 --force-device-scale-factor 可直接定尺"
+      "但空心字对「旦/日/目」「愿」这类字仍会因双线造成误读（视觉模型实测把旦读成目、把愿读成元），标题建议直接用实心黑字，涂色乐趣交给插画",
+      "A4 300dpi = 2480x3508；横版 = 3508x2480；逻辑尺寸 1240x1754 / 1754x1240 + Scale 2 精确得到",
+      "Chrome 文字有次像素抗锯齿会留少量彩色像素，render_a4.ps1 加 -Gray 开关用 ColorMatrix 转灰度，保证纯黑白可打印"
     ]
   },
   "last_session_summary": "2026-10-30 会话：①痛风科普收尾——漫画 6 格 + 长图全部加上右下角小标签『AI 生成合成』（漫画 6 处、长图关节插图 1 处），已重渲染高清版与手机版并经视觉模型确认文字正确、不挡主体。②新任务：元旦主题『旦愿有光』A4 涂色画报（一年级男孩向）——Agnes 生成黑白线稿（2048x3072，9/10），HTML+SVG 叠加空心标题/外框/分隔线，Chrome 定尺输出 2480x3508 300dpi，终检 8.5/10 可直接打印；成果在 E:\\临时文件\\元旦涂色画报。学到：-webkit-text-stroke 做空心字会露内部杂线，改用 SVG 双层 text + feMorphology dilate 解决。",
