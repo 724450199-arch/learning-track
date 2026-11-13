@@ -1,15 +1,21 @@
 ﻿param(
   [switch]$Push,
-  [string]$OutFile = "E:\learning-track\kids_edu\多多学习中心.md",
+  [string]$OutFile,
   [string]$RootPageId = "b80cd768-6ef5-4da6-a257-e2afe8d388ac",
   [int]$MaxDepth = 3
 )
 $ErrorActionPreference = "Stop"
 
+# 路径全部基于脚本自身位置推算，本机（E:\learning-track）和 GitHub Actions 都能跑
+$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+$repo      = Split-Path -Parent $scriptDir
+if ([string]::IsNullOrWhiteSpace($OutFile)) { $OutFile = Join-Path $scriptDir "多多学习中心.md" }
+$mdRel = "kids_edu/" + (Split-Path -Leaf $OutFile)
+
 # FlowUs token：优先环境变量（GitHub Actions 用 secret 注入），本地则从 upload_to_flowus.ps1 里取
 $token = $env:FLOWUS_TOKEN
 if ([string]::IsNullOrWhiteSpace($token)) {
-  $src = "E:\learning-track\upload_to_flowus.ps1"
+  $src = Join-Path $repo "upload_to_flowus.ps1"
   if (Test-Path -LiteralPath $src) {
     $m = [regex]::Match([IO.File]::ReadAllText($src, [Text.Encoding]::UTF8), '\$token\s*=\s*"([^"]+)"')
     if ($m.Success) { $token = $m.Groups[1].Value }
@@ -17,7 +23,6 @@ if ([string]::IsNullOrWhiteSpace($token)) {
 }
 if ([string]::IsNullOrWhiteSpace($token)) { throw "缺少 FLOWUS_TOKEN（环境变量或 upload_to_flowus.ps1）" }
 $mcp   = "https://mcp.flowus.cn/message"
-$repo  = "E:\learning-track"
 $logFile = Join-Path (Split-Path $OutFile -Parent) "backup.log"
 
 function Log($msg) {
@@ -172,7 +177,6 @@ if ($Push) {
   $ErrorActionPreference = "Continue"   # git 往 stderr 写进度，Stop 模式下会被当成异常
   $env:GIT_TERMINAL_PROMPT = "0"
   try {
-    $mdRel = "kids_edu/多多学习中心.md"
     & git add -- $mdRel 2>&1 | Out-Null
     $st = (& git status --porcelain -- $mdRel 2>&1) -join ""
     if ([string]::IsNullOrWhiteSpace($st)) {
