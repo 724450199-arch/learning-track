@@ -5,7 +5,17 @@
   [int]$MaxDepth = 3
 )
 $ErrorActionPreference = "Stop"
-$token = "zQC5s3N1auj4cFKXCAxZ8WLLJi1g7Wy80QZBuTfj"
+
+# FlowUs token：优先环境变量（GitHub Actions 用 secret 注入），本地则从 upload_to_flowus.ps1 里取
+$token = $env:FLOWUS_TOKEN
+if ([string]::IsNullOrWhiteSpace($token)) {
+  $src = "E:\learning-track\upload_to_flowus.ps1"
+  if (Test-Path -LiteralPath $src) {
+    $m = [regex]::Match([IO.File]::ReadAllText($src, [Text.Encoding]::UTF8), '\$token\s*=\s*"([^"]+)"')
+    if ($m.Success) { $token = $m.Groups[1].Value }
+  }
+}
+if ([string]::IsNullOrWhiteSpace($token)) { throw "缺少 FLOWUS_TOKEN（环境变量或 upload_to_flowus.ps1）" }
 $mcp   = "https://mcp.flowus.cn/message"
 $repo  = "E:\learning-track"
 $logFile = Join-Path (Split-Path $OutFile -Parent) "backup.log"
@@ -162,21 +172,22 @@ if ($Push) {
   $ErrorActionPreference = "Continue"   # git 往 stderr 写进度，Stop 模式下会被当成异常
   $env:GIT_TERMINAL_PROMPT = "0"
   try {
-    cmd /c "git add -- ""kids_edu/多多学习中心.md"" 2>&1" | Out-Null
-    $st = (cmd /c "git status --porcelain -- ""kids_edu/多多学习中心.md"" 2>&1") -join ""
+    $mdRel = "kids_edu/多多学习中心.md"
+    & git add -- $mdRel 2>&1 | Out-Null
+    $st = (& git status --porcelain -- $mdRel 2>&1) -join ""
     if ([string]::IsNullOrWhiteSpace($st)) {
       Log "无变化，跳过提交"
       Write-Host "no changes"
     } else {
       $msg = "weekly flowus backup - " + $now.ToString("yyyy-MM-dd HH:mm")
-      cmd /c "git commit -m ""$msg"" 2>&1" | Out-Null
+      & git commit -m $msg 2>&1 | Out-Null
       Log "已提交"
-      cmd /c "git push origin main 2>&1" | Out-Null
+      & git push origin main 2>&1 | Out-Null
       if ($LASTEXITCODE -eq 0) {
         Log "已推送 origin（GitHub + Gitee）"
       } else {
         Log ("origin 推送失败 exit=" + $LASTEXITCODE + "，改推 gitee")
-        cmd /c "git push gitee main 2>&1" | Out-Null
+        & git push gitee main 2>&1 | Out-Null
         if ($LASTEXITCODE -eq 0) { Log "已推送 gitee" } else { Log ("gitee 推送失败 exit=" + $LASTEXITCODE) }
       }
     }

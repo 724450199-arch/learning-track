@@ -1,0 +1,51 @@
+name: FlowUs 多多学习中心 每周备份
+
+on:
+  schedule:
+    # 每周日 20:00 北京时间 = 12:00 UTC
+    - cron: '0 12 * * 0'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: flowus-duoduo-backup
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure git
+        run: |
+          git config user.name "FlowUs Backup Bot"
+          git config user.email "bot@learning-track"
+
+      - name: Export FlowUs page and commit
+        shell: pwsh
+        env:
+          FLOWUS_TOKEN: ${{ secrets.FLOWUS_TOKEN }}
+        run: |
+          pwsh -NoProfile -ExecutionPolicy Bypass -File ./kids_edu/backup_flowus_duoduo.ps1 -Push
+          if ($LASTEXITCODE -ne 0) { throw "备份脚本返回 $LASTEXITCODE" }
+
+      - name: Push to Gitee
+        if: always()
+        shell: pwsh
+        env:
+          GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:GITEE_TOKEN)) {
+            Write-Host "没有 GITEE_TOKEN，跳过 Gitee 同步"
+            exit 0
+          }
+          git remote remove gitee 2>$null
+          git remote add gitee "https://oauth2:$($env:GITEE_TOKEN)@gitee.com/yql8981229/learning-track.git"
+          git push gitee "HEAD:main"
