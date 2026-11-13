@@ -158,24 +158,30 @@ Log ("导出完成: " + $OutFile + "  " + $text.Length + " 字符")
 
 if ($Push) {
   Push-Location $repo
+  $prevEap = $ErrorActionPreference
+  $ErrorActionPreference = "Continue"   # git 往 stderr 写进度，Stop 模式下会被当成异常
+  $env:GIT_TERMINAL_PROMPT = "0"
   try {
-    git add -- "kids_edu/多多学习中心.md"
-    $st = git status --porcelain -- "kids_edu/多多学习中心.md"
+    cmd /c "git add -- ""kids_edu/多多学习中心.md"" 2>&1" | Out-Null
+    $st = (cmd /c "git status --porcelain -- ""kids_edu/多多学习中心.md"" 2>&1") -join ""
     if ([string]::IsNullOrWhiteSpace($st)) {
       Log "无变化，跳过提交"
       Write-Host "no changes"
     } else {
-      git commit -m ("weekly flowus backup - " + $now.ToString("yyyy-MM-dd HH:mm")) | Out-Null
+      $msg = "weekly flowus backup - " + $now.ToString("yyyy-MM-dd HH:mm")
+      cmd /c "git commit -m ""$msg"" 2>&1" | Out-Null
       Log "已提交"
-      $p1 = git push origin main 2>&1
-      if ($LASTEXITCODE -eq 0) { Log "已推送 origin（GitHub + Gitee）" }
-      else {
-        Log ("origin 推送失败: " + ($p1 -join " "))
-        $p2 = git push gitee main 2>&1
-        if ($LASTEXITCODE -eq 0) { Log "已推送 gitee" } else { Log ("gitee 推送失败: " + ($p2 -join " ")) }
+      cmd /c "git push origin main 2>&1" | Out-Null
+      if ($LASTEXITCODE -eq 0) {
+        Log "已推送 origin（GitHub + Gitee）"
+      } else {
+        Log ("origin 推送失败 exit=" + $LASTEXITCODE + "，改推 gitee")
+        cmd /c "git push gitee main 2>&1" | Out-Null
+        if ($LASTEXITCODE -eq 0) { Log "已推送 gitee" } else { Log ("gitee 推送失败 exit=" + $LASTEXITCODE) }
       }
     }
   } finally {
+    $ErrorActionPreference = $prevEap
     Pop-Location
   }
 }
