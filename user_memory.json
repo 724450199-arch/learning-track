@@ -1,253 +1,331 @@
 {
-  "user_profile": {
-    "os_username": "yang",
-    "git_email": "724450199@QQ",
-    "github_username": "724450199-arch",
-    "github_repo": "learning-track (PowerShell, 2026-08-02更新)",
-    "profession": "药学专业，担任药学主任，985研究生出身；考虑给孩子日常普及药学知识（2mm，2026-08-31添加）"
-  },
-  "gitee_username": "yql8981229",
-  "gitee_repo": "https://gitee.com/yql8981229/learning-track.git",
-  "gitee_note": "E:\\learning-track 已配置 gitee remote；用户要求代码改动后实时同步到 Gitee（每次修改提交后 push 到 gitee 分支）",
-  "flowus": {
-    "base_url": "https://mcp.flowus.cn/v2",
-    "page_duoduo": "b80cd768-6ef5-4da6-a257-e2afe8d388ac",
-    "page_xiaoming": "8169ce9a-efd8-47bd-b671-2d0b8fa4c6e6",
-    "token_source": "位于 learning-track 仓库 upload_to_flowus.ps1 中（token 本身不写入此文件）",
-    "note": "朵朵和小明两个页面，疑似孩子英语学习相关"
-  },
-  "kids": {
-    "note": "用户(yang)的两个儿子；设计姓名牌/作业/学习材料时用到",
-    "yangmingze": {
-      "name": "杨明泽",
-      "nickname": "多多（FlowUs 页面名为『朵朵』，系写错）",
-      "gender": "男生",
-      "grade": "小学一年级（2026年开学）",
-      "added": "2026-08-14",
-      "first_grade_modules": "计划为多多制作并同步到息流(FlowUs)的两个一年级模块：1)课堂练习错题部分；2)浅奥错题",
-      "flowus_databases": {
-        "note": "已建好两个错题数据库（挂在多多页面 b80cd768 下，2026-08-14）",
-        "class_mistakes": {
-          "id": "b072234a-0207-418c-bdd0-b19ec19b4e98",
-          "url": "https://flowus.cn/b072234a-0207-418c-bdd0-b19ec19b4e98",
-          "title": "课堂练习错题",
-          "props": ["题目(title)", "日期(date)", "学科(select)", "错因分析(select)", "掌握情况(select)", "订正与备注(rich_text)"]
-        },
-        "ao_mistakes": {
-          "id": "da6af8d0-4aeb-43d2-b914-c338035f05de",
-          "url": "https://flowus.cn/da6af8d0-4aeb-43d2-b914-c338035f05de",
-          "title": "浅奥错题",
-          "props": ["题目(title)", "日期(date)", "专题(select)", "错因(select)", "掌握情况(select)", "思路与订正(rich_text)"]
-        }
-      },
-      "record_mistake_tool": {
-        "note": "错题拍照转文字录入息流工具，位于 E:\\learning-track\\record_mistake.ps1（已推Gitee），2026-08-31",
-        "usage": "拖图或 -Image 路径 -> Agnes AI 视觉识别(agnes-2.0-flash，算式/应用题更准) 失败则 Windows OCR 兜底 -> 确认/编辑 -> 写入错题数据库；-Db class(课堂练习)/ao(浅奥) 或交互选择",
-        "tech": "识别优先用 Agnes AI 视觉(OpenAI兼容多模态，max_tokens≥1024把答案写入content)；息流空间存储已满(约2.4GB>200MB配额)无法传图，故改用转文字记录方案；已实测验证 Agnes 能读出一年级算式(12+8=20)并生成完整中文句子"
-      }
-    },
-    "yangmingming": {
-      "name": "杨明铭",
-      "nickname": "小明",
-      "gender": "男生",
-      "note": "FlowUs 页面『小明』对应他",
-      "added": "2026-08-14"
-    }
-  },
-  "learning_track": {
-    "purpose": "英语学习自动化脚本仓库，含 daily_learning.ps1、daily_news.ps1、generate_docx.ps1 等，可生成练习题、打印材料并上传 FlowUs"
-  },
-  "gold_operation": {
-    "script": "E:\\learning-track\\daily_news.ps1",
-    "purpose": "每日金银持仓简报+操作建议（用户称之为『黄金操作』）",
-    "details": "抓取黄金(GC=F)/白银(SI=F)/美元指数(DX-Y.NYB)行情，计算金银比，生成中金黄金(600489)和兴业银锡(000426)操作建议，含支撑/阻力位（金4000/3950/4150/4200，银19.0/18.5/20.5/21.5）",
-    "trigger": "用户问起黄金操作/金银简报/操作建议时想到此脚本",
-    "params": "-SendKey 可选推送key"
-  },
-  "proxy": {
-    "clash_port": 7897,
-    "client": "Clash Verge Rev（verge-mihomo 核心，配置目录 C:\\Users\\yang\\AppData\\Roaming\\io.github.clash-verge-rev.clash-verge-rev，当前 profile Rg4nlWjPsq3a=三毛机场订阅）",
-    "rules_setup_2026_10_22": "profiles\\Merge.yaml 已加 prepend-rules 分流：opencode.ai/opencodeusercontent.com/deepseek.com/agnes-ai.com→DIRECT；openai.com/chatgpt.com/oai.com/oaistatic.com/oaipixel.com→三毛机场代理",
-    "system_proxy_settings": "ProxyEnable=1，ProxyServer=127.0.0.1:7897（2026-10-22 已由注册表直接开启；注意 verge.yaml 里 enable_system_proxy:false，界面开关是关的，若失效需去 Verge 界面打开保持持久）",
-    "usage_rule": "用户要求：下次需要联网抓取被墙数据（如 Yahoo 行情）时，自动打开系统代理。",
-    "helper": "E:\\learning-track\\proxy_helper.ps1 (on/off/status)",
-    "status": "2026-10-22 系统代理开启，分流规则生效；ChatGPT经代理通，DeepSeek直连0.15s",
-    "split_2026_10_29": {
-      "goal": "平时 opencode 走本地网络，只在用到 OpenAI 时才走 VPN（自动分流，无需手动开关）",
-      "key_finding": "opencode 是 bun 运行时，只认 https_proxy/http_proxy/no_proxy 环境变量，完全不读 Windows 系统代理（已在 app.asar 中确认 HttpsProxyAgent + applyNoProxyOption 逻辑）",
-      "setup": "用户级环境变量 HTTPS_PROXY/HTTP_PROXY=http://127.0.0.1:7897，NO_PROXY=127.0.0.1,localhost,::1,opencode.ai,opencodeusercontent.com,deepseek.com,agnes-ai.com,models.dev,gitee.com",
-      "effect": "opencode 自家域名被 NO_PROXY 绕过=真正本地直连；OpenAI 请求进 Clash，经 Merge.yaml 规则走三毛机场；浏览器等其它软件因系统代理关闭仍走本地",
-      "system_proxy": "ProxyEnable=0（保持关闭，只有 ChatGPT 网页需要时用 proxy_helper.ps1 on）",
-      "clash_rule_chain": "runtime clash-verge.yaml 已确认含 9 条 prepend-rules；末尾 RULE-SET,cn_ip,DIRECT 再 MATCH→三毛机场",
-      "env_takes_effect": "改环境变量后需重启 opencode 桌面端才生效",
-      "helper_actions": "proxy_helper.ps1 on/off（系统代理，给浏览器）/ env-on/env-off（opencode 等 CLI 的代理变量）/ status"
-    }
-  },
-  "wechat_push": {
-    "method": "Server酱(方糖)推送，通过 GitHub Actions (daily-news.yml) 每天 08:00 定时执行",
-    "sendkey_source": "GitHub 仓库 secret SENDKEY（本地无 sendkey.txt）",
-    "trigger_script": "E:\\learning-track\\trigger_news.ps1（本地触发 GitHub Actions workflow_dispatch）",
-    "github_actions_runs": "run #56 已验证含黄金操作推送成功",
-    "timing_note": "GitHub Actions schedule 不保证准点：cron 为 0 0 * * *（北京08:00），但近10次实际触发约北京09:44-10:03（延迟1.5-2h）。用户曾要求准时8点，2026-08-05确认仍用 GitHub Actions 方案、接受实际延迟",
-    "note": "方案B备选：把 SendKey 存本地 sendkey.txt 后本地运行 daily_news.ps1 也可推送（未实施，用户暂选 GitHub Actions 方案）"
-  },
-  "skills_user_has": {
-    "agnes_ai": {
-      "script": "learning-track/agnes_ai.ps1",
-      "purpose": "Agnes AI 是 Agent AI 系统/平台(https://agnes-ai.com)，画图/视频只是其众多功能之一",
-      "api_base": "https://apihub.agnes-ai.com/v1",
-      "models": ["agnes-image-2.0-flash (文生图)", "agnes-video-v2.0 (文生视频/图生视频)", "agnes-2.0-flash (chat/推理，OpenAI兼容，支持图片多模态输入)"],
-      "vision_capable": "已验证(2026-08-31)：agnes-2.0-flash 经 /v1/chat/completions 的 content 数组[text+image_url(data:image/png;base64)] 成功识别图片算式(如 12+8=20)；返回带 reasoning_content 字段，需调大 max_tokens(如1024) 让答案写入 content(text_tokens>0)；image_tokens 证明图片已编码传入。中文乱码为控制台编码/测试图渲染差所致，真实照片效果更好",
-      "usage": "Invoke-AgnesImage -Prompt \"描述\" -Size 1024x1024 -OutputFile xxx.png ; Invoke-AgnesVideo -Prompt \"描述\" -Width 1152 -Height 768 -NumFrames 121 -FrameRate 24 [-InputImage url] -OutputFile xxx.mp4",
-      "api_key_location": "~/.agnes/api_key (已配置) 或环境变量 AGNES_API_KEY",
-      "note": "用户要求记住此技能并会使用；用户问到画画/生图/生视频时优先想到它"
-    },
-    "generate_svg": {
-      "script": "learning-track/generate_svg.ps1",
-      "purpose": "生成 SVG 矢量图"
-    }
-  },
-  "desktop_protection": {
-    "purpose": "桌面文件保护/删除自动恢复",
-    "startup": "C:\\Users\\yang\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\protect_desktop.bat",
-    "script": "E:\\learning-track\\protect_desktop.ps1（每秒监控桌面，删除时自动从备份恢复）",
-    "utils": "E:\\learning-track\\desktop_utils.ps1（含备份目录、Backup-File/Restore-File 等）",
-    "status": "2026-08-05 用户要求已删除看门狗程序（protect_desktop.ps1、desktop_utils.ps1 已删除，开机启动项已删），永久禁用不再恢复；send_to_desktop.ps1 保留（独立工具）"
-  },
-  "opencode_deepseek_api": {
-    "status": "2026-08-13 已配置到 ~/.config/opencode/opencode.jsonc（model=deepseek/deepseek-chat），但 API 返回 402 余额不足，待用户充值后重启 opencode 生效",
-    "key_location": "~/.config/opencode/opencode.jsonc 的 provider.deepseek.options.apiKey（key 本身不写入记忆文件）"
-  },
-  "pharmacy_education": {
-    "note": "用户为药学主任/985研究生，要给两个孩子普及药学知识；在息流建了独立『药学启蒙』页面，2026-08-31",
-    "page_id": "7753269a-6e98-4d55-a016-b49e8517d91d",
-    "url": "https://flowus.cn/7753269a-6e98-4d55-a016-b49e8517d91d",
-    "build_script": "E:\\learning-track\\build_pharmacy_page.ps1（已推Gitee，UTF-8 BOM）",
-    "content": "三部分：一、小明4岁（安全/生活+每周计划）；二、多多6岁（科学思维/简单化学+小实验+每两周计划）；三、亲子问答卡+用药数学应用题",
-    "flowus_utf8_lesson": "【关键坑】PowerShell 5.1 的 Invoke-RestMethod -Body string 按 ASCII 编码发送，中文/emoji 全变'?'；必须用 [Text.Encoding]::UTF8.GetBytes($json) 做 Body 发送，且 .ps1 脚本需存为 UTF-8 BOM 才能被 PS5.1 正确解析中文；响应读取也用原始字节+UTF8 解码，控制台显示乱码不代表实际写入乱码（用 unicode 码点/写UTF8文件验证）。FlowUs 页面 title 属性需包一层 type='title'（properties.title = {type:'title'; title=[...]}），漏了会 title 为空"
-  },
-  "storyfun1": {
-    "note": "Storyfun 1 学生用书（YLE Starters 备考，第二版 Karen Saxby，2017 ISBN 9781316617014）扫描PDF整册提取+OCR+教案，多多的英语启蒙材料",
-    "src_pdf": "E:\\临时文件\\story fun\\182_1- Storyfun 1. Student's book_Saxby Karen_2017 -80p .pdf（82页全扫描无文本层，每页1张1568x2215 JPEG）",
-    "imgs": "C:\\Users\\yang\\AppData\\Local\\Temp\\opencode\\storyfun_imgs\\page_001~082.jpg（顺序与页码一致）",
-    "ocr": "C:\\Users\\yang\\AppData\\Local\\Temp\\opencode\\storyfun_ocr\\page_001~082.txt（Windows.Media.Ocr，仅zh-Hans-CN引擎，英文有噪音但可用）",
-    "json": "C:\\Users\\yang\\AppData\\Local\\Temp\\opencode\\storyfun1.json（135KB，pages=82 title正确）",
-    "full_text": "C:\\Users\\yang\\AppData\\Local\\Temp\\opencode\\storyfun_full.txt",
-    "lesson_plan_md": "E:\\临时文件\\story fun\\Storyfun1_教案.md（8单元同构：单元地图→词汇分层→核心单词(10个带音标)→重点句型→Day1-3教案，另含复习板块ABC+家长12周计划；U7首词已修正为badminton）",
-    "lesson_plan_docx": "E:\\临时文件\\story fun\\Storyfun1_教案.docx（pandoc转）",
-    "lesson_plan_pdf": "E:\\临时文件\\story fun\\Storyfun1_教案.pdf（Chrome headless --print-to-pdf转）",
-    "flowus_page": {
-      "id": "43d44d69-0129-4074-9a82-5e213273b894",
-      "url": "https://flowus.cn/43d44d69-0129-4074-9a82-5e213273b894",
-      "title": "Storyfun 1 · 单元教案全集（YLE Starters 备考）",
-      "icon": "📚",
-      "parent": "workspace顶部（不与孩子页面挂靠），600块已全量写入并验证（8个Unit标题完整）"
-    },
-    "hints": {
-      "pandoc_path": "C:\\Users\\yang\\AppData\\Local\\Pandoc\\pandoc.exe（winget装的不进PATH，需全路径）",
-      "wps_not_found": "有WPS但全盘/快捷方式未找到 wps.exe（Kingsoft office6下仅wpscloudsvr.exe），导出走pandoc+Chrome headless方案已够用",
-      "flowus_api_base": "https://api.flowus.cn/v2（upload_to_flowus.ps1 里的 mcp.flowus.cn/v2 已404废弃）",
-      "flowus_workspace_page": "API支持 parent={type:'workspace'} 在息流顶层建页（不需要父页面ID）",
-      "flowus_paging": "children 分页字段是 next_cursor（不是page_cursor），start_cursor 传next_cursor值",
-      "ps_ascii_scripts": "PS5.1跑含中文字面量的.ps1会ANSI乱码→脚本纯ASCII，中文从UTF-8-only外部文件读入（WriteAllText with UTF8Encoding($false)），JSON body用 [Text.Encoding]::UTF8.GetBytes 发送"
-    }
-  },
-  "hisuite": {
-    "status": "2026-09-21 已安装并启动成功（Windows 版 V14.0.0.380，适配 HarmonyOS 4.3 及以下/EMUI；HarmonyOS 5+ 需 V16.0.0.130 版）",
-    "installer_dl": "C:\\Users\\yang\\AppData\\Local\\Temp\\opencode\\HiSuite_v14.exe（官方直链 consumer-tkb.huawei.com/weknow/servlet/download/public?contextNo=W00018217，NSIS /S 静默安装，exit 0）",
-    "install_dir": "C:\\Program Files (x86)\\HiSuite（主程序 HiSuite.exe；driver/ 目录含 USB 驱动）",
-    "version_dl_urls": {
-      "harmonyos5_v16": "https://consumer-tkb.huawei.com/weknow/servlet/download/public?contextNo=W00065635（V16.0.0.130）",
-      "harmonyos4_v14": "https://consumer-tkb.huawei.com/weknow/servlet/download/public?contextNo=W00018217（V14.0.0.380）"
-    },
-    "note": "华为手机助手下载链接位于官网 hisuite 页的 a.btn href（JS渲染，dump-dom 可得）；链接带 contextNo=Wxxxx 签名参数"
-  },
-  "math_sort_2026": {
-    "note": "2026-09-26 多多(一年级) 5以内减法排序专项错题集：OCR识别微信图片(趋势·推导页：减号前面不变，减号后面越大得数越小)后出的排序练习题，已建息流页面并同步，另存错题文件",
-    "source_pic": "C:\\Users\\yang\\Documents\\xwechat_files\\yangqinlei_bd98\\temp\\RWTemp\\2026-09\\3b4f7ae10bd4387f516b46c29c5739f4.jpg",
-    "ocr_script": "C:\\Users\\yang\\AppData\\Local\\Temp\\opencode\\ocr_image.ps1（-ImagePath -OutFile，Windows.Media.Ocr zh-Hans-CN）",
-    "exercise_md": "C:\\Users\\yang\\AppData\\Local\\Temp\\opencode\\sort_exercise.md（六大区块：算一算比一比/从大到小排序/减数相同被减数变/混合排序/想一想填一填/自评）",
-    "flowus_page": {
-      "id": "7684d727-0a3d-45e6-8fdc-83f346e1cf34",
-      "url": "https://flowus.cn/7684d727-0a3d-45e6-8fdc-83f346e1cf34",
-      "title": "5以内减法 · 排序专项练习（错题）",
-      "icon": "🔢",
-      "parent": "多多页面 b80cd768 下新建子页，32块写入成功已验证"
-    },
-    "reusable_script": "C:\\Users\\yang\\AppData\\Local\\Temp\\opencode\\flowus_push_child.ps1（-ParentPage -TitleFile -IconFile -ContentFile；md转块批量PATCH，UTF-8安全，可复用于在某个父页面下新建内容页）"
-  },
-  "memory_backup": {
-    "note": "2026-10-21 起 user_memory.json 备份到 learning-track 仓库根目录，每次更新记忆后 commit+push 同步",
-    "repo": "E:\\learning-track（gitee 已确认 private=True；gitee 默认分支 main；本地分支 main）",
-    "quirks": "origin 的 push URL 被改成 gitee（fetch 仍指 github）；gh 与 opencode CLI 不在 PATH；推 gitee 用 git push gitee HEAD:main"
-  },
-  "image_gen": {
-    "status": "added_2026_10_22",
-    "provider": "openai",
-    "agent": {"name": "painter", "model": "openai/gpt-image-1", "file": "~/.config/opencode/agent/painter.md"},
-    "models": ["gpt-image-1", "gpt-4o-image"],
-    "note": "OpenAI key 已留 placeholder，待用户填入 ~/.config/opencode/opencode.jsonc 后重启 opencode 生效；ChatGPT/OpenAI 已走 Clash 代理"
-  },
-  "multi_agent": {
-    "note": "2026-10-22 已落地方案A：opencode 原生多 subagent",
-    "status": "deployed",
-    "provider": {
-      "agnes": {
-        "npm": "@ai-sdk/openai-compatible",
-        "baseURL": "https://apihub.agnes-ai.com/v1",
-        "models": ["agnes-2.0-flash"],
-        "config_file": "~/.config/opencode/opencode.jsonc"
-      }
-    },
-    "agents": {
-      "orchestrator": {"mode": "primary", "model": "opencode/deepseek-v4.1-flash-free", "file": "~/.config/opencode/agent/orchestrator.md", "role": "主控拆解/派单/汇总"},
-      "planner": {"mode": "subagent", "model": "opencode/deepseek-v4.1-flash-free", "file": "~/.config/opencode/agent/planner.md", "permission_edit": "deny"},
-      "worker": {"mode": "subagent", "model": "opencode/deepseek-v4.1-flash-free", "file": "~/.config/opencode/agent/worker.md", "permission_edit": "allow"},
-      "reader": {"mode": "subagent", "model": "agnes/agnes-2.0-flash", "file": "~/.config/opencode/agent/reader.md", "permission_edit": "deny", "role": "图片/错题识别（算式更准）"},
-      "reviewer": {"mode": "subagent", "model": "opencode/deepseek-v4.1-flash-free", "file": "~/.config/opencode/agent/reviewer.md", "permission_edit": "deny"}
-    },
-    "rules": "读图一律派 reader；worker+reviewer 流程；子 agent 只传必要上下文；超简单任务不分工；失败按需要返工"
-  },
-  "gout_edu": {
-    "note": "2026-10-29 痛风科普项目：把 docx 原文改写成通俗版，并产出漫画+长图两种科普作品",
-    "dir": "E:\\临时文件\\痛风科普",
-    "src": "E:\\临时文件\\痛风科普文案.docx（原文偏恐吓式、术语多）",
-    "outputs": ["痛风科普_通俗版.md/.docx", "痛风科普_长图.png（2160x7817）+_手机版（1080）", "痛风科普_漫画.png（2160x14779）+_手机版（1080）", "panels/p1~p6.png（6格插画原图）", "长图.html / 漫画.html（源文件，改文字后重渲染即可）"],
-    "pipeline": "AI 只画插画（无文字），中文全部用 HTML 叠加，再用 Chrome headless 截图 + 自动裁掉底部空白 → 高清长图",
-    "scripts": {
-      "render": "C:\\Users\\yang\\AppData\\Local\\Temp\\opencode\\render_html.ps1（-HtmlPath -OutPath -Width -MaxHeight -Scale；用 System.Drawing 扫描最后一行非背景色自动裁剪）",
-      "gen_comic": "C:\\Users\\yang\\AppData\\Local\\Temp\\opencode\\gen_gout_comic.ps1（批量生图+下载）"
-    },
-    "lessons": [
-      "Agnes 生图返回的 CDN platform-outputs.agnes-ai.space 直连超时，必须 -Proxy http://127.0.0.1:7897 下载（apihub 本身直连没问题）",
-      "中文文字绝不能让生图模型画，会乱码；插画只画场景，文字用 HTML/CSS 排版",
-      "Agnes 免费额度会触发 rate limit（reader 子 agent 报 API rate limit），视觉复核可改用 opencode/nemotron-3.5-super-vl-free",
-      "人物一致性靠固定 style 前缀 + 同一主角描述（短黑发中国男性）",
-      "PS 5.1 下 Chrome headless 的 stderr 会触发 NativeCommandError，需临时 ErrorActionPreference=Continue；脚本里不要用 $args 变量名"
-    ]
-  },
-  "newyear_coloring": {
-    "note": "2026-10-30 元旦主题『旦愿有光』A4 儿童涂色画报（一年级男孩向）",
-    "dir": "E:\\临时文件\\元旦涂色画报",
-    "outputs": ["旦愿有光_元旦A4涂色画报_横版.png（3508x2480 = A4 横版 300dpi，最终版，纯黑白 0 彩色像素）", "旦愿有光_A4涂色画报.png（2480x3508 竖版，早期版本，已弃用）", "涂色画报_横版.html / 涂色画报.html（源文件）", "art.png（横版插画线稿 2030x2030，已裁掉 AI 自带 9px 黑框）、line_art.png（竖版插画 2048x3072）"],
-    "design": "横版两栏、无外框：左栏中心 x=330 =2027(y240) + 「旦」愿/有光（160px 实心黑，letter-spacing 6）+ 元旦快乐鱼尾横幅(y760-868) + 1月1日日历卡(translate 154,912)；右栏 art.png left660/top30 1070x1180 object-fit:contain。用户明确要求：旦字加「」引号、去掉外圈黑框",
-    "pipeline": "AI 只画黑白线稿（coloring book 风格，无文字）→ HTML/SVG 叠加空心标题『旦愿有光』+ 圆角外框 + 分隔线 → Chrome headless 定尺截图 2480x3508",
-    "scripts": {
-      "gen_lineart": "C:\\Users\\yang\\AppData\\Local\\Temp\\opencode\\gen_newyear_lineart.ps1（-OutFile -Size -Proxy，Agnes 生图+代理下载）",
-      "render_a4": "C:\\Users\\yang\\AppData\\Local\\Temp\\opencode\\render_a4.ps1（-HtmlPath -OutPath -Width 1240 -Height 1754 -Scale 2，不裁剪、补白到精确像素）"
-    },
-    "lessons": [
-      "Agnes 图片尺寸：请求 1024x1536 实际返回 832x1248；请求 2048x3072 返回真实 2048x3072（要高清就直接要 2048x3072）",
-      "CSS -webkit-text-stroke 做空心字会在『愿/有』这类多部件汉字内部出现杂乱交叉线（轮廓重叠处描边外露）",
-      "空心字正确做法：SVG 里画两遍同一 <text>，底层 fill=#000 + feMorphology dilate 半径≈9 扩张成实心块，上层 fill=#fff 覆盖字内 → 得到粗细均匀、无内部杂线的空心字",
-      "但空心字对「旦/日/目」「愿」这类字仍会因双线造成误读（视觉模型实测把旦读成目、把愿读成元），标题建议直接用实心黑字，涂色乐趣交给插画",
-      "A4 300dpi = 2480x3508；横版 = 3508x2480；逻辑尺寸 1240x1754 / 1754x1240 + Scale 2 精确得到",
-      "Chrome 文字有次像素抗锯齿会留少量彩色像素，render_a4.ps1 加 -Gray 开关用 ColorMatrix 转灰度，保证纯黑白可打印",
-      "AI 生成的 coloring book page 会在图片最外圈画一圈 5px 黑色矩形边框（不是页面 CSS 画的），嵌入画报前必须裁掉，实测裁 9px 边距（2048→2030）后边缘变纯白自然融入",
-      "SVG 里给汉字加「」角引号：用 tspan 缩小到 0.62em + dy=-0.26em（相对缩小后的字号），后续 tspan dy 回 +0.26em；0.5em 偏小像装饰点",
-      "文字用 text-anchor=middle 定在栏中心，比手算 x 更稳"
-    ]
-  },
-  "last_session_summary": "2026-10-30 会话：①痛风科普收尾——漫画 6 格 + 长图全部加上右下角小标签『AI 生成合成』（漫画 6 处、长图关节插图 1 处），已重渲染高清版与手机版并经视觉模型确认文字正确、不挡主体。②新任务：元旦主题『旦愿有光』A4 涂色画报（一年级男孩向）——Agnes 生成黑白线稿（2048x3072，9/10），HTML+SVG 叠加空心标题/外框/分隔线，Chrome 定尺输出 2480x3508 300dpi，终检 8.5/10 可直接打印；成果在 E:\\临时文件\\元旦涂色画报。学到：-webkit-text-stroke 做空心字会露内部杂线，改用 SVG 双层 text + feMorphology dilate 解决。",
-  "secrets_never_save": ["FlowUs token、Agnes API key 等敏感信息一律不写入记忆文件，如需使用从 ~/.agnes/api_key 或仓库脚本读取"]
+    "user_profile":  {
+                         "os_username":  "yang",
+                         "git_email":  "724450199@QQ",
+                         "github_username":  "724450199-arch",
+                         "github_repo":  "learning-track (PowerShell, 2026-08-02更新)",
+                         "profession":  "药学专业，担任药学主任，985研究生出身；考虑给孩子日常普及药学知识（2mm，2026-08-31添加）"
+                     },
+    "gitee_username":  "yql8981229",
+    "gitee_repo":  "https://gitee.com/yql8981229/learning-track.git",
+    "gitee_note":  "E:\\learning-track 已配置 gitee remote；用户要求代码改动后实时同步到 Gitee（每次修改提交后 push 到 gitee 分支）",
+    "flowus":  {
+                   "base_url":  "https://api.flowus.cn/v2 (REST)",
+                   "page_duoduo":  "b80cd768-6ef5-4da6-a257-e2afe8d388ac",
+                   "page_xiaoming":  "8169ce9a-efd8-47bd-b671-2d0b8fa4c6e6",
+                   "token_source":  "E:\\learning-track\\upload_to_flowus.ps1",
+                   "note":  "朵朵和小明两个页面，疑似孩子英语学习相关",
+                   "mcp":  {
+                               "endpoint":  "https://mcp.flowus.cn/message (Streamable HTTP MCP)",
+                               "auth":  "Authorization: Bearer \u003ctoken\u003e（与 upload_to_flowus.ps1 里的 token 相同），Accept: application/json, text/event-stream",
+                               "handshake":  "先 POST initialize 取响应头 Mcp-Session-Id，再 POST notifications/initialized，之后才能 tools/call",
+                               "tool_count":  35,
+                               "key_tools":  "flowus_create_file_upload / flowus_append_block_children / flowus_append_hosted_file / flowus_get_block_children / flowus_query_database / flowus_update_page / flowus_help",
+                               "upload_flow":  "1) flowus_create_file_upload{filename,content_type,content_length,parent_page_id} 返回 method+upload_url+headers+oss_name+size；2) 用返回的 method/upload_url/headers PUT 原始字节；3) flowus_append_block_children 建 type=image 块，body.children[0].image.file={oss_name,size}",
+                               "avoid":  "别用 flowus_append_hosted_file，它建的是 file 卡片块（图片会重复显示一张带文件名的），删除只能走 REST",
+                               "delete_block":  "DELETE https://api.flowus.cn/v2/blocks/{block_id} 配同一 Bearer token 返回 in_trash=true；MCP 工具禁止删除（forbiddenDeletion）",
+                               "cdn_check":  "图片地址 cdn2.flowus.cn/oss/... 直接 GET 会 403，需带 Referer https://flowus.cn/ 和浏览器 UA",
+                               "script":  "C:\\Users\\yang\\AppData\\Local\\Temp\\opencode\\mcp_call.ps1（-Method tools/call -ParamsFile params.json -OutFile out.json）"
+                           }
+               },
+    "kids":  {
+                 "note":  "用户(yang)的两个儿子；设计姓名牌/作业/学习材料时用到",
+                 "yangmingze":  {
+                                    "name":  "杨明泽",
+                                    "nickname":  "多多（FlowUs 页面名为『朵朵』，系写错）",
+                                    "gender":  "男生",
+                                    "grade":  "小学一年级（2026年开学）",
+                                    "added":  "2026-08-14",
+                                    "first_grade_modules":  "计划为多多制作并同步到息流(FlowUs)的两个一年级模块：1)课堂练习错题部分；2)浅奥错题",
+                                    "flowus_databases":  {
+                                                             "note":  "已建好两个错题数据库（挂在多多页面 b80cd768 下，2026-08-14）",
+                                                             "class_mistakes":  {
+                                                                                    "id":  "b072234a-0207-418c-bdd0-b19ec19b4e98",
+                                                                                    "url":  "https://flowus.cn/b072234a-0207-418c-bdd0-b19ec19b4e98",
+                                                                                    "title":  "课堂练习错题",
+                                                                                    "props":  [
+                                                                                                  "题目(title)",
+                                                                                                  "日期(date)",
+                                                                                                  "学科(select)",
+                                                                                                  "错因分析(select)",
+                                                                                                  "掌握情况(select)",
+                                                                                                  "订正与备注(rich_text)"
+                                                                                              ]
+                                                                                },
+                                                             "ao_mistakes":  {
+                                                                                 "id":  "da6af8d0-4aeb-43d2-b914-c338035f05de",
+                                                                                 "url":  "https://flowus.cn/da6af8d0-4aeb-43d2-b914-c338035f05de",
+                                                                                 "title":  "浅奥错题",
+                                                                                 "props":  [
+                                                                                               "题目(title)",
+                                                                                               "日期(date)",
+                                                                                               "专题(select)",
+                                                                                               "错因(select)",
+                                                                                               "掌握情况(select)",
+                                                                                               "思路与订正(rich_text)"
+                                                                                           ]
+                                                                             }
+                                                         },
+                                    "record_mistake_tool":  {
+                                                                "note":  "错题拍照转文字录入息流工具，位于 E:\\learning-track\\record_mistake.ps1（已推Gitee），2026-08-31",
+                                                                "usage":  "拖图或 -Image 路径 -\u003e Agnes AI 视觉识别(agnes-2.0-flash，算式/应用题更准) 失败则 Windows OCR 兜底 -\u003e 确认/编辑 -\u003e 写入错题数据库；-Db class(课堂练习)/ao(浅奥) 或交互选择",
+                                                                "tech":  "识别优先用 Agnes AI 视觉(OpenAI兼容多模态，max_tokens≥1024把答案写入content)；息流空间存储已满(约2.4GB\u003e200MB配额)无法传图，故改用转文字记录方案；已实测验证 Agnes 能读出一年级算式(12+8=20)并生成完整中文句子"
+                                                            }
+                                },
+                 "yangmingming":  {
+                                      "name":  "杨明铭",
+                                      "nickname":  "小明",
+                                      "gender":  "男生",
+                                      "note":  "FlowUs 页面『小明』对应他",
+                                      "added":  "2026-08-14"
+                                  }
+             },
+    "learning_track":  {
+                           "purpose":  "英语学习自动化脚本仓库，含 daily_learning.ps1、daily_news.ps1、generate_docx.ps1 等，可生成练习题、打印材料并上传 FlowUs"
+                       },
+    "gold_operation":  {
+                           "script":  "E:\\learning-track\\daily_news.ps1",
+                           "purpose":  "每日金银持仓简报+操作建议（用户称之为『黄金操作』）",
+                           "details":  "抓取黄金(GC=F)/白银(SI=F)/美元指数(DX-Y.NYB)行情，计算金银比，生成中金黄金(600489)和兴业银锡(000426)操作建议，含支撑/阻力位（金4000/3950/4150/4200，银19.0/18.5/20.5/21.5）",
+                           "trigger":  "用户问起黄金操作/金银简报/操作建议时想到此脚本",
+                           "params":  "-SendKey 可选推送key"
+                       },
+    "proxy":  {
+                  "clash_port":  7897,
+                  "client":  "Clash Verge Rev（verge-mihomo 核心，配置目录 C:\\Users\\yang\\AppData\\Roaming\\io.github.clash-verge-rev.clash-verge-rev，当前 profile Rg4nlWjPsq3a=三毛机场订阅）",
+                  "rules_setup_2026_10_22":  "profiles\\Merge.yaml 已加 prepend-rules 分流：opencode.ai/opencodeusercontent.com/deepseek.com/agnes-ai.com→DIRECT；openai.com/chatgpt.com/oai.com/oaistatic.com/oaipixel.com→三毛机场代理",
+                  "system_proxy_settings":  "ProxyEnable=1，ProxyServer=127.0.0.1:7897（2026-10-22 已由注册表直接开启；注意 verge.yaml 里 enable_system_proxy:false，界面开关是关的，若失效需去 Verge 界面打开保持持久）",
+                  "usage_rule":  "用户要求：下次需要联网抓取被墙数据（如 Yahoo 行情）时，自动打开系统代理。",
+                  "helper":  "E:\\learning-track\\proxy_helper.ps1 (on/off/status)",
+                  "status":  "2026-10-22 系统代理开启，分流规则生效；ChatGPT经代理通，DeepSeek直连0.15s",
+                  "split_2026_10_29":  {
+                                           "goal":  "平时 opencode 走本地网络，只在用到 OpenAI 时才走 VPN（自动分流，无需手动开关）",
+                                           "key_finding":  "opencode 是 bun 运行时，只认 https_proxy/http_proxy/no_proxy 环境变量，完全不读 Windows 系统代理（已在 app.asar 中确认 HttpsProxyAgent + applyNoProxyOption 逻辑）",
+                                           "setup":  "用户级环境变量 HTTPS_PROXY/HTTP_PROXY=http://127.0.0.1:7897，NO_PROXY=127.0.0.1,localhost,::1,opencode.ai,opencodeusercontent.com,deepseek.com,agnes-ai.com,models.dev,gitee.com",
+                                           "effect":  "opencode 自家域名被 NO_PROXY 绕过=真正本地直连；OpenAI 请求进 Clash，经 Merge.yaml 规则走三毛机场；浏览器等其它软件因系统代理关闭仍走本地",
+                                           "system_proxy":  "ProxyEnable=0（保持关闭，只有 ChatGPT 网页需要时用 proxy_helper.ps1 on）",
+                                           "clash_rule_chain":  "runtime clash-verge.yaml 已确认含 9 条 prepend-rules；末尾 RULE-SET,cn_ip,DIRECT 再 MATCH→三毛机场",
+                                           "env_takes_effect":  "改环境变量后需重启 opencode 桌面端才生效",
+                                           "helper_actions":  "proxy_helper.ps1 on/off（系统代理，给浏览器）/ env-on/env-off（opencode 等 CLI 的代理变量）/ status"
+                                       }
+              },
+    "wechat_push":  {
+                        "method":  "Server酱(方糖)推送，通过 GitHub Actions (daily-news.yml) 每天 08:00 定时执行",
+                        "sendkey_source":  "GitHub 仓库 secret SENDKEY（本地无 sendkey.txt）",
+                        "trigger_script":  "E:\\learning-track\\trigger_news.ps1（本地触发 GitHub Actions workflow_dispatch）",
+                        "github_actions_runs":  "run #56 已验证含黄金操作推送成功",
+                        "timing_note":  "GitHub Actions schedule 不保证准点：cron 为 0 0 * * *（北京08:00），但近10次实际触发约北京09:44-10:03（延迟1.5-2h）。用户曾要求准时8点，2026-08-05确认仍用 GitHub Actions 方案、接受实际延迟",
+                        "note":  "方案B备选：把 SendKey 存本地 sendkey.txt 后本地运行 daily_news.ps1 也可推送（未实施，用户暂选 GitHub Actions 方案）"
+                    },
+    "skills_user_has":  {
+                            "agnes_ai":  {
+                                             "script":  "learning-track/agnes_ai.ps1",
+                                             "purpose":  "Agnes AI 是 Agent AI 系统/平台(https://agnes-ai.com)，画图/视频只是其众多功能之一",
+                                             "api_base":  "https://apihub.agnes-ai.com/v1",
+                                             "models":  [
+                                                            "agnes-image-2.0-flash (文生图)",
+                                                            "agnes-video-v2.0 (文生视频/图生视频)",
+                                                            "agnes-2.0-flash (chat/推理，OpenAI兼容，支持图片多模态输入)"
+                                                        ],
+                                             "vision_capable":  "已验证(2026-08-31)：agnes-2.0-flash 经 /v1/chat/completions 的 content 数组[text+image_url(data:image/png;base64)] 成功识别图片算式(如 12+8=20)；返回带 reasoning_content 字段，需调大 max_tokens(如1024) 让答案写入 content(text_tokens\u003e0)；image_tokens 证明图片已编码传入。中文乱码为控制台编码/测试图渲染差所致，真实照片效果更好",
+                                             "usage":  "Invoke-AgnesImage -Prompt \"描述\" -Size 1024x1024 -OutputFile xxx.png ; Invoke-AgnesVideo -Prompt \"描述\" -Width 1152 -Height 768 -NumFrames 121 -FrameRate 24 [-InputImage url] -OutputFile xxx.mp4",
+                                             "api_key_location":  "~/.agnes/api_key (已配置) 或环境变量 AGNES_API_KEY",
+                                             "note":  "用户要求记住此技能并会使用；用户问到画画/生图/生视频时优先想到它"
+                                         },
+                            "generate_svg":  {
+                                                 "script":  "learning-track/generate_svg.ps1",
+                                                 "purpose":  "生成 SVG 矢量图"
+                                             }
+                        },
+    "desktop_protection":  {
+                               "purpose":  "桌面文件保护/删除自动恢复",
+                               "startup":  "C:\\Users\\yang\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\protect_desktop.bat",
+                               "script":  "E:\\learning-track\\protect_desktop.ps1（每秒监控桌面，删除时自动从备份恢复）",
+                               "utils":  "E:\\learning-track\\desktop_utils.ps1（含备份目录、Backup-File/Restore-File 等）",
+                               "status":  "2026-08-05 用户要求已删除看门狗程序（protect_desktop.ps1、desktop_utils.ps1 已删除，开机启动项已删），永久禁用不再恢复；send_to_desktop.ps1 保留（独立工具）"
+                           },
+    "opencode_deepseek_api":  {
+                                  "status":  "2026-08-13 已配置到 ~/.config/opencode/opencode.jsonc（model=deepseek/deepseek-chat），但 API 返回 402 余额不足，待用户充值后重启 opencode 生效",
+                                  "key_location":  "~/.config/opencode/opencode.jsonc 的 provider.deepseek.options.apiKey（key 本身不写入记忆文件）"
+                              },
+    "pharmacy_education":  {
+                               "note":  "用户为药学主任/985研究生，要给两个孩子普及药学知识；在息流建了独立『药学启蒙』页面，2026-08-31",
+                               "page_id":  "7753269a-6e98-4d55-a016-b49e8517d91d",
+                               "url":  "https://flowus.cn/7753269a-6e98-4d55-a016-b49e8517d91d",
+                               "build_script":  "E:\\learning-track\\build_pharmacy_page.ps1（已推Gitee，UTF-8 BOM）",
+                               "content":  "三部分：一、小明4岁（安全/生活+每周计划）；二、多多6岁（科学思维/简单化学+小实验+每两周计划）；三、亲子问答卡+用药数学应用题",
+                               "flowus_utf8_lesson":  "【关键坑】PowerShell 5.1 的 Invoke-RestMethod -Body string 按 ASCII 编码发送，中文/emoji 全变\u0027?\u0027；必须用 [Text.Encoding]::UTF8.GetBytes($json) 做 Body 发送，且 .ps1 脚本需存为 UTF-8 BOM 才能被 PS5.1 正确解析中文；响应读取也用原始字节+UTF8 解码，控制台显示乱码不代表实际写入乱码（用 unicode 码点/写UTF8文件验证）。FlowUs 页面 title 属性需包一层 type=\u0027title\u0027（properties.title = {type:\u0027title\u0027; title=[...]}），漏了会 title 为空"
+                           },
+    "storyfun1":  {
+                      "note":  "Storyfun 1 学生用书（YLE Starters 备考，第二版 Karen Saxby，2017 ISBN 9781316617014）扫描PDF整册提取+OCR+教案，多多的英语启蒙材料",
+                      "src_pdf":  "E:\\临时文件\\story fun\\182_1- Storyfun 1. Student\u0027s book_Saxby Karen_2017 -80p .pdf（82页全扫描无文本层，每页1张1568x2215 JPEG）",
+                      "imgs":  "C:\\Users\\yang\\AppData\\Local\\Temp\\opencode\\storyfun_imgs\\page_001~082.jpg（顺序与页码一致）",
+                      "ocr":  "C:\\Users\\yang\\AppData\\Local\\Temp\\opencode\\storyfun_ocr\\page_001~082.txt（Windows.Media.Ocr，仅zh-Hans-CN引擎，英文有噪音但可用）",
+                      "json":  "C:\\Users\\yang\\AppData\\Local\\Temp\\opencode\\storyfun1.json（135KB，pages=82 title正确）",
+                      "full_text":  "C:\\Users\\yang\\AppData\\Local\\Temp\\opencode\\storyfun_full.txt",
+                      "lesson_plan_md":  "E:\\临时文件\\story fun\\Storyfun1_教案.md（8单元同构：单元地图→词汇分层→核心单词(10个带音标)→重点句型→Day1-3教案，另含复习板块ABC+家长12周计划；U7首词已修正为badminton）",
+                      "lesson_plan_docx":  "E:\\临时文件\\story fun\\Storyfun1_教案.docx（pandoc转）",
+                      "lesson_plan_pdf":  "E:\\临时文件\\story fun\\Storyfun1_教案.pdf（Chrome headless --print-to-pdf转）",
+                      "flowus_page":  {
+                                          "id":  "43d44d69-0129-4074-9a82-5e213273b894",
+                                          "url":  "https://flowus.cn/43d44d69-0129-4074-9a82-5e213273b894",
+                                          "title":  "Storyfun 1 · 单元教案全集（YLE Starters 备考）",
+                                          "icon":  "📚",
+                                          "parent":  "workspace顶部（不与孩子页面挂靠），600块已全量写入并验证（8个Unit标题完整）"
+                                      },
+                      "hints":  {
+                                    "pandoc_path":  "C:\\Users\\yang\\AppData\\Local\\Pandoc\\pandoc.exe（winget装的不进PATH，需全路径）",
+                                    "wps_not_found":  "有WPS但全盘/快捷方式未找到 wps.exe（Kingsoft office6下仅wpscloudsvr.exe），导出走pandoc+Chrome headless方案已够用",
+                                    "flowus_api_base":  "https://api.flowus.cn/v2（upload_to_flowus.ps1 里的 mcp.flowus.cn/v2 已404废弃）",
+                                    "flowus_workspace_page":  "API支持 parent={type:\u0027workspace\u0027} 在息流顶层建页（不需要父页面ID）",
+                                    "flowus_paging":  "children 分页字段是 next_cursor（不是page_cursor），start_cursor 传next_cursor值",
+                                    "ps_ascii_scripts":  "PS5.1跑含中文字面量的.ps1会ANSI乱码→脚本纯ASCII，中文从UTF-8-only外部文件读入（WriteAllText with UTF8Encoding($false)），JSON body用 [Text.Encoding]::UTF8.GetBytes 发送"
+                                }
+                  },
+    "hisuite":  {
+                    "status":  "2026-09-21 已安装并启动成功（Windows 版 V14.0.0.380，适配 HarmonyOS 4.3 及以下/EMUI；HarmonyOS 5+ 需 V16.0.0.130 版）",
+                    "installer_dl":  "C:\\Users\\yang\\AppData\\Local\\Temp\\opencode\\HiSuite_v14.exe（官方直链 consumer-tkb.huawei.com/weknow/servlet/download/public?contextNo=W00018217，NSIS /S 静默安装，exit 0）",
+                    "install_dir":  "C:\\Program Files (x86)\\HiSuite（主程序 HiSuite.exe；driver/ 目录含 USB 驱动）",
+                    "version_dl_urls":  {
+                                            "harmonyos5_v16":  "https://consumer-tkb.huawei.com/weknow/servlet/download/public?contextNo=W00065635（V16.0.0.130）",
+                                            "harmonyos4_v14":  "https://consumer-tkb.huawei.com/weknow/servlet/download/public?contextNo=W00018217（V14.0.0.380）"
+                                        },
+                    "note":  "华为手机助手下载链接位于官网 hisuite 页的 a.btn href（JS渲染，dump-dom 可得）；链接带 contextNo=Wxxxx 签名参数"
+                },
+    "math_sort_2026":  {
+                           "note":  "2026-09-26 多多(一年级) 5以内减法排序专项错题集：OCR识别微信图片(趋势·推导页：减号前面不变，减号后面越大得数越小)后出的排序练习题，已建息流页面并同步，另存错题文件",
+                           "source_pic":  "C:\\Users\\yang\\Documents\\xwechat_files\\yangqinlei_bd98\\temp\\RWTemp\\2026-09\\3b4f7ae10bd4387f516b46c29c5739f4.jpg",
+                           "ocr_script":  "C:\\Users\\yang\\AppData\\Local\\Temp\\opencode\\ocr_image.ps1（-ImagePath -OutFile，Windows.Media.Ocr zh-Hans-CN）",
+                           "exercise_md":  "C:\\Users\\yang\\AppData\\Local\\Temp\\opencode\\sort_exercise.md（六大区块：算一算比一比/从大到小排序/减数相同被减数变/混合排序/想一想填一填/自评）",
+                           "flowus_page":  {
+                                               "id":  "7684d727-0a3d-45e6-8fdc-83f346e1cf34",
+                                               "url":  "https://flowus.cn/7684d727-0a3d-45e6-8fdc-83f346e1cf34",
+                                               "title":  "5以内减法 · 排序专项练习（错题）",
+                                               "icon":  "🔢",
+                                               "parent":  "多多页面 b80cd768 下新建子页，32块写入成功已验证"
+                                           },
+                           "reusable_script":  "C:\\Users\\yang\\AppData\\Local\\Temp\\opencode\\flowus_push_child.ps1（-ParentPage -TitleFile -IconFile -ContentFile；md转块批量PATCH，UTF-8安全，可复用于在某个父页面下新建内容页）"
+                       },
+    "memory_backup":  {
+                          "note":  "2026-10-21 起 user_memory.json 备份到 learning-track 仓库根目录，每次更新记忆后 commit+push 同步",
+                          "repo":  "E:\\learning-track（gitee 已确认 private=True；gitee 默认分支 main；本地分支 main）",
+                          "quirks":  "origin 的 push URL 被改成 gitee（fetch 仍指 github）；gh 与 opencode CLI 不在 PATH；推 gitee 用 git push gitee HEAD:main"
+                      },
+    "image_gen":  {
+                      "status":  "added_2026_10_22",
+                      "provider":  "openai",
+                      "agent":  {
+                                    "name":  "painter",
+                                    "model":  "openai/gpt-image-1",
+                                    "file":  "~/.config/opencode/agent/painter.md"
+                                },
+                      "models":  [
+                                     "gpt-image-1",
+                                     "gpt-4o-image"
+                                 ],
+                      "note":  "OpenAI key 已留 placeholder，待用户填入 ~/.config/opencode/opencode.jsonc 后重启 opencode 生效；ChatGPT/OpenAI 已走 Clash 代理"
+                  },
+    "multi_agent":  {
+                        "note":  "2026-10-22 已落地方案A：opencode 原生多 subagent",
+                        "status":  "deployed",
+                        "provider":  {
+                                         "agnes":  {
+                                                       "npm":  "@ai-sdk/openai-compatible",
+                                                       "baseURL":  "https://apihub.agnes-ai.com/v1",
+                                                       "models":  [
+                                                                      "agnes-2.0-flash"
+                                                                  ],
+                                                       "config_file":  "~/.config/opencode/opencode.jsonc"
+                                                   }
+                                     },
+                        "agents":  {
+                                       "小od":  {
+                                                            "mode":  "primary",
+                                                            "model":  "opencode/deepseek-v4.1-flash-free",
+                                                            "file":  "~/.config/opencode/agent/小od.md",
+                                                            "role":  "主控拆解/派单/汇总（原名 orchestrator / 总指挥，2026-11-14 改名为 小od）"
+                                                        },
+                                       "planner":  {
+                                                       "mode":  "subagent",
+                                                       "model":  "opencode/deepseek-v4.1-flash-free",
+                                                       "file":  "~/.config/opencode/agent/planner.md",
+                                                       "permission_edit":  "deny"
+                                                   },
+                                       "worker":  {
+                                                      "mode":  "subagent",
+                                                      "model":  "opencode/deepseek-v4.1-flash-free",
+                                                      "file":  "~/.config/opencode/agent/worker.md",
+                                                      "permission_edit":  "allow"
+                                                  },
+                                       "reader":  {
+                                                      "mode":  "subagent",
+                                                      "model":  "agnes/agnes-2.0-flash",
+                                                      "file":  "~/.config/opencode/agent/reader.md",
+                                                      "permission_edit":  "deny",
+                                                      "role":  "图片/错题识别（算式更准）"
+                                                  },
+                                       "reviewer":  {
+                                                        "mode":  "subagent",
+                                                        "model":  "opencode/deepseek-v4.1-flash-free",
+                                                        "file":  "~/.config/opencode/agent/reviewer.md",
+                                                        "permission_edit":  "deny"
+                                                    }
+                                   },
+                        "rules":  "读图一律派 reader；worker+reviewer 流程；子 agent 只传必要上下文；超简单任务不分工；失败按需要返工"
+                    },
+    "gout_edu":  {
+                     "note":  "2026-10-29 痛风科普项目：把 docx 原文改写成通俗版，并产出漫画+长图两种科普作品",
+                     "dir":  "E:\\临时文件\\痛风科普",
+                     "src":  "E:\\临时文件\\痛风科普文案.docx（原文偏恐吓式、术语多）",
+                     "outputs":  [
+                                     "痛风科普_通俗版.md/.docx",
+                                     "痛风科普_长图.png（2160x7817）+_手机版（1080）",
+                                     "痛风科普_漫画.png（2160x14779）+_手机版（1080）",
+                                     "panels/p1~p6.png（6格插画原图）",
+                                     "长图.html / 漫画.html（源文件，改文字后重渲染即可）"
+                                 ],
+                     "pipeline":  "AI 只画插画（无文字），中文全部用 HTML 叠加，再用 Chrome headless 截图 + 自动裁掉底部空白 → 高清长图",
+                     "scripts":  {
+                                     "render":  "C:\\Users\\yang\\AppData\\Local\\Temp\\opencode\\render_html.ps1（-HtmlPath -OutPath -Width -MaxHeight -Scale；用 System.Drawing 扫描最后一行非背景色自动裁剪）",
+                                     "gen_comic":  "C:\\Users\\yang\\AppData\\Local\\Temp\\opencode\\gen_gout_comic.ps1（批量生图+下载）"
+                                 },
+                     "lessons":  [
+                                     "Agnes 生图返回的 CDN platform-outputs.agnes-ai.space 直连超时，必须 -Proxy http://127.0.0.1:7897 下载（apihub 本身直连没问题）",
+                                     "中文文字绝不能让生图模型画，会乱码；插画只画场景，文字用 HTML/CSS 排版",
+                                     "Agnes 免费额度会触发 rate limit（reader 子 agent 报 API rate limit），视觉复核可改用 opencode/nemotron-3.5-super-vl-free",
+                                     "人物一致性靠固定 style 前缀 + 同一主角描述（短黑发中国男性）",
+                                     "PS 5.1 下 Chrome headless 的 stderr 会触发 NativeCommandError，需临时 ErrorActionPreference=Continue；脚本里不要用 $args 变量名"
+                                 ]
+                 },
+    "newyear_coloring":  {
+                             "note":  "2026-10-30 元旦主题『旦愿有光』A4 儿童涂色画报（一年级男孩向）",
+                             "dir":  "E:\\临时文件\\元旦涂色画报",
+                             "outputs":  [
+                                             "旦愿有光_元旦A4涂色画报_横版.png（3508x2480 = A4 横版 300dpi，最终版，纯黑白 0 彩色像素）",
+                                             "旦愿有光_A4涂色画报.png（2480x3508 竖版，早期版本，已弃用）",
+                                             "涂色画报_横版.html / 涂色画报.html（源文件）",
+                                             "art.png（横版插画线稿 2030x2030，已裁掉 AI 自带 9px 黑框）、line_art.png（竖版插画 2048x3072）"
+                                         ],
+                             "design":  "横版两栏、无外框：左栏中心 x=330 =2027(y240) + 「旦」愿/有光（160px 实心黑，letter-spacing 6）+ 元旦快乐鱼尾横幅(y760-868) + 1月1日日历卡(translate 154,912)；右栏 art.png left660/top30 1070x1180 object-fit:contain。用户明确要求：旦字加「」引号、去掉外圈黑框",
+                             "pipeline":  "AI 只画黑白线稿（coloring book 风格，无文字）→ HTML/SVG 叠加空心标题『旦愿有光』+ 圆角外框 + 分隔线 → Chrome headless 定尺截图 2480x3508",
+                             "scripts":  {
+                                             "gen_lineart":  "C:\\Users\\yang\\AppData\\Local\\Temp\\opencode\\gen_newyear_lineart.ps1（-OutFile -Size -Proxy，Agnes 生图+代理下载）",
+                                             "render_a4":  "C:\\Users\\yang\\AppData\\Local\\Temp\\opencode\\render_a4.ps1（-HtmlPath -OutPath -Width 1240 -Height 1754 -Scale 2，不裁剪、补白到精确像素）"
+                                         },
+                             "lessons":  [
+                                             "Agnes 图片尺寸：请求 1024x1536 实际返回 832x1248；请求 2048x3072 返回真实 2048x3072（要高清就直接要 2048x3072）",
+                                             "CSS -webkit-text-stroke 做空心字会在『愿/有』这类多部件汉字内部出现杂乱交叉线（轮廓重叠处描边外露）",
+                                             "空心字正确做法：SVG 里画两遍同一 \u003ctext\u003e，底层 fill=#000 + feMorphology dilate 半径≈9 扩张成实心块，上层 fill=#fff 覆盖字内 → 得到粗细均匀、无内部杂线的空心字",
+                                             "但空心字对「旦/日/目」「愿」这类字仍会因双线造成误读（视觉模型实测把旦读成目、把愿读成元），标题建议直接用实心黑字，涂色乐趣交给插画",
+                                             "A4 300dpi = 2480x3508；横版 = 3508x2480；逻辑尺寸 1240x1754 / 1754x1240 + Scale 2 精确得到",
+                                             "Chrome 文字有次像素抗锯齿会留少量彩色像素，render_a4.ps1 加 -Gray 开关用 ColorMatrix 转灰度，保证纯黑白可打印",
+                                             "AI 生成的 coloring book page 会在图片最外圈画一圈 5px 黑色矩形边框（不是页面 CSS 画的），嵌入画报前必须裁掉，实测裁 9px 边距（2048→2030）后边缘变纯白自然融入",
+                                             "SVG 里给汉字加「」角引号：用 tspan 缩小到 0.62em + dy=-0.26em（相对缩小后的字号），后续 tspan dy 回 +0.26em；0.5em 偏小像装饰点",
+                                             "文字用 text-anchor=middle 定在栏中心，比手算 x 更稳"
+                                         ]
+                         },
+    "last_session_summary":  "2026-11-18 多多《短歌行》朗诵视频配三国背景已完成，输出 E:\\临时文件\\多多朗诵短歌行\\多多朗诵短歌行_三国背景.mp4（1080x1920 / 30fps / 59.233s / 1777帧 / H.264 crf22 medium 5.4Mbps + AAC 192k 48k 立体声 / 38.2MB）。做法：①原视频是暖调室内、无绿幕不能抠像 → 采用「背景全屏 + 原视频作圆角卡片画中画」：760x1350 圆角30遮罩(alphamerge)+阴影，位置 x110 y230。②背景用 Agnes 生图 5 张三国夜景（832x1248：烽火台/江面战船/军帐烛火/城墙旌旗/松林月夜），做 Ken Burns 推拉(zoompan) + xfade 1.5s 转场 + 泛光 bloom + 底部暖色火光 + 火星粒子(screen) + 颗粒/暗角；底图偏暗，加了 curves 提亮才看得清（顶部均值 5→30，两侧 17→60）。③琵琶曲是 C# Karplus-Strong 物理建模原创 A 羽调式五声音阶(make_music.ps1)，无版权风险；混音 loudnorm 提人声（源仅 -35.9 LUFS）+ sidechaincompress 闪避，实测人声相关 0.865、音乐比整体低约 13dB。④中文全部用 HTML + Chrome headless 渲染成透明 PNG（竖排「短歌行」「曹操」+红印章「曹」、片尾「多多 朗诵」），agnes-3.0-flash 视觉 OCR 复核正确（短歌行 曹操 曹 / 多多朗诵）。工具与脚本：ffmpeg 9.0.2 装在 E:\\tools\\ffmpeg\\bin；E:\\临时文件\\多多朗诵短歌行\\ 下 render.ps1、filter_full.txt、make_music.ps1、make_embers.ps1、make_assets.ps1、vision.ps1、audio_filter.txt。踩坑记录：ffmpeg 9 已删 -filter_complex_script，改用 -/filter_complex 文件；Add-Type 的 C# 里未使用字段、同名局部变量都会编译失败；curl 输出被 PS 按 GBK 解码导致中文变乱码（必须 Invoke-WebRequest + RawContentStream 取 UTF-8）；Agnes 视觉用 agnes-3.0-flash（agnes-2.0-flash 报 get_channel_failed），生图 CDN 下载需走代理 127.0.0.1:7897；agnes-video-2.0/2.5 仍不可用。 || 2026-11-17 缠论来源链接已核验并写进库（commit bddfbae，本地=远端）：chzhshch.blog 单课直达规则 = https://chzhshch.blog/stocks/NNN（001-108 三位补零，109 起 404），108课目录 https://chzhshch.blog/stocks/stockschat，全部博文1135篇 https://chzhshch.blog/timeline/poems/linjiangxian，缠师其人 https://chzhshch.blog/identity/simujianghu，站内搜索 Ctrl+K；缠习录 App 介绍 https://chanxilu.com，iOS https://apps.apple.com/app/id6809664630，Android https://play.google.com/store/apps/details?id=com.chanxilu.chanxilu，Telegram https://t.me/chzhshchblog（大陆区不提供）。更正：网友留言是 511,225 条不是 25 万。|| 2026-11-17 完成缠论拆书入库（commit 82d5a94，已校验 GitHub 远端一致，325 文件）：①合并本在 E:\\临时文件\\缠论\\合集\\：缠论108课合集.md(1.97MB/113篇)、.docx(4.7MB, pandoc 带 TOC)、.pdf(9.8MB/728页, Chrome headless 打印)、.html(2.0MB) + pic 43 图；脚本 E:\\临时文件\\缠论\\merge_chanlun.ps1。②拆书笔记 E:\\chaishu\\books\\缠论108课-缠中说禅\\README.md（13KB）：结构拆解表按 1-10/11-17/18-30/31-50/51-61/62-71/72-90/91-108 分块，3 张 Mermaid（结构递归链 TD、三类买卖点、阅读顺序），15 张概念卡片，6 条批注（前30课与62课定义冲突、100%安全是定义内安全、事后归因、24h金银与级别假设不合、语气、不替代仓位），6 条行动清单。原文不入库，source 只放「来源说明」。③add_book.ps1 新增 -Message 参数（commit 信息用英文）。④渲染已用 Chrome 截图核验（结构链图由 LR 改 TD 才可读；表格课次列加 white-space:nowrap 防竖排断行）。|| 2026-11-17 已取消：小明唱《当那一天来临》MV（用户明确说「不制作了」）。曾确认歌曲信息=王晓岭词/王路明曲/2005 军旅歌曲；因无照片文件、无小明录音、且我不能替用户下载有版权音频而暂停；另说明照片做不出对口型，建议「我做无音轨画面半成品 + 用户在剪映加正版曲库」。以后不再主动推进。|| 2026-11-17 待办（视频配背景，用户说「改天做」）：目标=给朗诵《短歌行》的视频配背景。环境已查：Agnes 生视频可用（agnes-video-v2.0，key 在 ~/.agnes/api_key），**ffmpeg 未装**（需 winget 装），RAM 7.7GB、核显 UHD 730、无剪映。已给三方案 A=Agnes 生氛围空镜+ffmpeg 叠加人像、B=HTML/SVG 动态水墨逐帧渲染+ffmpeg 合成（最可控）、C=原视频模糊铺底+竖排字幕。约定：汉字一律 HTML/字幕层渲染，AI 只画无字背景。待用户提供视频路径 + 画幅(9:16/16:9) + 是否要人像 + 是否要字幕。|| 2026-11-17 会话（上传校验）：用户要求「以后每拆一本书都要上传」。已在 site\\add_book.ps1 的推送环节加校验：push 后比对本地 HEAD 与 git ls-remote 的远端 HEAD，一致打印「已上传 GitHub（远端一致）」，不一致 exit 1；README 同步写明。提交 ddd93d2，本地=远端=ddd93d2，工作区干净，323 文件。|| 2026-11-17 会话（拆书自动化流水线）：①E:\\chaishu 建了拆书流水线：site\\scan_drop.ps1 扫描输入目录 E:\\临时文件\\拆书-md 报出未入库的 md（先查 site/library.json 登记的文件名，再比内容归一化 MD5，避免 CRLF/改图链接导致误判），site\\add_book.ps1 -Meta meta.json 负责建 books/<slug>/{README.md,source/}、从模板生成笔记骨架、替换 README 中 <!-- BOOK-INDEX --> 区间的索引行（自动重新编号、同 slug 去重）、登记 library.json、重建网页、git 提交推送（-NoPush 可先看），site\\meta.example.json 是字段模板。②根 README 索引表加了 <!-- BOOK-INDEX --> / <!-- /BOOK-INDEX --> 机器标记，并在「加一本新书」里写明自动/手动两条路。③已冒烟测试通过（TestBook-SmokeTest 建了又删，README/library.json 已还原），当前 scan 结果：1 个文件已入库、0 待拆。④提交 42aedd9 已推送，323 文件。⑤坑：git checkout -- A B 里只要有一个 pathspec 不存在，整条命令不生效（这次导致 README 没回滚，需手工改）。‖ 2026-11-17 会话（多本书结构）：①E:\\chaishu 改成标准多书仓库：books/<书名-作者>/README.md + source/，根 README.md 变成总目录（目录结构树、书目总览表含状态列、每本书简介、加书三步、四步法、命名规范）。②site/build_site.ps1 升级为自动扫描：解析每本 md 的 H1 标题 + 作者/出版社/评分表格行 + 一句话总结，自动生成 hero 芯片、书目卡片（.cards>.card）和正文块，模板占位符 {{CHIPS}}/{{CATALOG}}/{{BOOKS}}；加书=建目录+跑脚本，不改代码。③书内 Mermaid 用 ```mermaid 代码块写，前端 JS 把 pre>code.language-mermaid 换成 div.mermaid 再渲染；通用四步法图留在 site/template.html。④坑：PS5.1 脚本里出现中文字面量（如 Cell $md \"作者\"）必须存 UTF-8 BOM；PS5.1 不支持行尾点号换行链式调用（$a.Replace().Replace() 要拆成多行）。⑤提交 516630e 已推送，319 文件。‖ 2026-11-16 会话（拆书库网页版）：①在 E:\\chaishu 加单文件网页展示 index.html（marked@4.3.0 + mermaid@10.9.1 CDN，绿色 hero + 左侧自动目录 + 卡片式分区）。②正文不手抄：site/build_site.ps1 扫描 books/*/README.md 注入 site/template.html 的 {{BOOKS}} 占位符（script type=text/markdown），浏览器端 marked 渲染，所以加书=放目录+跑脚本。③Mermaid 三张图：8 单元 mindmap、每周四步循环 flowchart、自然拼读→YLE 学习路径 flowchart；改图只改 template.html。④已验证：Chrome headless 截图 1440x1500 渲染正常（目录、表格、mermaid 全部到位）。⑤提交 ee1708b 已推送，319 文件。⑥坑：PowerShell 里 [System.Drawing.Image] 需 Add-Type -AssemblyName System.Drawing；Chrome headless --screenshot 不认 URL fragment（锚点不滚动），要看中段内容得复制一份 HTML 把前面 section 设 display:none 再截。‖ 2026-11-16 会话（拆书库）：①新建 GitHub 仓库 724450199-arch/chaishu（private，本地 E:\\chaishu），含 README + templates/拆书模板.md + books/。②把 E:\\临时文件\\拆书-md 里 MinerU 转出的 Storyfun 1 全文拆成 books/Storyfun1-KarenSaxby/README.md（8 单元结构表、5 个教学设计、概念卡片、金句、不足、5 条行动清单），原文放 source/Storyfun1_原书.md。③311 张 CDN 插图全部下载到 source/img/（001-311.jpg，9.5MB，manifest.csv 记来源），正文链接已改本地相对路径，离线可看。④按用户要求把 README 从模板改成「书名 + 作者简介（Karen Saxby）+ 这本书讲什么 + 一句话总结 + 索引表」，不再光秃秃。⑤最新提交 aa11c3b（316 文件），本地=远端，工作区干净。⑥坑：该仓库中文 commit message 会乱码（GBK/UTF-8），一律用英文 commit message；gh 的 GraphQL 报 EOF，建库改用 REST POST /user/repos。‖ 2026-11-14 会话：①用户把自己的主智能体改名为「小od」：agent 文件 orchestrator.md → 小od.md，人设行与 description 同步更新；子智能体不变（worker/planner/reader/reviewer/painter）。②「多多学习中心」页面清理完成，三轮共删 80 块（英语12周+数学31周计划 26 块、本周学习 28 块、亲子游戏/语文准备/985路线图/打印练习纸 26 块），页面只剩标题 + 2 个数据库（课堂练习重点难点 b072234a、浅奥错题 da6af8d0）+ 5 个子页面。③新增 kids_edu/backup_flowus_duoduo.ps1：自包含 MCP 会话递归导出 md 到 E:\\learning-track\\kids_edu\\多多学习中心.md，然后 git 提交并 push（origin 同时推 GitHub + Gitee）。④注册计划任务「FlowUs 多多学习中心 每周备份」，每周日 20:00，实测 LastTaskResult=0 推送成功；但用户要求改成云端备份（电脑不用开机），改走 GitHub Actions。⑤坑：脚本里 git 会往 stderr 写进度，$ErrorActionPreference=Stop 会把它当异常 → 需临时设 Continue 并用 cmd /c 包一层。⑥坑：用 PS 往 JSON 里插 Windows 路径必须写双反斜杠，否则 ConvertFrom-Json 报「无法识别的转义序列」。⑦遗留：04_错题复盘 页面 (2cfb0193) 仍在，但页面上入口块已被换成空段落 dcfd95cd，未决定是否恢复；「一年级数学｜数字卡片与减法提高练习」= 42bbf91f（挂在 04_错题复盘 下）。‖ 2026-11-13 会话：①用户给了息流 MCP 端点 https://mcp.flowus.cn/message，实测可用（Streamable HTTP，Bearer token 与老 upload_to_flowus.ps1 里的一致）：POST initialize 拿 Mcp-Session-Id → POST notifications/initialized → POST tools/call。共 35 个工具，含 create_file_upload/append_block_children/append_hosted_file/query_database/update_page/get_page_markdown。②图片上传终于打通：create_file_upload(POST /v2/files/upload-url) 返回 method+upload_url+headers+oss_name+size → 按返回的 method 和 headers PUT 原始字节（COS 回调 200）→ append_block_children 建 type=image 块（image.file.oss_name/size）。不要用 append_hosted_file，它建的是 file 卡片，会跟图片重复。③两条 11-13 错题记录已各插入一张图片：看图列式计算.jpg（191757B, 1400x1050）进 e166735b，列车上下乘客.jpg（90951B）进 f7091c6d；均已核对页内只有 1 个 image 块，CDN 字节数与上传一致。④删除块：MCP 工具禁止删除，但 REST DELETE https://api.flowus.cn/v2/blocks/{id} 可用，已用它清掉两个多余 file 块。⑤cdn2.flowus.cn 图片直连需 Referer https://flowus.cn/ + 浏览器 UA，否则 403。⑥中文 .ps1 必须 UTF-8 BOM。",
+    "secrets_never_save":  [
+                               "FlowUs token、Agnes API key 等敏感信息一律不写入记忆文件，如需使用从 ~/.agnes/api_key 或仓库脚本读取"
+                           ]
 }
