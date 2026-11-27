@@ -1,11 +1,11 @@
-<#
+﻿<#
 .SYNOPSIS
   多多题目分析→录入息流（带图片）全流程脚本
 .DESCRIPTION
   按 2026-11-27 用户确认的标准格式，把多多（一年级）的题目录入息流数据库并上传题目图片。
   防重复：录入前先查库，同题已存在则只补图片不重复创建。
 .PARAMETER ImagePath      题目图片路径
-.PARAMETER Db            目标数据库：mistake(重点难点,默认) / ao(浅奥错题)
+.PARAMETER TargetDb      目标数据库：mistake(重点难点,默认) / ao(浅奥错题)
 .PARAMETER Title          条目标题（简述）
 .PARAMETER Attr           题目内容/已知条件/孩子答案
 .PARAMETER Note           验证过程+判定结论+图片来源
@@ -19,7 +19,7 @@
 #>
 param(
   [Parameter(Mandatory=$true)][string]$ImagePath,
-  [string]$Db = "mistake",
+  [string]$TargetDb = "mistake",
   [Parameter(Mandatory=$true)][string]$Title,
   [string]$Attr = "",
   [string]$Note = "",
@@ -33,17 +33,23 @@ param(
 
 $ErrorActionPreference = "Stop"
 $token = (Select-String -Path "$PSScriptRoot\upload_to_flowus.ps1" -Pattern '^\$token\s*=\s*"([^"]+)"').Matches[0].Groups[1].Value
-$dbId = if ($Db -eq "ao") { "da6af8d0-4aeb-43d2-b914-c338035f05de" } else { "b072234a-0207-418c-bdd0-b19ec19b4e98" }
+$dbId = if ($TargetDb -eq "ao") { "da6af8d0-4aeb-43d2-b914-c338035f05de" } else { "b072234a-0207-418c-bdd0-b19ec19b4e98" }
 $base = "https://api.flowus.cn/v2"
 $out = @()
 
 function Req($method, $path, $bodyBytes, $ctype, $hdrs) {
-  $req = [Net.HttpWebRequest]::Create($base + $path)
+  $url = if ($path -match '^https?://') { $path } else { $base + $path }
+  $req = [Net.HttpWebRequest]::Create($url)
   $req.Method = $method
   $req.Headers.Add("Authorization", "Bearer $token")
-  if ($hdrs) { foreach ($k in $hdrs.Keys) { $req.Headers.Add($k, $hdrs[$k]) } }
+  if ($bodyBytes -and $ctype) { $req.ContentType = $ctype }
+  if ($hdrs) {
+    foreach ($k in $hdrs.Keys) {
+      if ($k -ieq "Content-Type" -or $k -ieq "Content-Length" -or $k -ieq "Authorization" -or $k -ieq "Accept" -or $k -ieq "Host" -or $k -ieq "User-Agent") { continue }
+      $req.Headers.Add($k, $hdrs[$k])
+    }
+  }
   if ($bodyBytes) {
-    $req.ContentType = $ctype
     $req.ContentLength = $bodyBytes.Length
     $st = $req.GetRequestStream(); $st.Write($bodyBytes,0,$bodyBytes.Length); $st.Close()
   }
@@ -64,7 +70,8 @@ function RichArr($t) { if ([string]::IsNullOrEmpty($t)) { return @() } else { re
 if (-not (Test-Path -LiteralPath $ImagePath)) { throw "图片不存在: $ImagePath" }
 $fileBytes = [IO.File]::ReadAllBytes($ImagePath)
 $fileName = [IO.Path]::GetFileName($ImagePath)
-$out += "题目图片: $fileName ($($fileBytes.Length) bytes)"
+$contentType = switch ([IO.Path]::GetExtension($fileName).ToLower()) { ".jpg" { "image/jpeg" } ".jpeg" { "image/jpeg" } ".gif" { "image/gif" } default { "image/png" } }
+$out += "题目图片: $fileName ($($fileBytes.Length) bytes) contentType=$contentType"
 
 # --- 0) 防重复：查库中是否有相同标题的活跃条目 ---
 $q = Req "POST" "/databases/$dbId/query" (Json @{page_size=100}) "application/json; charset=utf-8" $null
@@ -104,12 +111,12 @@ if (-not $skipCreate) {
 }
 
 # --- 2) 上传题目图片（图片块，不是文件卡片）---
-$u = Req "POST" "/files/upload-url" (Json @{ filename=$fileName; content_type="image/png"; content_length=$fileBytes.Length; parent=@{page_id=$pageId} }) "application/json; charset=utf-8" $null
+$u = Req "POST" "/files/upload-url" (Json @{ filename=$fileName; content_type=$contentType; content_length=$fileBytes.Length; parent=@{page_id=$pageId} }) "application/json; charset=utf-8" $null
 if (-not $u.ok) { throw "获取上传地址失败: $($u.text)" }
 $ju = $u.text | ConvertFrom-Json
 $hdrs = @{}
 if ($ju.headers) { foreach ($hp in $ju.headers.PSObject.Properties) { $hdrs[$hp.Name] = $hp.Value } }
-$up = Req $ju.method $ju.upload_url $fileBytes "image/png" $hdrs
+$up = Req $ju.method $ju.upload_url $fileBytes $contentType $hdrs
 if (-not ($up.ok -or ($up.status -ge 200 -and $up.status -lt 300))) { throw "图片字节上传失败: $($up.text)" }
 $out += "图片字节已上传 (oss_name=$($ju.oss_name))"
 
