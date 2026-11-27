@@ -153,6 +153,11 @@ if ($cnPoems -and $cnPoems.Count -ge 2) {
 }
 $WeekCN = @{1="一";2="二";3="三";4="四";5="五";6="六";7="七";8="八";9="九";10="十";11="十一";12="十二";13="十三"}[$ChineseWeek]
 
+# ====== 每日一年级浅奥题（与19:00学习推送同一天同题） ======
+. "$PSScriptRoot\aoshu_questions.ps1"
+$AoShuToday = Get-TodayAoShu -DaysSinceStart $DaysSinceStart
+$AoShuPush = "**每日浅奥（一年级）：**`n$($AoShuToday.q)`n答案：$($AoShuToday.a)"
+
 # ====== RSS 来源 ======
 # ====== 网页抓取（无 RSS 的网站） ======
 try {
@@ -348,6 +353,9 @@ if ($PoemsToday.Count -gt 0) {
   $PoemBlock += "---`n"
   $Body += $PoemBlock
 }
+
+# ====== 追加每日浅奥题 ======
+$Body += "---`n$AoShuPush`n`n"
 
 $i = 1
 foreach ($item in $Filtered) {

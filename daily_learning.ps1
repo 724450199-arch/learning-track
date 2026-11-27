@@ -552,6 +552,12 @@ $SyncPath = Join-Path -Path $PSScriptRoot -ChildPath "worksheets\flowus_sync.jso
 $SyncData | ConvertTo-Json -Depth 5 | Set-Content -Path $SyncPath -Encoding utf8
 Write-Log "FlowUs同步数据已保存到: $SyncPath"
 
+# ====== 每日一年级浅奥题（按日期轮换，附答案；题库在共享文件） ======
+. "$PSScriptRoot\aoshu_questions.ps1"
+$AoShuToday = Get-TodayAoShu -DaysSinceStart $DaysSinceStart
+$AoShuPush = "**每日浅奥（一年级）：**`n$($AoShuToday.q)`n答案：$($AoShuToday.a)"
+Write-Log "今日浅奥题：$($AoShuToday.q)"
+
 # ====== Windows 通知 ======
 try {
   Add-Type -AssemblyName System.Windows.Forms
@@ -566,7 +572,8 @@ try {
   $b3 = " 多多数学 第${MathWeek}周：$($M.ch)`n   内容：$($M.topic)`n   活动：$($M.act)"
   $b4 = " 多多语文 第${ChineseWeek}周：$($C.pinyin) + $($C.chars)`n   今日：$DailyAct"
   $b5 = " 练习卡片已保存至：$WorksheetDir`n 点击查看息流学习页面"
-  $Body = "$b1`n`n$b2`n`n$b3`n`n$b4`n`n$b5"
+  $b6 = " 每日浅奥：$($AoShuToday.q)`n   答案：$($AoShuToday.a)"
+  $Body = "$b1`n`n$b2`n`n$b3`n`n$b4`n`n$b5`n`n$b6"
 
   $Notify.BalloonTipText = $Body.Trim()
   $Notify.Visible = $true
@@ -587,7 +594,7 @@ try {
 
 # ====== 微信推送（Server酱） ======
 $WeChatTitle = "学习提醒 - 第$([Math]::Floor($DaysSinceStart / 7) + 1)周"
-$WeChatBody = "**多多 第${DuoDuoWeek}周：$($D.letter)**`n单词：$($D.words)`n活动：$($D.act)`n`n**小铭 第${XiaoMingWeek}周：$($X.letter)**`n单词：$($X.words)`n活动：$($X.act)`n`n**多多数学 第${MathWeek}周：$($M.ch)**`n内容：$($M.topic)`n活动：$($M.act)`n`n**多多语文 第${ChineseWeek}周：$($C.pinyin) + $($C.chars)**`n今日：$DailyAct`n`n查看息流详情：$ChineseUrl"
+$WeChatBody = "**多多 第${DuoDuoWeek}周：$($D.letter)**`n单词：$($D.words)`n活动：$($D.act)`n`n**小铭 第${XiaoMingWeek}周：$($X.letter)**`n单词：$($X.words)`n活动：$($X.act)`n`n**多多数学 第${MathWeek}周：$($M.ch)**`n内容：$($M.topic)`n活动：$($M.act)`n`n**多多语文 第${ChineseWeek}周：$($C.pinyin) + $($C.chars)**`n今日：$DailyAct`n`n查看息流详情：$ChineseUrl`n`n$AoShuPush"
 try {
   $jsonBody = @{ title = $WeChatTitle; desp = $WeChatBody } | ConvertTo-Json
   $utf8Body = [System.Text.Encoding]::UTF8.GetBytes($jsonBody)
